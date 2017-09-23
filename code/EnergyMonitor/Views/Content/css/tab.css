@@ -1,0 +1,9 @@
+﻿#tabs { margin:10px;}
+#tabs .tab-ul{height:28px; width:100%; background:#EAEAEA;border-top-left-radius: 10px;border-top-right-radius: 10px;}
+#tabs .tab-ul li{float:left;padding:0 0 0 2px;border:1px outset #A4BF3A;border-bottom:0;border-top-left-radius: 10px;border-top-right-radius: 10px; margin-right:2px; background:#A4BF3A; }
+#tabs .tab-ul li a{display:block;height:100%;padding:0 16px 0 14px;line-height:36px;text-align:center;font-weight:bold;cursor:pointer;border-top-left-radius: 10px;border-top-right-radius: 10px;color:#FFFFFF;text-decoration:none;}
+#tabs .tab-ul li a:hover{background:#869E25;}
+#tabs .tab-ul li.current{background:#FFFFFF;}
+#tabs .tab-ul li.current a{background:#FFFFFF;color:#666666;}
+#tabs .tab-div{border:1px solid #EAEAEA;border-top:0;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px; clear:both; padding:10px;}
+#tabs .padding50px{padding:50px;}

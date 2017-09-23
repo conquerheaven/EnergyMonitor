@@ -1,0 +1,269 @@
+﻿
+<link href="@Url.Content("~/Content/css/RoomSelect.css")" rel="stylesheet" type="text/css" />
+<div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择对象（使用鼠标拖动或Ctrl键或Shift键进行多选）">
+        <div>
+            <ul>
+                <li style="display: block;">
+                    <h4>选择建筑</h4>
+                    <div class="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="SwitchingRoomDiv">
+                    <h4>选择配电室</h4>
+                    <div id="divSwitchingRoom"><select id="selectedSwitchingRoom" name="selectedSwitchingRoom" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="TransformerDiv">
+                    <h4>选择变压器</h4>
+                    <div id="divTransformer"">
+                        <select id="selectedTransformer" name="selectedTransformer" multiple="multiple">
+                        </select>
+                    </div>
+                </li>
+                <li id="newRoomDiv">
+                    <h4>选择测点</h4>
+                    <div id="divNewRoom">
+                    <select id="newRoomID" name="newRoomID" multiple="multiple" style=" width:300px">
+                    </select>
+                    </div>
+                </li>
+            </ul>
+        </div>
+            <div class=" ui-widget-content ui-helper-clearfix clear" style=" margin:10px 0px; border:0px;">
+                <div class="ui-dialog-buttonset" style=" text-align:center;">
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="addToCompare()">
+                        <span class="ui-button-text">加入对比</span>
+                    </button>
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="quitFromCompare()">
+                        <span class="ui-button-text">退出对比</span>
+                    </button>
+                </div>
+            </div>
+            <div style="width:100%; height:auto; clear:both;">
+                <select multiple="multiple" name="" id="addedBD" style=" width:100%">
+                </select>
+            </div>
+            <div id="dialogErrorTip1" class="clear a-center red hidden">查询对象不能为空。</div>
+            <div id="dialogErrorTip2" class="clear a-center red hidden">只能查询同一级别的测点的能耗对比。</div>
+            <div id="dialogErrorTip3" class="clear a-center red hidden">不能添加重复的测点，请重新选择。</div>
+            <div id="dialogErrorTip4" class="clear a-center red hidden">加入对比的测点数目不能超过5个。</div>
+    </div>
+
+    <script type="text/javascript">
+        $("#selectedBuilding").change(function () {
+            $.getJSON('@Url.Action("GetSwitchingRoomsByBuildingIDAjax", "Util")', { buildingID: this.value }, function (jsonData) {
+                $("#selectedSwitchingRoom").html("");
+                $("#selectedTransformer").html("");
+                $("#newRoomID").html("");
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSwitchingRoom");
+                $("#divSwitchingRoom").attr("class", "divSelectRoom2");
+                $("#SwitchingRoomDiv").fadeIn("fast");
+                $("#TransformerDiv").fadeOut("fast");
+                $("#newRoomDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedSwitchingRoom").change(function () {
+            $.getJSON('@Url.Action("GetTransformersBySwitchingRoomIDAjax", "Util")', { SwitchingRoomID: this.value }, function (jsonData) {
+                $("#selectedTransformer").html("");
+                $("#newRoomID").html("");
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedTransformer");
+                $("#divSwitchingRoom").attr("class", "divSelectRoom1");
+                $("#divTransformer").attr("class", "divSelectRoom2");
+                $("#TransformerDiv").fadeIn("fast");
+                $("#newRoomDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedTransformer").change(function () {
+            $.getJSON('@Url.Action("GetPointsByTransformerAjax", "Util")', { TransformerID: this.value }, function (jsonData) {
+                $("#newRoomID").html("");
+                $("#pointTemplate").tmpl(jsonData).appendTo("#newRoomID");
+                $("#divTransformer").attr("class", "divSelectRoom1");
+                $("#divNewRoom").attr("class", "divSelectRoom4");
+                $("#newRoomDiv").fadeIn("fast");
+            });
+        });
+        $("#newRoomID").change(function () {
+            $("#divNewRoom").attr("class", "divSelectRoom divSelectRoom3");
+        });
+        $.getJSON('@Url.Action("GetGuanghuaBuildingAjax", "Util")', null, function (jsonData) {
+            $("#roomTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+        });
+
+        var selectedItems = new Array();
+        var selectedName = new Array();
+        var currentCompareType = 0;
+        function addToCompare() {
+            var selected = $("#selectedBuilding option:selected");
+            $("#dialogErrorTip1").hide();
+            $("#dialogErrorTip2").hide();
+            $("#dialogErrorTip3").hide();
+            $("#dialogErrorTip4").hide();
+            if (selected.length != 0) {
+                selected = $("#selectedSwitchingRoom option:selected");
+                if (selected.length != 0) {
+                    selected = $("#selectedTransformer option:selected");
+                    if (selected.length != 0) {
+                        selected = $("#newRoomID option:selected");
+                        if (selected.length != 0) {
+                            if (selectedItems.length + selected.length > 5) {
+                                $("#dialogErrorTip4").slideDown("fast");
+                                return;
+                            }
+                            selected.each(function (index, obj) {
+                                compareType = 4;
+                                for (var i = 0; i < selectedItems.length; i++) {
+                                    if (selectedItems[i] == obj.value) {
+                                        $("#dialogErrorTip3").slideDown("fast");
+                                        return;
+                                    }
+                                }
+                                if (currentCompareType != 0 && compareType == currentCompareType) {
+                                    var bdNameStr = $("#selectedBuilding option:selected").text() + ">>" + $("#selectedSwitchingRoom option:selected").text() + ">>" + $("#selectedTransformer option:selected").text() + ">>" + obj.text;
+                                    selectedName.push(obj.text);
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+
+                                }
+                                if (currentCompareType == 0) {
+                                    var bdNameStr = $("#selectedBuilding option:selected").text() + ">>" + $("#selectedSwitchingRoom option:selected").text() + ">>" + $("#selectedTransformer option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                    currentCompareType = compareType;
+                                    $("#objType").val(compareType);
+                                }
+                                if (currentCompareType != 0 && compareType != currentCompareType) {
+
+                                    $("#dialogErrorTip2").slideDown("normal");
+                                }
+                            });
+                        }
+                        else {
+                            selected = $("#selectedTransformer option:selected");
+                            if (selectedItems.length + selected.length > 5) {
+                                $("#dialogErrorTip4").slideDown("fast");
+                                return;
+                            }
+                            selected.each(function (index, obj) {
+                                compareType = 3;
+                                for (var i = 0; i < selectedItems.length; i++) {
+                                    if (selectedItems[i] == obj.value) {
+                                        $("#dialogErrorTip3").slideDown("fast");
+                                        return;
+                                    }
+                                }
+                                if (currentCompareType != 0 && compareType == currentCompareType) {
+                                    var bdNameStr = $("#selectedBuilding option:selected").text() + ">>" + $("#selectedSwitchingRoom  option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                }
+                                if (currentCompareType == 0) {
+                                    var bdNameStr = $("#selectedBuilding option:selected").text() + ">>" + $("#selectedSwitchingRoom  option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                    currentCompareType = compareType;
+                                    $("#objType").val(compareType);
+                                }
+                                if (currentCompareType != 0 && compareType != currentCompareType) {
+                                    $("#dialogErrorTip2").slideDown("normal");
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        selected = $("#selectedSwitchingRoom  option:selected");
+                        if (selectedItems.length + selected.length > 5) {
+                            $("#dialogErrorTip4").slideDown("fast");
+                            return;
+                        }
+                        selected.each(function (index, obj) {
+                            compareType = 2;
+                            for (var i = 0; i < selectedItems.length; i++) {
+                                if (selectedItems[i] == obj.value) {
+                                    $("#dialogErrorTip3").slideDown("fast");
+                                    return;
+                                }
+                            }
+                            if (currentCompareType != 0 && compareType == currentCompareType) {
+                                var bdNameStr = $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                            }
+                            if (currentCompareType == 0) {
+                                var bdNameStr = $("#selectedBuilding option:selected").text() + ">>" + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                                currentCompareType = compareType;
+                                $("#objType").val(compareType);
+                            }
+                            if (currentCompareType != 0 && compareType != currentCompareType) {
+                                $("#dialogErrorTip2").slideDown("normal");
+                            }
+                        });
+                    }
+                }
+                else {
+                    selected = $("#selectedBuilding option:selected");
+                    if (selectedItems.length + selected.length > 5) {
+                        $("#dialogErrorTip4").slideDown("fast");
+                        return;
+                    }
+                    selected.each(function (index, obj) {
+                        compareType = 1;
+                        for (var i = 0; i < selectedItems.length; i++) {
+                            if (selectedItems[i] == obj.value) {
+                                $("#dialogErrorTip3").slideDown("fast");
+                                return;
+                            }
+                        }
+                        if (currentCompareType != 0 && compareType == currentCompareType) {
+                            var bdNameStr = obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                        }
+                        if (currentCompareType == 0) {
+                            var bdNameStr = obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                            currentCompareType = compareType;
+                            $("#objType").val(compareType);
+                        }
+                        if (currentCompareType != 0 && compareType != currentCompareType) {
+                            $("#dialogErrorTip2").slideDown("normal");
+                        }
+                    });
+                }
+            }
+        }
+
+        function quitFromCompare() {
+            $("#addedBD option:selected").each(function (index, obj) {
+                for (var i = 0; i < selectedItems.length; i++) {
+                    if (selectedItems[i] == obj.value) {
+                        selectedItems.splice(i, 1);
+                        selectedName.splice(i, 1);
+                    }
+                }
+            }
+            )
+            $("#addedBD option:selected").remove();
+            var remainOptions = $("#addedBD option");
+            if (remainOptions.length == 0) {
+                currentCompareType = 0;
+            }
+        }
+    </script>
+
+    <script id="roomTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}" title="${dataValue}">${dataValue}</option>
+    </script>
+    <script id="pointTemplate" type="text/x-jQuery-tmpl">
+        <option value="${analogNo}" title="${analogName}">${analogName}</option>
+    </script>
+

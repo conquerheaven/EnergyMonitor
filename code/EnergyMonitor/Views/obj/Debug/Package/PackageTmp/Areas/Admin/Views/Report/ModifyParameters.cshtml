@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "报表参数管理";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>报表参数管理</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li class="current"><a>单价设置</a></li>
+	    </ul>
+	    <div class="tab-div padding50px">
+        @if (Model != null)
+        {
+            if (Model == true)
+            {
+                <div class="status success">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_success.png") " alt="Success" /><span>修改参数成功!</span>
+                    <a href="@Url.Action("SetParameters", "Report")">重新查询</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="status error">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Error" /><span>修改参数失败!</span>
+                    尝试重新修改
+                    </p>
+                </div>
+            }
+
+        }
+        else
+        {
+            <div class="status error">
+                <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Error" /><span>修改参数有误!</span>
+                检查修改数据是否有误
+                </p>
+            </div>
+        }
+    </div></div>
+</div></div>
+

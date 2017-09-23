@@ -1,0 +1,262 @@
+﻿@{
+    ViewBag.Title = "建筑额定能耗管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>楼宇管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("QueryBuilding", "Information")">查询楼宇</a></li>
+		    <li><a href="@Url.Action("AddBuilding", "Information")">增加楼宇</a></li>
+            <li class="current"><a>楼宇额定能耗管理</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="#" method="post" >
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li><span class="red">* </span>选择建筑： </li>
+                    <li><input id="buildingInput" name="building" type="text" class="inputbox" value=""/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <input id="queryButton" type="button" value="  查 询  " class="btn m-button"/>
+                <input id="newValButton" type="button" value="  设 置  " class="btn"/>
+            </li>
+            <fieldset id="resultDivForQuery" class="hidden">
+                <div class="dataDiv">
+                <table>
+                    <thead>
+                    <tr>
+                            <th>建筑</th>
+                            <th>能耗类型</th>
+                            <th>年份</th>
+                            <th>额定能耗用量</th>
+                    </tr>
+                    </thead>
+                    <tbody class="resultDataDiv"></tbody>
+                </table>
+                </div>
+                <div class="noDataDiv">当前查询范围没有数据</div>
+            </fieldset>
+@*            <fieldset id="resultDivForInput" class="hidden">
+                <div class="dataDiv">
+                    <input id="submitBotton" type="button" value="  提交  " class="btn m-button" style="margin-left:200px"/>
+                </div>
+            </fieldset>*@
+            <fieldset id="newValDiv" class="hidden" >
+            <li class="col5-width">
+                <ul>
+                    <li><span class="red">* </span>选择能耗类型： </li>
+                    <li>
+                        <select id="powerTypeName" name="powerTypeName">
+                            <option value="001" selected="selected">电</option>
+                            <option value="002">水</option>
+                            <option value="003">煤气</option>
+                        </select>
+                    </li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li><span class="red">*</span>请选择年份</li>
+                    <li>
+                            <select id="newValYear" >
+                                <option value="2013" selected="selected">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                    </li>
+                </ul>
+                <ul>
+                    <li><span class="red">*</span>输入额定能耗数值：</li>
+                    <li>
+                        <input type="text" id="yearValue" name="yearValue" style=" width:auto;"/>
+                        <input type="button" id="addButton" value="添加" style=" width:auto;"/>
+                        <div id="ErrorTip" class="red hidden"></div>
+                    </li>
+                </ul>
+                <div class ="clear"></div>
+            </li>
+            </fieldset>
+         </ul>
+         <input type="hidden" id="buildingID" name="buildingID" value="0"/>
+         </form>
+    </div></div>
+</div></div>
+<script type="text/javascript" >
+    $(function () {
+        $("#newValYear").change(function(){
+            updateValue();
+        });
+        $("#powerTypeName").change(function(){
+            updateValue();
+        });
+
+        $("#queryButton").click(function () {
+            $("#newValDiv").hide();
+            var buildingID = $("#buildingID").val();
+            if (buildingID == 0) {
+                alert("请选择一栋建筑！");
+                return;
+            }
+            var loadingIMG = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#resultDivForQuery .noDataDiv").html(loadingIMG).show();
+            $.getJSON('@Url.Action("QueryBEC", "Information")', {
+                buildingID: $("#buildingID").val()
+            }, function (jsonData) {
+                $("#resultDivForInput").hide();
+                if (jsonData == null) {
+                    $("#resultDivForQuery .dataDiv").hide();
+                    $("#resultDivForQuery .noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    $("#resultDivForQuery").show();
+                    return;
+                }
+                if (jsonData.ifSucceed == false) {
+                    $("#resultDivForQuery .dataDiv").hide();
+                    $("#resultDivForQuery .noDataDiv").html('对不起，您查询的建筑目前暂时没有任何额定能耗设置，您可以点击“新增”进行设置。').show();
+                    $("#resultDivForQuery").show();
+                    return;
+                }
+                $("#resultDivForQuery .noDataDiv").hide();
+                $("#resultDivForQuery .dataDiv").show();
+                var resultDivHtml = $("#resultDivForQuery .resultDataDiv").html($("#dataTemplateText").tmpl(jsonData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#resultDivForQuery").show();
+            });
+        });
+
+
+        $("#buildingInput").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#buildingSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        selectedObjs = $("#selectedBuilding option:selected");
+                        if (selectedObjs.length == 0) {
+                            $("#dialogErrorTip").text("请选择某栋建筑");
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                        else if (selectedObjs.length > 1) {
+                            $("#dialogErrorTip").text("只能选择单个对象");
+                            $("#dialogErrorTip").slideDown("fast");
+                        } else if (selectedObjs.length == 1) {
+                            $("#buildingInput").val(selectedObjs.text());
+                            $("#buildingID").val(selectedObjs.val());
+                            $("#resultDivForQuery").slideUp("fast");
+                            $("#resultDivForQuery dataDiv").hide();
+                            $("#newValDiv").slideUp("fast");
+                            $(this).dialog("close");
+                        }
+                    },
+                    '清空': function () {
+                        $("#buildingInput").val("");
+                        $("#buildingID").val("");
+                        $("#resultDivForQuery").slideUp("fast");
+                        $("#newValDiv").slideUp("fast");
+                        $(this).dialog("close");
+                    }
+                }
+            })
+        });
+
+
+        $("#addButton").click(function () {
+            var buildingID = $("#buildingID").val();
+            if (buildingID == 0) {
+                alert("请选择一栋建筑！");
+                return;
+            }
+            var powerType = $("#powerTypeName").val();
+            var year = $("#newValYear").val();
+            var val = $("#yearValue").val();
+            $("#ErrorTip").hide();
+            if (val == null || val == "") {
+                $("#ErrorTip").text("请输入数值").show();
+                return;
+            }
+            $.getJSON('@Url.Action("ModifyOrAddBEC","Information")', {
+                buildingID: buildingID,
+                year: $("#newValYear").val(),
+                powerType: $("#powerTypeName").val(),
+                Val: val
+            }, function (jsonData) {
+                if (jsonData.ifSucceed == true) {
+                    alert("设置成功！");
+                    $("#newValDiv").slideUp("fast");
+                    return;
+                } else {
+                    alert("设置失败,请检查输入的建筑或能耗数值是否有误！");
+                    return;
+                }
+            })
+        });
+
+        $("#newValButton").click(function () {
+            var buildingID = $("#buildingID").val();
+            if (buildingID == 0) {
+                alert("请选择一栋建筑！");
+                return;
+            }
+            updateValue();
+            $("#ErrorTip").hide();
+            $("#resultDivForQuery").hide();
+            $("#newValDiv").show();
+        });
+
+
+        function updateValue() {
+            $.getJSON('@Url.Action("GetBECValue","Information")', {
+                buildingID: $("#buildingID").val(),
+                year: $("#newValYear").val(),
+                powerType: $("#powerTypeName").val(),
+            }, function(jsonData){
+                if(jsonData == null || jsonData == 0){
+                    $("#yearValue").val("");
+                    return;
+                }
+                $("#yearValue").val(jsonData);
+            })
+        }
+    });
+
+
+</script>
+<script id="dataTemplateText" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}"> 
+    <td>${BuildingName}</td>
+    <td>${powerTypeName}(${powerUnit}) </td>
+    <td>${year}</td>
+    <td>${Val}</td>
+    </tr>
+</script>
+
+@Html.Partial("_buildingSelect")

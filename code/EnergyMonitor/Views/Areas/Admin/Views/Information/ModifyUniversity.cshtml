@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "全校信息管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>全校信息管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+            <li class="current"><a>全校信息管理</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="#" method="post" >
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li>大学总人数：</li>
+                    @if (Model.StudentCount != null)
+                    { 
+                        <li><input id="StudentCount" name="StudentCount" type="text" class="inputbox" value="@Model.StudentCount"/></li>
+                    }
+                    else
+                    { 
+                        <li><input id="StudentCount" name="StudentCount" type="text" class="inputbox" /></li>
+                    }
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>大学总占地面积：</li>
+                    @if (Model.Area != null)
+                    { 
+                        <li><input id="GroundArea" name="GroundArea" type="text" class="inputbox" value="@Model.Area"/></li>
+                    }
+                    else
+                    { 
+                        <li><input id="GroundArea" name="GroundArea" type="text" class="inputbox" /></li>
+                    }
+                    
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" name="" type="button" value="  修 改  " class="btn m-button"/></li>
+         </ul>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#queryButton").click(function () {
+            var stuCount = $("#StudentCount").val();
+            var area = $("#GroundArea").val();
+            var reg = /^\d+(\.\d+)?$/;
+            if (stuCount == null || stuCount == "" || !reg.test(stuCount)) {
+                alert("请输入正确的校区总人数！");
+                return;
+            }
+            if (area == null || area == "" || !reg.test(area)) {
+                alert("请输入正确的校区总占地面积！");
+                return;
+            }
+            $.getJSON('@Url.Action("ModifyUniverityInfoAjax", "Information")', {
+                StudentCount: stuCount,
+                area: area
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    alert('没有权限或登录超时，尝试重新登录');
+                    return;
+                }
+                if (jsonData.ifSucceed == false) {
+                    alert('修改失败！');
+                    return;
+                }
+                if (jsonData.ifSucceed == true) {
+                    alert("修改成功！");
+                }
+            });
+        });
+
+    });
+</script>

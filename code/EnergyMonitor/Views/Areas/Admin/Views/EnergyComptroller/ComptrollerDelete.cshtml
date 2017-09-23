@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "能耗审计";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>能耗审计</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		     <li class="current"><a>能耗审计</a></li>
+	    </ul>
+	    <div class="tab-div padding50px">
+        @if (ViewBag.importedPointCount != null && ViewBag.importedPointCount > 0)
+        {
+            <div class="status success">
+                <p><img src="@Url.Content("~/Content/images/img/icons/icon_success.png") " alt="Success" /><span>删除成功!</span>
+                <a href="@Url.Action("Comptroller", "EnergyComptroller")">返回</a> </p>
+            </div>
+        }  else
+        {
+            <div class="status error">
+                <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Error" /><span>删除失败</span>
+                <a href="@Url.Action("Comptroller", "EnergyComptroller")">返回</a> </p>
+                <ul>
+                <li>请查看是否有相应的文件</li>              
+                </ul>                
+            </div>
+        }     
+    </div></div>
+</div></div>
+
+
+

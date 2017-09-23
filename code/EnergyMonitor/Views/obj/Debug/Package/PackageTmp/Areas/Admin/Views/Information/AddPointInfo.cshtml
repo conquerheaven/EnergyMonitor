@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "测点管理";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点管理</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("QueryPoint", "Information")">查询测点</a></li>
+            @if (ViewBag.realFlag == 0)
+            {
+                <li><a href="@Url.Action("AddRealPoint", "Information")">增加真实测点</a></li>
+		        <li class="current"><a>增加虚拟测点</a></li>    
+            }
+            else
+            { 
+                <li class="current"><a>增加真实测点</a></li>    
+                <li><a href="@Url.Action("AddPoint", "Information")">增加虚拟测点</a></li>
+            }
+            
+            <li><a href="@Url.Action("ImportPoint", "Information")">导入历史数据</a></li>
+            <li><a href="@Url.Action("UpdateList", "Information")">数据更新列表</a></li>
+	    </ul>
+	    <div class="tab-div padding50px">
+        @if (ViewBag.flag != null)
+        {
+            if (ViewBag.flag == true && ViewBag.realFlag == 1)
+            {
+                <div class="status success">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_success.png") " alt="Success" /><span>增加测点数据成功!</span>
+                    
+                    <a href="@Url.Action("AddRealPoint", "Information")">继续增加</a> 或 <a href="@Url.Action("QueryPoint", "Information")">重新查询</a></p>
+                </div>
+            }
+            else if(ViewBag.flag == true && ViewBag.realFlag != 1)
+            {
+                <div class="status success">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_success.png") " alt="Success" /><span>增加测点数据成功!</span>
+                    <a href="@Url.Action("AddPoint", "Information")">继续增加</a> 或 <a href="@Url.Action("QueryPoint", "Information")">重新查询</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="status error">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Error" /><span>增加测点数据失败!</span>
+                    尝试重新添加
+                    </p>
+                </div>
+            }
+
+        }
+        else
+        {
+            <div class="status error">
+                <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Error" /><span>增加测点数据有误!</span>
+                请重新输入
+                </p>
+            </div>
+        }
+    </div></div>
+</div></div>
+

@@ -1,0 +1,210 @@
+﻿@{
+    ViewBag.Title = "添加个人信息";
+    Layout = "~/Areas/User/Views/Shared/_Layout2.cshtml";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    
+    <style type="text/css">
+        .btn-submit { margin-left: 300px;}
+    </style>
+}
+<div class="contentcontainer m-center">
+<div class="headings altheading"><h2>添加个人信息</h2></div>
+    <div class="contentbox">
+        <div class="status error">
+            <p>你还有没有添加个人信息，请完善你的个人信息！</p>
+        </div>
+        <div>
+        <form id="addForm" action="@Url.Action("AddInfo", "User")" method="post" >
+        <table>
+            <tr><td><span class="red">* </span>学号 / 工号：</td><td><input id="userID" name="userID" type="text" class="inputbox inputbox-readonly" value="@ViewBag.userID" readonly="readonly"/></td><td></td></tr>
+            <tr><td><span class="red">* </span>姓名：</td><td><input id="userName" name="userName" type="text" class="inputbox" /></td><td></td></tr>
+            <tr><td><span class="red">* </span>联系邮箱：</td><td><input id="userEmail" name="userEmail" type="text" class="inputbox" /></td><td></td></tr>
+            <tr><td></td><td><span class="red">请认真填写电子邮箱，需要激活后才能登录系统，仅支持复旦邮箱</span></td><td></td></tr>
+            <tr><td><span class="red">* </span>所属院系：</td>
+            <td>
+            <select id="userDepartment" name="userDepartment">
+                <option value='-1' selected="selected">--请选择院系--</option>
+                @foreach (var department in Model){
+                    <option value="@department.DI_ID">@department.DI_Name</option>
+                }
+            </select>
+            </td><td></td></tr>
+            
+            <tr><td><span class="red">* </span>添加房间：</td><td><input id="userRoom" name="userRoom" type="text" class="inputbox" readonly="readonly" /></td><td></td></tr>
+            <tr><td></td><td><span class="red">房间添加后不能自行修改，修改请联系管理员</span></td><td></td></tr>
+            <tr><td colspan="3"><input type="submit" value="  提 交  " class="btn btn-submit" /> </td></tr>
+            
+        </table>
+        <input id="departmentName" name="departmentName" type="hidden" />
+        <input id="roomID" name="roomID" type="hidden" value="-1"/>
+        </form>
+            
+        </div>
+    </div>
+</div>
+<div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择房间">
+    <ul>
+        <li style="display: block;">
+            <h4>选择校区</h4>
+            <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="schoolAreaDiv">
+            <h4>选择区域</h4>
+            <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="buildingDiv">
+            <h4>选择楼宇</h4>
+            <div id="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="newRoomDiv">
+            <h4>选择房间</h4>
+            <div id="divNewRoom"><select id="newRoomID" name="newRoomID" multiple="multiple">
+            </select></div>
+        </li>
+    </ul>
+    <div id="dialogErrorTip" class="clear a-center red hidden">请选择房间</div>
+</div>
+<script type="text/javascript">
+    // 验证是否为复旦邮箱
+    jQuery.validator.addMethod("isFudanMail", function (value, element) {
+        var mailSuffix = /@@fudan.edu.cn$/;
+        return this.optional(element) || (mailSuffix.test(value));
+    }, "请输入复旦邮箱");
+    $(function () {
+        $("#addForm").validate({
+            rules: {
+                userID: {
+                    required: true
+                },
+                userName: {
+                    required: true,
+                    rangelength: [1, 50]
+                },
+                userEmail: {
+                    required: true,
+                    email: true,
+                    isFudanMail: true,
+                    rangelength: [1, 50],
+                    remote: "@Url.Action("MailCanBeUsedAjax","User")"
+                },
+                userDepartment: {
+                    min: 1
+                },
+                userRoom: {
+                    required: true
+                }
+            },
+            messages: {
+                userID: {
+                    required: "学号 / 工号不能为空"
+                },
+                userName: {
+                    required: "姓名不能为空 ",
+                    rangelength: "长度不合法"
+                },
+                userEmail: {
+                    required: "邮箱不能为空 ",
+                    email: "邮箱格式不对",
+                    isFudanMail: "请输入复旦邮箱",
+                    rangelength: "长度不合法",
+                    remote: "邮箱已经存在"
+                },
+                userDepartment: {
+                    min: "所属院系不能为空"
+                },
+                userRoom: {
+                    required: "房间不能为空 "
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (confirm("确认提交？") == true) {
+                    form.submit();
+                }
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+        $("#userDepartment").change(function () {
+            $("#departmentName").val($(this).find('option:selected').text());
+        });
+        $("#userRoom").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#roomSelectDiv").dialog({
+                modal: true,
+                width: 710,
+                buttons: {
+                    '选择': function () {
+                        if ($("#newRoomID").val() != null) {
+                            $("#roomID").val($("#newRoomID").val());
+                            var selectedRoomStr = $("#selectedSchool option:selected").text() + ">"
+                                + $("#selectedSchoolArea option:selected").text() + ">"
+                                + $("#selectedBuilding option:selected").text() + ">"
+                                + $("#newRoomID option:selected").text();
+                            $("#userRoom").val(selectedRoomStr);
+                            $(this).dialog("close");
+                        } else {
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    }
+                }
+            });
+        });
+
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "User")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html("");
+                $("#selectedBuilding").html("");
+                $("#newRoomID").html("");
+                $("#dataTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                $("#divSchoolArea").attr("class", "divSelectRoom2");
+                $("#schoolAreaDiv").fadeIn("fast");
+                $("#buildingDiv").fadeOut("fast");
+                $("#newRoomDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedSchoolArea").change(function () {
+            $.getJSON('@Url.Action("GetBuildingByAreaAjax", "User")', { areaID: this.value }, function (jsonData) {
+                $("#selectedBuilding").html("");
+                $("#newRoomID").html("");
+                $("#dataTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+                $("#divSchoolArea").attr("class", "divSelectRoom1");
+                $("#divBuilding").attr("class", "divSelectRoom2");
+                $("#buildingDiv").fadeIn("fast");
+                $("#newRoomDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedBuilding").change(function () {
+            $.getJSON('@Url.Action("GetRoomsByBIDAjax", "User")', { buildingID: this.value }, function (jsonData) {
+                $("#newRoomID").html("");
+                $("#dataTemplate").tmpl(jsonData).appendTo("#newRoomID");
+                $("#divBuilding").attr("class", "divSelectRoom1");
+                $("#divNewRoom").attr("class", "divSelectRoom4");
+                $("#newRoomDiv").fadeIn("fast");
+            });
+        });
+        $("#newRoomID").change(function () {
+            $("#divNewRoom").attr("class", "divSelectRoom divSelectRoom3");
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "User")', null, function (jsonData) {
+            $("#dataTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+    });
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>

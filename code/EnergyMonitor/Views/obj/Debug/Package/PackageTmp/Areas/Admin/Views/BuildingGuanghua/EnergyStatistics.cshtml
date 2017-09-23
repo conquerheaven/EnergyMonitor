@@ -1,0 +1,1061 @@
+﻿@{
+    ViewBag.Title = "能耗统计";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/Visifire.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/util.js" type="text/javascript"></script>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>能耗统计</h2></div>
+    <div class="contentbox">
+    <form id="myForm" action="#" method="post">
+    <ul class="em-form-ul">
+        <li>
+            <ul>
+                <li><span class="red">* </span>查询对象（只能查询单个对象）： </li>
+                <li><input id="queryObj" name="queryObj" type="text" class="inputbox" readonly="readonly" value=""/></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li><span class="red">* </span>能耗分类： </li>
+                @*<li><input id="powerTypeName" name="powerTypeName" type="text" class="inputbox" readonly="readonly" value="电..."/></li>*@
+                <li><select id="powerType" name="powerType">
+                        @foreach (var item in Model)
+                        {
+                            if (item.PC_ID.Length == 3)
+                            {
+                                var prefix = "总用";
+                                <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+                            }
+                            else
+                            {
+                                var s = new string('-', item.PC_ID.Length - 3);
+                                <option value="@item.PC_ID">@s@item.PC_Name</option>
+                            }
+                        }
+                </select></li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <ul>
+                <li><span class="red">* </span>起始日期：</li>
+                <li><input id="startTime" name="startTime" type="text" class="inputbox" readonly="readonly" /></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li><span class="red">* </span>结束日期：</li>
+                <li><input id="endTime" name="endTime" type="text" class="inputbox" readonly="readonly" /></li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <ul>
+                <li>显示方式：</li>
+                <li>
+                    <div id="renderTypeSet">
+                        <input type="radio" id="renderList" name="renderRadio" value="List" checked="checked" /><label for="renderList"> 一览表 </label>
+                        <input type="radio" id="renderColumn" name="renderRadio" value="Column" /><label for="renderColumn"> 柱状图 </label>
+                        <input type="radio" id="renderLine" name="renderRadio" value="Line" /><label for="renderLine"> 折线图 </label>
+                        <input type="radio" id="renderPie" name="renderRadio" value="Pie" /><label for="renderPie"> 饼状图 </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <ul>
+                <li>是否分页显示：</li>
+                <li>
+                    <div id="ifPageSet">
+                        <input type="radio" id="posPage" name="pageRadio" value="posPage" checked="checked" /><label for="posPage"> 分页 </label>
+                        <input type="radio" id="negPage" name="pageRadio" value="negPage" /><label for="negPage"> 不分页 </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li class="col1-width">
+            <ul>
+                <li style="padding-left:10px;">统计粒度：</li>
+                <li style="padding-left:5px;">
+                    <div id="granularitySet">
+                        <input type="radio" id="yearGranularity" name="granularity" value="year" checked="checked"/><label for="yearGranularity"> 按年 </label>
+                        <input type="radio" id="monthGranularity" name="granularity" value="month"  /><label for="monthGranularity"> 按月 </label>
+                        <input type="radio" id="dayGranularity" name="granularity" value="day" /><label for="dayGranularity"> 按天 </label>
+                        <input type="radio" id="hourGranularity" name="granularity" value="hour" /><label for="hourGranularity"> 按小时 </label>
+                        <input type="radio" id="weekPeriod" name="granularity" value="week" /><label for="weekPeriod"> 按星期 </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li id="monthType" class="hidden">
+            <ul style="width: 100%;">
+                <li><span class="red">* </span>按月比较方式：</li>
+                <li>
+                    <div id="monthTypeSet">
+                        <input type="radio" id="perMonth" name="monthRadio" value="month" checked="checked" /><label for="perMonth"> 每月 </label>
+                        <input type="radio" id="mToM" name="monthRadio" value="selectedmonth" /><label for="mToM"> 同期月份 </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li id="dayType" class="hidden">
+            <ul style="width: 100%;">
+                <li><span class="red">* </span>按天比较方式：</li>
+                <li>
+                    <div id="dayTypeSet" class="left">
+                        <input type="radio" id="perDay" name="dayRadio" value="day" checked="checked" /><label for="perDay"> 每天 </label>
+                        <input type="radio" id="dayToDay" name="dayRadio" value="daytoday" /><label for="dayToDay"> 同期日期 </label>
+                        <input type="radio" id="daySpecific" name="dayRadio" value="selectedday" /><label for="daySpecific"> 指定日期 </label>
+                    </div>
+                    <div id="daySpecificDiv" style="float:left; margin-left:20px; display:none;">
+                     指定日期: <select id="selectedDay">
+                     <option value="1">1</option>
+                     <option value="2">2</option>
+                     <option value="3">3</option>
+                     <option value="4">4</option>
+                     <option value="5">5</option>
+                     <option value="6">6</option>
+                     <option value="7">7</option>
+                     <option value="8">8</option>
+                     <option value="9">9</option>
+                     <option value="10">10</option>
+                     <option value="11">11</option>
+                     <option value="12">12</option>
+                     <option value="13">13</option>
+                     <option value="14">14</option>
+                     <option value="15">15</option>
+                     <option value="16">16</option>
+                     <option value="17">17</option>
+                     <option value="18">18</option>
+                     <option value="19">19</option>
+                     <option value="20">20</option>
+                     <option value="21">21</option>
+                     <option value="22">22</option>
+                     <option value="23">23</option>
+                     <option value="24">24</option>
+                     <option value="25">25</option>
+                     <option value="26">26</option>
+                     <option value="27">27</option>
+                     <option value="28">28</option>
+                     <option value="29">29</option>
+                     <option value="30">30</option>
+                     <option value="31">31</option>
+                     </select> 日
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li id="weekLi" class="hidden">
+            <ul style="width: 100%;">
+                <li><span class="red">* </span>指定星期：</li>
+                <li>
+                    <div id="weekTypeSet">
+                        <input type="radio" id="weekAll" name="weekRadio" value="0" checked="checked" /><label for="weekAll"> 所有 </label>
+                        <input type="radio" id="weekMon" name="weekRadio" value="1" /><label for="weekMon"> 星期一 </label>
+                        <input type="radio" id="weekTues" name="weekRadio" value="2" /><label for="weekTues"> 星期二 </label>
+                        <input type="radio" id="weekWed" name="weekRadio" value="3" /><label for="weekWed"> 星期三 </label>
+                        <input type="radio" id="weekThur" name="weekRadio" value="4" /><label for="weekThur"> 星期四 </label>
+                        <input type="radio" id="weekFri" name="weekRadio" value="5" /><label for="weekFri"> 星期五 </label>
+                        <input type="radio" id="weekSat" name="weekRadio" value="6" /><label for="weekSat"> 星期六 </label>
+                        <input type="radio" id="weekSun" name="weekRadio" value="7" /><label for="weekSun"> 星期日 </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li id="hourLi" class="hidden">
+            <ul style="width: 100%;">
+                <li><span class="red">* </span>指定小时：</li>
+                <li>
+                    <div id="hourTypeSet" class="left">
+                        <input type="radio" id="hourAll" name="hourRadio" value="0" checked="checked" /><label for="hourAll"> 每小时 </label>
+                        <input type="radio" id="hourSpecific" name="hourRadio" value="1" /><label for="hourSpecific"> 指定小时段 </label>
+                    </div>
+                    <div id="hourSpecificDiv" style="float:left; margin-left:20px; display:none;">
+                     从 <select id="startHour"><option value="0">0:00</option><option value="1">1:00</option><option value="2">2:00</option><option value="3">3:00</option><option value="4">4:00</option><option value="5">5:00</option>
+                     <option value="6">6:00</option><option value="7">7:00</option><option value="8">8:00</option><option value="9">9:00</option><option value="10">10:00</option><option value="11">11:00</option>
+                     <option value="12">12:00</option><option value="13">13:00</option><option value="14">14:00</option><option value="15">15:00</option><option value="16">16:00</option><option value="17">17:00</option>
+                     <option value="18">18:00</option><option value="19">19:00</option><option value="20">20:00</option><option value="21">21:00</option><option value="22">22:00</option><option value="23">23:00</option></select> 点到
+                     <select id="endHour"><option value="1">1:00</option><option value="2">2:00</option><option value="3">3:00</option><option value="4">4:00</option><option value="5">5:00</option>
+                     <option value="6">6:00</option><option value="7">7:00</option><option value="8">8:00</option><option value="9">9:00</option><option value="10">10:00</option><option value="11">11:00</option>
+                     <option value="12">12:00</option><option value="13">13:00</option><option value="14">14:00</option><option value="15">15:00</option><option value="16">16:00</option><option value="17">17:00</option>
+                     <option value="18">18:00</option><option value="19">19:00</option><option value="20">20:00</option><option value="21">21:00</option><option value="22">22:00</option><option value="23">23:00</option><option value="24">24:00</option></select> 点
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li><input id="queryButton" name="" type="submit" value="  查  询  " class="btn m-button"/></li>
+     </ul>
+     </form>
+
+     <fieldset id="resultDiv" class="hidden"><legend>查询结果</legend>
+        <div id="dataDiv">
+        <table id="dataTable" class="hidden" width="500">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th class="dataDivUnit">用电值</th>
+                </tr>
+            </thead>
+            <tbody id="resultDataDiv">
+            </tbody>
+        </table>
+        <table id="weekDataTable" class="hidden" width="500">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>星期</th>
+                    <th class="dataDivUnit">用能值</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="chartDiv" class="hidden"></div>
+        <div id="pager"></div>
+        <input id="exportExcel" name="exportExcel" type="button" value=" 导出Excel " class="btn" />
+        </div>
+        <div id="noDataDiv">当前查询范围没有数据</div>
+     </fieldset>
+</div></div>
+@*<input type="hidden" id="powerType" value="0"/>*@
+<input type="hidden" id="objIDs" value="0" />
+<input type="hidden" id="objType" value="0"/>
+
+<script type="text/javascript">
+    $(function () {
+        $("#startTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#endTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#startTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#endTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#powerType").change(function(){
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#granularitySet").buttonset();
+        $("#renderTypeSet").buttonset();
+        $("#weekTypeSet").buttonset();
+        $("#hourTypeSet").buttonset();
+        $("#monthTypeSet").buttonset();
+        $("#dayTypeSet").buttonset();
+        $("#ifPageSet").buttonset();
+
+        $("input[name='granularity']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            var radioVal = $(this).val();
+            if (radioVal == "week") {
+                $("#hourLi").hide();
+                $("#monthType").hide();
+                $("#dayType").hide();
+                $("#weekLi").slideDown("fast");
+            } else if (radioVal == "hour") {
+                $("#weekLi").hide();
+                $("#monthType").hide();
+                $("#dayType").hide();
+                $("#hourLi").slideDown("fast");
+            } else if ("month" == radioVal) {
+                $("#hourLi").hide();
+                $("#weekLi").hide();
+                $("#dayType").hide();
+                $("#monthType").slideDown("fast");
+            } else if ("day" == radioVal) {
+                $("#hourLi").hide();
+                $("#weekLi").hide();
+                $("#monthType").hide();
+                $("#dayType").slideDown("fast");
+            } else {
+                $("#monthType").slideUp("fast");
+                $("#dayType").slideUp("fast");
+                $("#weekLi").slideUp("fast");
+                $("#hourLi").slideUp("fast");
+            }
+        });
+        $("#selectedDay").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='renderRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='pageRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='dayRadio']").change(function () {
+            if ($(this).val() == "selectedday") {
+                $("#daySpecificDiv").show();
+            } else {
+                $("#daySpecificDiv").hide();
+            }
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='monthRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='weekRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='hourRadio']").change(function () {
+            if (+$(this).val() == 1) {
+                $("#hourSpecificDiv").show();
+            } else {
+                $("#hourSpecificDiv").hide();
+            }
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#startHour").change(function () {
+            var val = +$(this).val();
+            if (+$("#endHour").val() <= val) {
+                $("#endHour").val(val + 1);
+            }
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#endHour").change(function () {
+            var val = +$(this).val();
+            if (+$("#startHour").val() >= val) {
+                $("#startHour").val(val - 1);
+            }
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+
+        $("#exportExcel").click(function () {
+            var granularityVal = $("input[name='granularity']:checked").val();
+            if (granularityVal == "month") {
+                actualGraVal = $("input[name='monthRadio']:checked").val();
+            } else if (granularityVal == "day") {
+                actualGraVal = $("input[name='dayRadio']:checked").val();
+            } else {
+                actualGraVal = granularityVal;
+            }
+            if (actualGraVal == "selectedmonth") {
+                alert("对不起，同期月份比较不能导出数据，请选择其他统计粒度。");
+                $("#resultDiv").hide();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            } else if (actualGraVal == "daytoday") {
+                alert("对不起，同期日期比较不能导出数据，请选择其他统计粒度。");
+                $("#resultDiv").hide();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            }
+             else if (actualGraVal == "daytoday") {
+                alert("对不起，指定日期比较不能导出数据，请选择其他统计粒度。");
+                $("#resultDiv").hide();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            }
+            var parameters = "?objType=" + $("#objType").val()
+                             + "&objIDs=" + $("#objIDs").val()
+                             + "&startTime=" + $("#startTime").val()
+                             + "&endTime=" + $("#endTime").val()
+                             + "&powerType=" + $("#powerType").val()
+                             + "&granularity=" + $("input[name='granularity']:checked").val()
+                             + "&weekType=" + $("input[name='weekRadio']:checked").val()
+                             + "&hourType=" + $("input[name='hourRadio']:checked").val()
+                             + "&startHour=" + $("#startHour").val()
+                             + "&endHour=" + $("#endHour").val()
+                             + "&selectedDay=" + $("#selectedDay").val();
+            window.open('@Url.Action("GetBuildingGuanghuaElecExcel","BuildingGuanghua")' + parameters, "_self");
+        });
+
+        $("#myForm").validate({
+            rules: {
+                queryObj: {
+                    required: true
+                },
+                startTime: {
+                    required: true
+                },
+                endTime: {
+                    required: true
+                },
+            },
+            messages: {
+                queryObj: {
+                    required: "查询对象不能为空"
+                },
+                startTime: {
+                    required: "开始时间不能为空"
+                },
+                endTime: {
+                    required: "结束时间不能为空"
+                },
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (Date.parse($("#startTime").val().replace(/-/g, "/")) > Date.parse($("#endTime").val().replace(/-/g, "/"))) {
+                    $("#endTime").parent().next().html('<label class="error" for="endTime" generated="true">结束时间不能大于开始时间</label>');
+                    return false;
+                }
+
+                if (+$("#objType").val() == 0 || +$("#objIDs").val() == 0) {
+                    $("#queryObj").parent().next().html('<label class="error" for="queryObj" generated="true">请重新选择查询对象</label>');
+                    return false;
+                }
+                if (!$("#resultDiv").is(":visible")) {
+                    var ifpage = $("input[name='pageRadio']:checked").val();
+                    if (ifpage == "posPage") {
+                        global_totalPages = -1;
+                        pageClick(1);
+                    } else {
+                        query();
+                    }
+                }
+                return false;
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        $("#queryObj").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#pointSelectDiv").dialog({
+                modal: true,
+                width: 710,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var selectedObjs = $("#selectedPoint option:selected");
+                        if (selectedObjs.length == 0) {
+                            selectedObjs = $("#selectedTransformer option:selected");
+                            if (selectedObjs.length == 0) {
+                                selectedObjs = $("#selectedSwitchingRoom option:selected");
+                                if (selectedObjs.length == 0) {
+                                    selectedObjs = $("#selectedBuilding option:selected");
+                                    if (selectedObjs.length > 0) {
+                                        $("#objType").val(1);
+                                    }
+                                } else {
+                                    $("#objType").val(2);
+                                }
+                            } else {
+                                $("#objType").val(3);
+                            }
+                        } else {
+                            $("#objType").val(4);
+                        }
+
+                        if (selectedObjs.length == 1) {
+                            $("#queryObj").val(selectedObjs.attr("title"));
+                            $("#objIDs").val(selectedObjs.val());
+                            $("#resultDiv").slideUp("fast");
+                            $("#dataDiv").hide();
+                            $(this).dialog("close");
+                        } else if (selectedObjs.length > 1) {
+                            $("#dialogErrorTip").text("只能选择单个对象");
+                            $("#dialogErrorTip").slideDown("fast");
+                        } else {
+                            $("#dialogErrorTip").text("查询对象不能为空");
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+
+                        var selectedObjID = $("#objIDs").val();
+                        var selectedObjType = +$("#objType").val();
+                        if (selectedObjID != null && selectedObjID != 0) {
+                            $.getJSON('@Url.Action("BuildingGuanghuaPowerTypesOfObj","BuildingGuanghua")', {
+                                objID: selectedObjID,
+                                objType: selectedObjType
+                            }, function (jsonData) {
+                                if (jsonData == null) {
+                                    return;
+                                }
+                                if (jsonData.length == 0) {
+                                    var optionStr = "<option value=\"0\" > 无任何能耗类型 </option>";
+                                    $("#powerType").html(optionStr);
+                                    //                                    $("#powerType").val("0");
+                                    //                                    $("#powerTypeName").val("无");
+                                    //                                    $("#powerTreeDiv ul.em-tree ul li").each(function (index, item) {
+                                    //                                        $(item).hide();
+                                    //                                    });
+                                }
+                                else if($("#objType").val() == 4 && jsonData.length == 1 ){
+                                    var powerID = new String(jsonData[0].PowerTypeID);
+                                    var powerName = jsonData[0].PowerTypeName;
+                                    var optionStr = "<option value=\"" + powerID + "\" > ---" + powerName + " </option>"
+                                    $("#powerType").html(optionStr);
+                                }
+                                else
+                                {
+                                    var optionStr = "";
+                                    var elecOptionStr = "<option value=\"001\" > 总用电 </option>";
+                                    var waterOptionStr = "<option value=\"002\" > 总用水 </option>";
+                                    var gasOptionStr = "<option value=\"003\" > 总用气 </option>";
+                                    for (i = 0; i < jsonData.length; i++) { 
+                                        var powerID = new String(jsonData[i].PowerTypeID);
+                                        var powerIDPrefix = powerID.substr(0, 3);
+                                        var powerName = jsonData[i].PowerTypeName;
+                                        if(powerIDPrefix == "001"){
+                                            elecOptionStr = elecOptionStr + "<option value=\"" + powerID + "\" > ---" + powerName + " </option>";
+                                        }
+                                        else if (powerIDPrefix == "002"){
+                                            waterOptionStr = waterOptionStr + "<option value=\"" + powerID + "\" > --- " + powerName + " </option>";
+                                        }else if(powerIDPrefix == "003"){
+                                            gasOptionStr = gasOptionStr + "<option value=\"" + powerID + "\" > --- " + powerName + " </option>";
+                                        }
+                                    }
+                                    optionStr = elecOptionStr + waterOptionStr + gasOptionStr;
+                                    $("#powerType").html(optionStr);
+                                }
+                                //                                if (jsonData.length == 1) {
+                                //                                    $("#powerType").val(jsonData[0].PowerTypeID);
+                                //                                    $("#powerTypeName").val(jsonData[0].PowerTypeName);
+                                //                                }
+                                //                                if (jsonData.length != 0) {
+                                //                                    $("#powerTreeDiv ul.em-tree ul li").each(function (index, item) {
+                                //                                        var tempID = $(item).children("input").val();
+                                //                                        var ifExistInJsonData = false;
+                                //                                        for (i = 0; i < jsonData.length; i++) {
+                                //                                            if (jsonData[i].PowerTypeID == tempID) {
+                                //                                                ifExistInJsonData = true;
+                                //                                                break;
+                                //                                            }
+                                //                                        }
+                                //                                        if (!ifExistInJsonData) {
+                                //                                            $(item).hide();
+                                //                                        } else {
+                                //                                            $(item).show();
+                                //                                        }
+                                //                                    });
+                                //                                    $("#powerTreeDiv ul.em-tree").first().find("div.checkbox").addClass("checked");
+                                //                                    var powerIDs = "" + jsonData[0].PowerTypeID;
+                                //                                    var powerNames = "" + jsonData[0].PowerTypeName;
+                                //                                    for (i = 1; i < jsonData.length; i++) {
+                                //                                        powerIDs = powerIDs + "_" + jsonData[i].PowerTypeID;
+                                //                                    }
+                                //                                    for (k = 1; k < 3 && k < jsonData.length; k++) {
+                                //                                        powerNames = powerNames + ", " + jsonData[k].PowerTypeName;
+                                //                                    }
+                                //                                    powerNames = powerNames + "... (" + jsonData.length + ")";
+                                //                                    $("#powerType").val(powerIDs);
+                                //                                    $("#powerTypeName").val(powerNames);
+                                //                                }
+                            });
+                        }
+                    }
+                }
+            });
+        });
+
+//        $("#powerTypeName").click(function () {
+//            $("#powerTreeDiv").dialog({
+//                modal: true,
+//                width: 500,
+//                resizable: false,
+//                buttons: {
+//                    '选择': function () {
+//                        var tempName = "";
+//                        var tempIDs = "";
+//                        var selectedIndex = $("#powerTreeDiv").tabs('option', 'selected');
+//                        var checkedObjs = $("#powerTreeDiv > .em-tree:eq(" + selectedIndex + ") div.checked");
+//                        if (checkedObjs.length > 0) {
+//                            checkedObjs.each(function (index, item) {
+//                                if (tempName == "") {
+//                                    tempName = $(item).next().html();
+//                                }
+//                                if (tempIDs == "") {
+//                                    tempIDs = $(item).next().next().val();
+//                                } else {
+//                                    tempIDs += ("_" + $(item).next().next().val());
+//                                }
+//                            });
+//                            $("#powerType").val(tempIDs);
+//                            if (checkedObjs.length > 1) {
+//                                $("#powerTypeName").val(tempName + " ... （" + checkedObjs.length + "）");
+//                            } else {
+//                                $("#powerTypeName").val(tempName);
+//                            }
+
+//                        } else {
+//                            $("#treeDialogErrorTip").slideDown("fast");
+//                            return;
+//                        }
+//                        $("#resultDiv").slideUp("fast");
+//                        $("#dataDiv").hide();
+//                        $(this).dialog("close");
+//                    }
+//                }
+//            });
+//        });
+
+        var statisChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "StatisticsChart", 700, 500, "White");
+
+        var global_totalPages = -1;
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="/Content/images/loading_mid.gif" title="Loading" width="100" />');
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            var granularityVal = $("input[name='granularity']:checked").val();
+            if (granularityVal == "month") {
+                actualGraVal = $("input[name='monthRadio']:checked").val();
+            } else if (granularityVal == "day") {
+                actualGraVal = $("input[name='dayRadio']:checked").val();
+            } else {
+                actualGraVal = granularityVal;
+            }
+            if (actualGraVal == "selectedmonth") {
+                $("#noDataDiv").html("对不起，同期月份比较界面不适合分页显示，请选择不分页方式。").show();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            } else if (actualGraVal == "daytoday") {
+                $("#noDataDiv").html("对不起，同期日期比较界面不适合分页显示，请选择不分页方式。").show();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            }
+            var powerTypeID = $("#powerType").val();
+            if (powerTypeID == "0") {
+                $("#noDataDiv").html("对不起，您选择的对象没有相应的测点。").show();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            }
+            $.getJSON('@Url.Action("GetBuildingGuanghuaElecAjax", "BuildingGuanghua")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                objType: $("#objType").val(),
+                objIDs: $("#objIDs").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val(),
+                granularity: actualGraVal,
+                powerType: $("#powerType").val(),
+                weekType: $("input[name='weekRadio']:checked").val(),
+                hourType: $("input[name='hourRadio']:checked").val(),
+                startHour: $("#startHour").val(),
+                endHour: $("#endHour").val(),
+                selectedDay: $("#selectedDay").val()
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#weekDataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 <a href="/">登录</a>').show();
+                    return;
+                }
+                if (global_totalPages == -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    $("#weekDataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                var dataTemplateId = "dataTemplate";
+                var dataTableId = "dataTable";
+                $("#weekDataTable").hide();
+                //$("#hourDataTable").hide();
+                if (actualGraVal == "week") {
+                    $("#dataTable").hide();
+                    var dataTemplateId = "weekDataTemplate";
+                    var dataTableId = "weekDataTable";
+                } else if (actualGraVal == "hour") {
+                }
+                var renderType = $("input[name='renderRadio']:checked").val();
+                if (renderType == "List") {
+                    $(".dataDivUnit").html(jsonData.yAxisTitle);
+                    $("#" + dataTableId + " > tbody").html($("#" + dataTemplateId).tmpl(jsonData.data, {
+                        alternate: function (item) {
+                            return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                        }
+                    }));
+                    $("#" + dataTableId).show();
+                    $("#chartDiv").hide();
+                    $("#pager").show();
+                    $("#dataDiv").show();
+                } else {
+                    $("#chartDiv").html("");
+                    var extendObj = {
+                        title: "能耗统计",
+                        xAxisTitle: "时间",
+                        renderType: renderType,
+                        averageVal: jsonData.average,
+                        maxVal: jsonData.max,
+                        minVal: jsonData.min,
+                        hourType: $("input[name='hourRadio']:checked").val(),
+                        GranularityType: actualGraVal
+                    };
+                    var chartData = $.extend(jsonData, extendObj);
+                    var chartXml = util_templateToChartXml("chartTemplate", chartData);
+                    statisChart.setDataXml(chartXml);
+                    $("#dataTable").hide();
+                    $("#weekDataTable").hide();
+                    $("#noDataDiv").hide();
+                    $("#chartDiv").show();
+                    $("#pager").show();
+                    $("#dataDiv").show();
+                    statisChart.render("chartDiv");
+                }
+            });
+        }
+        function query() {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            var granularityVal = $("input[name='granularity']:checked").val();
+            if (granularityVal == "month") {
+                actualGraVal = $("input[name='monthRadio']:checked").val();
+            } else if (granularityVal == "day") {
+                actualGraVal = $("input[name='dayRadio']:checked").val();
+            } else {
+                actualGraVal = granularityVal;
+            }
+            var renderType = $("input[name='renderRadio']:checked").val();
+            if (actualGraVal == "selectedmonth" && renderType == "List") {
+                $("#noDataDiv").html("对不起，同期月份比较界面不适合用一览表形式显示，请选择其他图形显示方式。").show();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            }
+            if (actualGraVal == "daytoday" && renderType == "List") {
+                $("#noDataDiv").html("对不起，同期日期比较界面不适合用一览表形式显示，请选择其他图形显示方式。").show();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            }
+            var powerTypeID = $("#powerType").val();
+            if (powerTypeID == "0") {
+                $("#noDataDiv").html("对不起，您选择的对象没有相应的测点。").show();
+                $("#dataDiv").hide();
+                $("#weekDataDiv").hide();
+                return;
+            }
+            $.getJSON('@Url.Action("GetBuildingGuanghuaElecAllAjax", "BuildingGuanghua")', {
+                objType: $("#objType").val(),
+                objIDs: $("#objIDs").val(),
+                powerType: $("#powerType").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val(),
+                granularity: actualGraVal,
+                weekType: $("input[name='weekRadio']:checked").val(),
+                hourType: $("input[name='hourRadio']:checked").val(),
+                startHour: $("#startHour").val(),
+                endHour: $("#endHour").val(),
+                selectedDay: $("#selectedDay").val()
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#weekDataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (actualGraVal == "selectedmonth") {
+                    if (jsonData.count == 0) {
+                        $("#noDataDiv").html("当前查询范围没有数据").show();
+                        $("#dataDiv").hide();
+                        $("#weekDataDiv").hide();
+                        return;
+                    }
+                    var renderType = $("input[name='renderRadio']:checked").val();
+                    //                    var headObj = {
+                    //                        title: "能耗统计",
+                    //                        xAxisTitle: "月份",
+                    //                        yAxisTitle: "用能值"
+                    //                    };
+                    var headXmlStr = util_templateToChartXml("selectedMonthTemplateHead", jsonData);
+                    var i = 0;
+                    var bodyXmlStr = "";
+                    for (i = 0; i < jsonData.data.length; i++) {
+                        var bodyObj = {
+                            renderType: renderType,
+                            year: jsonData.years[i],
+                            data: jsonData.data[i],
+                            GranularityType: actualGraVal,
+                            hourType: $("input[name='hourRadio']:checked").val()
+                        }
+                        bodyXmlStr = bodyXmlStr + util_templateToChartXml("selectedMonthTemplateBody", bodyObj);
+                    }
+                    var chartXml = headXmlStr + bodyXmlStr + $("#selectedMonthTemplateTail").html();
+                    statisChart.setDataXml(chartXml);
+                    $("#dataTable").hide();
+                    $("#weekDataTable").hide();
+                    $("#pager").hide();
+                    $("#noDataDiv").hide();
+                    $("#chartDiv").html("");
+                    $("#chartDiv").show();
+                    $("#dataDiv").show();
+                    statisChart.render("chartDiv");
+                    return;
+                }
+                else if (actualGraVal == "daytoday") {
+                    if (jsonData.count == 0) {
+                        $("#noDataDiv").html("当前查询范围没有数据").show();
+                        $("#dataDiv").hide();
+                        $("#weekDataDiv").hide();
+                        return;
+                    }
+                    var renderType = $("input[name='renderRadio']:checked").val();
+                    //                    var headObj = {
+                    //                        title: "能耗统计",
+                    //                        xAxisTitle: "日期",
+                    //                        yAxisTitle: "用能值"
+                    //                    };
+                    var headXmlStr = util_templateToChartXml("selectedDayTemplateHead", jsonData);
+                    var i = 0;
+                    var bodyXmlStr = "";
+                    for (i = 0; i < jsonData.data.length; i++) {
+                        var bodyObj = {
+                            renderType: renderType,
+                            month: jsonData.months[i],
+                            data: jsonData.data[i],
+                            GranularityType: actualGraVal,
+                            hourType: $("input[name='hourRadio']:checked").val()
+                        }
+                        bodyXmlStr = bodyXmlStr + util_templateToChartXml("selectedDayTemplateBody", bodyObj);
+                    }
+                    var chartXml = headXmlStr + bodyXmlStr + $("#selectedDayTemplateTail").html();
+                    statisChart.setDataXml(chartXml);
+                    $("#dataTable").hide();
+                    $("#weekDataTable").hide();
+                    $("#pager").hide();
+                    $("#noDataDiv").hide();
+                    $("#chartDiv").html("");
+                    $("#chartDiv").show();
+                    $("#dataDiv").show();
+                    statisChart.render("chartDiv");
+                    return;
+                }
+                if (jsonData.data.length == 0) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    $("#weekDataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                var dataTemplateId = "dataTemplate";
+                var dataTableId = "dataTable";
+                $("#weekDataTable").hide();
+                //$("#hourDataTable").hide();
+                if (actualGraVal == "week") {
+                    $("#dataTable").hide();
+                    dataTemplateId = "weekDataTemplate";
+                    dataTableId = "weekDataTable";
+                }
+                var renderType = $("input[name='renderRadio']:checked").val();
+                if (renderType == "List") {
+                    $(".dataDivUnit").html(jsonData.yAxisTitle);
+                    $("#" + dataTableId + " > tbody").html($("#" + dataTemplateId).tmpl(jsonData.data, {
+                        alternate: function (item) {
+                            return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                        }
+                    }));
+                    $("#" + dataTableId).show();
+                    $("#chartDiv").hide();
+                    $("#pager").hide();
+                    $("#dataDiv").show();
+                } else {
+                    $("#chartDiv").html("");
+                    var extendObj = {
+                        renderType: renderType,
+                        averageVal: jsonData.average,
+                        maxVal: jsonData.max,
+                        minVal: jsonData.min,
+                        GranularityType: actualGraVal,
+                        hourType: $("input[name='hourRadio']:checked").val()
+                    };
+                    var chartData = $.extend(jsonData, extendObj);
+                    var chartXml = util_templateToChartXml("chartTemplate", chartData);
+                    statisChart.setDataXml(chartXml);
+                    $("#dataTable").hide();
+                    $("#weekDataTable").hide();
+                    $("#pager").hide();
+                    $("#chartDiv").show();
+                    $("#dataDiv").show();
+                    statisChart.render("chartDiv");
+                }
+            });
+        }
+        $("#powerType").val(globalPowerFn_getElecStr());
+    });
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+	<tr class="${$item.alternate($data)}"><td>${TimeBlock}</td><td>${StatisSVal}</td></tr>
+</script>
+<script id="weekDataTemplate" type="text/x-jQuery-tmpl">
+	<tr class="${$item.alternate($data)}"><td>${TimeBlock}</td><td>${weekDay}</td><td>${StatisSVal}</td></tr>
+</script>
+<script id="chartTemplate" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+        <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+
+        <vc:Chart.TrendLines> 
+            <vc:TrendLine Value="${averageVal}" ToolTipText="平均值：${averageVal}" LabelText="平均值：${averageVal}" ShadowEnabled="True"/>
+        </vc:Chart.TrendLines>
+        <vc:Chart.TrendLines> 
+            <vc:TrendLine Value="${maxVal}" ToolTipText="最大值：${maxVal}" LabelText="最大值：${maxVal}" ShadowEnabled="True"/>
+        </vc:Chart.TrendLines>
+        <vc:Chart.TrendLines> 
+            <vc:TrendLine Value="${minVal}" ToolTipText="最小值：${minVal}" LabelText="最小值：${minVal}" ShadowEnabled="True"/>
+        </vc:Chart.TrendLines>
+        <vc:Chart.AxesX>
+            <vc:Axis Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+
+        <vc:Chart.Series>
+        <vc:DataSeries RenderAs="${renderType}">
+            <vc:DataSeries.DataPoints>
+                {{if GranularityType == "hour" && hourType == 0}}
+                {{each data}}
+                    <vc:DataPoint AxisXLabel="${HHTimeStr}" YValue="${StatisSVal}"/>
+                {{/each}}
+                {{else}}
+                {{each data}}
+                    <vc:DataPoint AxisXLabel="${TimeBlock}" YValue="${StatisSVal}"/>
+                {{/each}}
+                {{/if}}
+
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+<script id="selectedMonthTemplate" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+        <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+        <vc:Chart.AxesX>
+            <vc:Axis  Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+        <vc:Chart.Series>
+                {{each(i, dataItem) data}}
+                <vc:DataSeries LegendText="legend ${i}" RenderAs="${renderType}">
+                    <vc:DataSeries.DataPoints>
+                        {{each dataItem}}
+                            <vc:DataPoint AxisXLabel="${MMTimeStr}" YValue="${StatisSVal}"/>
+                        {{/each}}
+                    </vc:DataSeries.DataPoints>
+                </vc:DataSeries>
+                {{/each}}
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+<script id="selectedMonthTemplateHead" type="text/x-jQuery-tmpl">
+    <vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+        <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+        <vc:Chart.TrendLines> 
+            <vc:TrendLine Value="${max}" ToolTipText="最大值：${max}" LabelText="最大值：${max}" ShadowEnabled="True"/>
+        </vc:Chart.TrendLines>
+        <vc:Chart.TrendLines> 
+            <vc:TrendLine Value="${min}" ToolTipText="最小值：${min}" LabelText="最小值：${min}" ShadowEnabled="True"/>
+        </vc:Chart.TrendLines>
+        <vc:Chart.AxesX>
+            <vc:Axis  Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+        <vc:Chart.Series>
+</script>
+<script id="selectedMonthTemplateBody" type="text/x-jQuery-tmpl">
+    <vc:DataSeries LegendText="${year}" RenderAs="${renderType}">
+                    <vc:DataSeries.DataPoints>
+                        {{each data}}
+                            <vc:DataPoint AxisXLabel="${MMTimeStr}" YValue="${StatisSVal}"/>
+                        {{/each}}
+                    </vc:DataSeries.DataPoints>
+    </vc:DataSeries>
+</script>
+<script id="selectedMonthTemplateTail" type="text/x-jQuery-tmpl">
+    </vc:Chart.Series>
+    </vc:Chart>
+</script>
+<script id="selectedDayTemplateHead" type="text/x-jQuery-tmpl">
+    <vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+        <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+        <vc:Chart.TrendLines> 
+            <vc:TrendLine Value="${max}" ToolTipText="最大值：${max}" LabelText="最大值：${max}" ShadowEnabled="True"/>
+        </vc:Chart.TrendLines>
+        <vc:Chart.TrendLines> 
+            <vc:TrendLine Value="${min}" ToolTipText="最小值：${min}" LabelText="最小值：${min}" ShadowEnabled="True"/>
+        </vc:Chart.TrendLines>
+        <vc:Chart.AxesX>
+            <vc:Axis Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+        <vc:Chart.Series>
+</script>
+<script id="selectedDayTemplateBody" type="text/x-jQuery-tmpl">
+    <vc:DataSeries LegendText="${month}" RenderAs="${renderType}">
+                    <vc:DataSeries.DataPoints>
+                        {{each data}}
+                            <vc:DataPoint AxisXLabel="${DDTimeStr}" YValue="${StatisSVal}"/>
+                        {{/each}}
+                    </vc:DataSeries.DataPoints>
+    </vc:DataSeries>
+</script>
+<script id="selectedDayTemplateTail" type="text/x-jQuery-tmpl">
+    </vc:Chart.Series>
+    </vc:Chart>
+</script>
+@Html.Partial("_BuildingGuanghuaRoomSelect")
+@Html.Partial("_PowerSelect")

@@ -1,0 +1,241 @@
+﻿
+@{
+    ViewBag.Title = "能耗审计";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />   
+    <script src="@Url.Content("~/Scripts/jquery.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/flexpaper_flash_debug.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/flexpaper_flash.js")" type="text/javascript"></script>
+
+    <style type="text/css">
+        fieldset{margin: 20px;}
+        .step-tip{ float:left; width:400px; margin:10px;}
+        .step-img{ float:left; margin:10px;}
+        hr{margin: 20px auto;}
+        .import-upload{ padding:10px; margin: auto 10px;}
+        html, body  { height:100%; }  
+        body { margin:0; padding:0; overflow:auto; }     
+        #flashContent { display:none; }  
+        element.style {
+          padding: 7px;
+        }
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>能耗审计</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">		 
+            <li class="current"><a>能耗审计</a></li>
+	    </ul>
+        <div class="tab-div">
+        <ul class="em-form-ul">
+            <li>     
+             <table id="dataTable" >
+             <thead>  
+              <tr>
+                        <td>  
+           
+                <ul>                 
+                      <li></li>
+                      <li><span class="red">* </span>选择文档：</li>
+                     <li></li>                    
+                </ul> 
+                 </td> 
+                  <td>  
+                 <ul style=" width:400px;">
+                <li> </li>                
+                <li>
+                    <form id="mainForm" action="@Url.Action("Comptroller", "EnergyComptroller")" method="post" enctype="multipart/form-data" >
+                        <select id = "y" name="y">
+                                @if (ViewBag.fileListSize == 0)
+                                {
+                                    <option value="" selected="selected">暂时没有上传文档</option>
+                                }
+                                else
+                                {
+                                    int i =1;
+                                    foreach (string s in Model)
+                                    {
+                                        if ((ViewBag.selectedWordName != null && ViewBag.selectedWordName == s) || (ViewBag.selectedWordName == null && i == 1))
+                                        { 
+                                            <option value="@s" selected="selected">@s</option> 
+                                            i++;
+                                        }
+                                        else { 
+                                            <option value="@s" >@s</option>
+                                        }
+                                    }
+                                }          
+                        </select>    
+                   </form>      
+                </li>
+                <li></li>
+            </ul>  
+                   </td>  
+                 <td>  
+            <ul>                  
+                  <li></li>
+                  <li>
+                          <form id="uploadForm" action="@Url.Action("DownloadImportWord", "EnergyComptroller")" method="post" enctype="multipart/form-data" >                            
+                                <button id="uploadButton" type="submit" class="btn m-button" style = "padding:0" > 下 载 </button>                                   
+                                <input type="hidden" id="wordNameOne" name="wordNameOne" />
+                         </form>    
+                        
+                    </li>
+                    <li></li>                    
+            </ul> 
+             </td> 
+            <td>
+            <ul>                 
+                  <li></li>
+                  <li>                         
+                         <form id="previewForm" action="@Url.Action("Comptrolleringone", "EnergyComptroller")" method="post" enctype="multipart/form-data" >                            
+                                <button id="previewButton" type="submit" class="btn m-button" style = "padding:0" > 预 览  </button> 
+                                <button id="canclePreviewButton" type="button" class="btn m-button" style = "padding:0px" >取消预览 </button>                              
+                                <input type="hidden" id="wordNameTwo" name="wordNameTwo" />                                
+                         </form>
+                    </li>
+                     <li></li>                    
+            </ul>  
+            </td> 
+            <td>
+                    <ul>                 
+                          <li></li>
+                          <li>                       
+                                  <form id="deleteForm" action="@Url.Action("ComptrollerDelete", "EnergyComptroller")" method="post" enctype="multipart/form-data" >                            
+                                        <button id="deleteButton" type="submit" class="btn m-button"  style = "padding:0;display:none;" > 删 除  </button>                               
+                                        <input type="hidden" id="wordNameThree" name="wordNameThree" />                                
+                                 </form>                            
+                          </li>
+                             <li></li>                    
+                    </ul>  
+                </td>   
+            </tr>
+            </thead>
+           </table> 
+        </li>  
+    </ul> 
+        <div class="clear"></div>
+       <form id="myForm"   action="@Url.Action("Comptrollering", "EnergyComptroller")" method="post" enctype="multipart/form-data"  style = "padding:2px">
+        <table>
+            <tr>
+                    <td>
+                    <span class="red" style = "width:15px">* </span>上传文件(支持doc,docx,pdf格式文件,大小控制在2G以下)： <input id="uploadWord" name="uploadWord" type="file" class="import-upload"   />
+                    </td> 
+                    <td> 
+                    <img id="idProcess" style="display:none;" src="@Url.Content("~/Content/images/loading_load.gif")" alt = "uploading" />
+                    </td>
+                    <td > 
+                    <span id = "bigFile" style="display:none;">文件比较大，请耐心等待:</span><img id="idProcessBigFile" style="display:none;" src="@Url.Content("~/Content/images/loading_load.gif")" alt = "uploading" />
+                    </td>
+                    <td>
+                    <button id="queryButton" type="submit" class="btn m-button" style = "padding:0"  > 上 传 </button>
+                    </td>
+                     
+            </tr>
+            <tr>
+                <td > 
+                    <span id = "sign" class="red" style="display:none;">备注: </span><textarea id="remark" name="remark" cols="40" rows="1" style="width:1000px;display:none;"></textarea>
+                </td>
+                    
+            </tr>
+            </table> 
+        </form>    
+        
+    @if (ViewBag.previewFilePath != null)
+    {
+        <div id = "viewerDiv" style="left:0px;top:0px;">
+        <a id="viewerPlaceHolder" style="width:940px;height:830px;display:block"></a> 
+        @if (ViewBag.previewTxt != null)
+        {
+         <span id = "signOne">备注:</span><span id="view"  style="width:800px;" ></span> 
+        }       
+    </div>
+    }
+    </div></div>
+</div> </div>
+<script type="text/javascript">
+    $(function () {
+        $("#previewButton").addClass("hidden");
+        var fp = new FlexPaperViewer(
+                         '@Url.Content("~/Content/previewPdfFiles/FlexPaperViewer")',
+                         'viewerPlaceHolder',
+                         { config: {
+                             SwfFile: escape('/Content/previewPdfFiles/@ViewBag.previewFilePath'),
+                             Scale: 0.8,
+                             ZoomTransition: 'easeOut',
+                             ZoomTime: 0.5,
+                             ZoomInterval: 0.2,
+                             FitPageOnLoad: true,
+                             FitWidthOnLoad: false,
+                             PrintEnabled: true,
+                             FullScreenAsMaxWindow: false,
+                             ProgressiveLoading: false,
+                             MinZoomSize: 0.2,
+                             MaxZoomSize: 5,
+                             SearchMatchAll: false,
+                             InitViewMode: 'Portrait',
+
+                             ViewModeToolsVisible: true,
+                             ZoomToolsVisible: true,
+                             NavToolsVisible: true,
+                             CursorToolsVisible: true,
+                             SearchToolsVisible: true,
+                             localeChain: 'en_US'
+                         }
+                         });
+        $("#queryButton").click(function () {
+            $("#sign").addClass("hidden");
+            $("#remark").addClass("hidden");
+            if ($("#uploadWord").val() == "") {
+                return false;
+            }
+            var f = document.getElementById("uploadWord").files;
+            var fileSize = f[0].size;
+            if (fileSize > 3000 * 1024) {
+                $("#bigFile").attr("style", "");
+                $("#idProcessBigFile").attr("style", "");
+            } else {
+                $("#idProcess").attr("style", "");
+            }
+        });
+        $("#uploadWord").click(function () {
+            $("#sign").attr("style", "");
+            $("#remark").attr("style", "");
+        });
+        $("#uploadButton").click(function () {
+            var sel_obj = $('#y option:selected').val();
+            if (sel_obj == "") {
+                return false;
+            }
+            $("#wordNameOne").val(sel_obj);
+        });
+        $("#deleteButton").click(function () {
+            var sel_obj = $('#y option:selected').val();
+            $("#wordNameThree").val(sel_obj);
+        });
+        $("#previewButton").click(function () {
+            var sel_obj = $('#y option:selected').val();
+            if (sel_obj == "") {
+                return false;
+            }
+            $("#wordNameTwo").val(sel_obj);
+        });
+        $("#canclePreviewButton").click(function () {
+            $("#viewerDiv").addClass("hidden");
+            $("#canclePreviewButton").addClass("hidden");
+            $("#previewButton").removeClass("hidden");
+            $("#deleteButton").attr("style", "padding:0;");
+        });
+        
+        $("#view").text("@ViewBag.previewTxt");
+    });
+   
+</script>
+
+
+
+
+

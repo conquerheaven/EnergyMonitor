@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "没有权限";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout2.cshtml";
+}
+<div class="contentcontainer m-center" style="height: 300px;">
+<div class="headings altheading"><h2>没有权限</h2></div>
+    <div class="contentbox" style="height: 200px;">
+    <div class="status">
+        <div><img src="@Url.Content("~/Content/images/error.jpg") " alt="error" />
+        <h1 style="padding-top: 60px; padding-left: 200px;">抱歉，您没有权限进行该操作！</h1>
+        <h1 style="padding-left: 300px;"><a href="javascript:history.go(-1)">返回</a></h1>
+        </div>
+    </div>
+</div></div>

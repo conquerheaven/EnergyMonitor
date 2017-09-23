@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "添加个人信息";
+    Layout = "~/Areas/User/Views/Shared/_Layout2.cshtml";
+}
+<div class="contentcontainer m-center" style="height: 300px;">
+<div class="headings altheading"><h2>添加个人信息</h2></div>
+    <div class="contentbox" style="height: 200px;">
+    @if (ViewBag.error != null)
+    {
+        <div class="status error">
+            <p>输入信息有误,<a href="@Url.Action("Register", "User")">点击重新输入</a></p>
+        </div>
+    }
+    else
+    {
+        <div class="status success">
+            <p>添加个人信息成功,我们已经发送一封邮件到您的邮箱中，请激活后重新登录系统！</p>
+        </div>
+    }
+</div></div>
+

@@ -1,0 +1,1609 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>详细信息</title>
+    <script src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/arcgismap.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.tmpl.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Visifire.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.pager.js")" type="text/javascript"></script>
+    <script src="/Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/" type="text/javascript"></script><link href="/Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet"type="text/css" />
+    <script src="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/js/esri/nls/jsapi_en-us.js"></script>
+
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/themes/green/styles.css" rel="stylesheet" type="text/css" />
+    <link href="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/js/dojo/dijit/themes/tundra/tundra.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html body{font-family: Arial,Helvetica,sans-serif;  font-size: 13px;}
+        #map{ position:relative;}
+        .info_container {border:1px solid rgb(153, 153,153);}
+        #buildingNameTip {display:none; font-size:12px;height:16px;white-space: nowrap;border: 1px solid #333333; padding: 2px; background-color: #ffffcc; z-index:2;}
+        #left_map { height:400px; width:700px;  }
+        #right_info { height:400px; overflow:hidden;  margin-left:710px; position:absolute;  left:0; top:0; width:900; }
+        #bd_energy_info { font-size:16px; font-weight:bold; line-height:18px; color: #4D4D4D; height:359px;  overflow-y:auto; overflow-x:hidden;}
+        #bd_energy_info a{ font-size:16px; font-weight:bold; line-height:18px; }
+        #select_bd { height:400px; width:500px;}
+        #bd_info { height:400px; position:absolute; left:0px; top:0px; margin-left:510px; width: 1150px; }
+        .container_title { line-height: 31px; background-color: rgb(249, 249, 249); overflow: hidden; height: 31px; white-space: nowrap; width: 100%; text-align:left; border-bottom: 1px solid #CCCCCC;}
+        .iw_poi_title { color: #4D4D4D; font-size: 14px; font-weight: bold;  overflow: hidden; padding-left: 11px; white-space: nowrap; margin:0px;}
+        #map { height:368px; }
+        .chart { width:430px; height:267px;}
+        #days_chart { position:absolute; left:0px; top:32px;}
+        #months_chart{ position:absolute; left:0px; top:32px;}
+        #mapLoading {position:relative; top:30%; left:30%;}
+        .content_text { margin:5px 20px 5px 20px;}
+        #bd_intro {margin: 20px; width:400px; float:left;  font-size: 15px; text-indent:30px; line-height:20px;}
+        #bd_photo { margin: 20px 10px 10px 20px; overflow:auto; float:left; width:250;}
+        #title {width:100%; height:40px; line-height: 40px; border:1px; padding-left:20px; }
+        #title p { font-size:20px; margin:0px; }
+        .container_title a { color: #4174D9;  font-size: 12px; font-weight: normal; margin-left: 10px; text-decoration: none;}
+        .second_order { padding-left:20px;}
+        .content_text p{ margin:3px 0px;}
+        #room_info { display:none; }
+        #noDataDiv { display:none;}
+        table { padding:10px;}
+        th {   font-size: 14px; text-shadow: 1px 1px 1px #FFFFFF; }
+        th, td { padding: 2px; text-align: left;}
+        #pager ul.pages { margin:10px 0;}
+        #re_energy_info { float:left; margin-left:20px; line-height:25px;}
+        .level_container { position:relative; margin-top:10px; width:100%;}
+        ul, li {list-style: none outside none; margin: 0; padding: 0;}
+        ul, li { list-style: none outside none;}
+        select {border: 1px solid #CCCCCC; border-radius: 5px 5px 5px 5px; padding: 7px 10px;}
+        h1, h2, h3, h4, h5 { margin: 0; padding: 0;}
+        .hidden {display: none;}
+        .clear { clear: both;}
+        .red { color: #C61B1B;}
+        ul.float li{ float:left; margin-left:10px;}
+        .building_link { text-decoration: none; line-height:20px;}
+        /* Facebook Like Skin */
+
+        table.vsTable {
+            position: relative;
+            z-index: 2;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            border-collapse: collapse;
+            margin: 0 auto;
+            border-right: 1px solid #ccc;
+            width: 550px;
+            font-size: 20px;
+        }
+
+        table.vsTable td {
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+        vertical-align: middle;
+        text-align: center;
+        background: #fff;
+        color: #707070;
+        }
+
+        table.vsTable td.second{
+        background: #edeff4;
+        }
+
+        table.vsTable tr td div {
+        text-align: center;
+        }
+
+
+        table.vsTable tr td.cat div, table.vsTable tr td.title div {
+        height: auto;
+        }
+
+        table.vsTable td.cat div {
+        text-align: left;
+        padding: 0 10px;
+        }
+
+        table.vsTable td.title{
+        background: #3b5998;
+        font-size: 24px;
+        color: #fff;
+        text-shadow: 1px 1px 0 #000;
+        border: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+        vertical-align: middle;
+        text-align: center;
+        text-decoration: none;
+        }
+
+        table.vsTable td.title a {
+        color: #fff;
+        vertical-align: middle;
+        text-align: center;
+        text-decoration: none;}
+
+        table.vsTable .cat, table.vsTable tr.second .cat {
+        text-shadow: 1px 1px 0 #fff;
+        text-align: left;
+        color: #4b67a1;
+        border-left: 1px solid #ccc;
+        }
+
+        table.vsTable td.title.cat {
+        background: none !important;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        cursor: default !important;
+        box-shadow: none;
+        }
+
+        table.vsTable td.title.cat div {
+        display: none;
+        }
+
+        table.vsTable tr td.cat:hover {
+        background: #d8dfea;
+        }
+
+        table.vsTable tr td.title:hover {
+        background: #4b67a1;
+        }
+
+    </style>
+</head>
+<body>
+        <div id="title" class="container_title">
+            <p class="title_p" >@ViewBag.buildingInfo.BDI_Name  >> 详细信息 
+            <a href="@Url.Action("FullScrMap", "Global", new { campusID = 0 })" >地图浏览</a>
+            <a href="@Url.Action("Welcome", "Home")" >系统首页</a>
+            <a href="javascript:void(0)" onclick="MultiBdCompare()" >能耗对比</a>
+            <a href="javascript:void(0)" onclick="savedCompare()">已保存对比条目</a>
+            @if (ViewBag.B_ID == 369)
+            { 
+                <a href="http://218.193.130.166/EMS" target="_blank">进入室内能耗监控演示系统</a>
+            }
+            </p>
+        </div>
+        <div  class="level_container">
+            <div id="left_map" class="info_container">
+                <div class="container_title">
+                    <p class="iw_poi_title"> 地图 </p>
+                </div>
+                <div class="map tundra" id="map">
+                    <div id="mapLoading"><img src="@Url.Content("~/Content/images/loading_mid.gif")" alt="" /></div>
+                    <div id="buildingNameTip">
+                    </div>
+                </div>
+            </div>
+            <div id="right_info" class="info_container">
+                <div class="container_title">
+                    <p class="iw_poi_title"> 能耗值信息 </p>
+                </div>
+                <div class="content_text" id="bd_energy_info">
+                    <div id="energy_table" style="width:px;">
+                    <ul class="float">
+                      @*  <li>
+                            <table class="vsTable">
+                                <tbody>
+                                @if (ViewBag.powerElecMonthReals[0].Val != null)
+                                {
+                                    <tr>
+                                        <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecMonthReals[0].PowerType")'>总用电量 (度)</a></td>
+                                        <td class="" style="width: 120px; ">@ViewBag.powerElecMonthReals[0].ValStr </td>
+                                    </tr>
+                                }
+                                @if (ViewBag.powerElecMonthReals[0].Val == null)
+                                {
+                                    <tr>
+                                        <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecMonthReals[0].PowerType")'>总用电量 (度)</a></td>
+                                        <td class="red" style="width: 120px; ">暂无数据</td>
+                                    </tr>
+                                }
+                                @for (int i = 0; i < ViewBag.powerElecType.Length; i++)
+                                {
+                                    if (ViewBag.powerElecMonthReals[i + 1] != null)
+                                    { 
+                                    <tr>
+                                        <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecType[i].PC_ID")'>--- @ViewBag.powerElecType[i].PC_Name (度)</a></td>
+                                        <td class="" style="width: 120px; "> @ViewBag.powerElecMonthReals[i + 1].ValStr  </td>
+                                    </tr>
+                                    }
+                                    if (ViewBag.powerElecMonthReals[i + 1] == null)
+                                    {
+                                    <tr>
+                                        <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecType[i].PC_ID")'>--- @ViewBag.powerElecType[i].PC_Name (度)</a></td>
+                                        <td class="red" style="width: 120px; ">暂无数据</td>
+                                    </tr> 
+                                    }
+                                }
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table class="vsTable">
+                                <tbody>
+                                    @if (ViewBag.powerWaterMonthReals[0].Val != null)
+                                    {
+                                         <tr>
+                                            <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterMonthReals[0].PowerType")'>总用水量 (吨)</a></td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerWaterMonthReals[0].ValStr </td>
+                                        </tr>
+                                    }
+                                    @if (ViewBag.powerWaterMonthReals[0].Val == null)
+                                    {
+                                        <tr>
+                                            <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterMonthReals[0].PowerType")'>总用水量 (吨)</a></td>
+                                            <td class="red" style="width: 120px; "> 暂无数据 </td>
+                                        </tr>
+                                    }
+                                    @for (int i = 0; i < ViewBag.powerWaterType.Length; i++)
+                                    {
+                                        if (ViewBag.powerWaterMonthReals[i + 1] != null)
+                                        { 
+                                        <tr>
+                                            <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterType[i].PC_ID")'>--- @ViewBag.powerWaterType[i].PC_Name (吨)</a></td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerWaterMonthReals[i + 1].ValStr  </td>
+                                        </tr>
+                                        }
+                                        if (ViewBag.powerWaterMonthReals[i + 1] == null)
+                                        { 
+                                            <tr>
+                                                <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterType[i].PC_ID")'>--- @ViewBag.powerWaterType[i].PC_Name (吨)</a></td>
+                                                <td class="red" style="width: 120px; ">暂无数据</td>
+                                            </tr> 
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table class="vsTable">
+                                <tbody>
+                                    @if (ViewBag.powerGasMonthReals[0].Val != null)
+                                    {
+                                         <tr>
+                                            <td class="title" style="width: 170px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasMonthReals[0].PowerType")'>总燃气用量 (立方米)</a></td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerGasMonthReals[0].ValStr </td>
+                                        </tr>
+                                    }
+                                    @if (ViewBag.powerGasMonthReals[0].Val == null)
+                                    {
+                                        <tr>
+                                            <td class="title" style="width: 170px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasMonthReals[0].PowerType")'>总燃气用量 (立方米)</a></td>
+                                            <td class="red" style="width: 120px; "> 暂无数据 </td>
+                                        </tr>
+                                    }
+                                    @for (int i = 0; i < ViewBag.powerGasType.Length; i++)
+                                    {
+                                        if (ViewBag.powerGasMonthReals[i + 1] != null)
+                                        { 
+                                        <tr>
+                                            <td class="title" style="width: 170px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasType[i].PC_ID")'>--- @ViewBag.powerGasType[i].PC_Name (立方米)</a></td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerGasMonthReals[i + 1].ValStr  </td>
+                                        </tr>
+                                        }
+                                        if (ViewBag.powerGasMonthReals[i + 1] == null)
+                                        { 
+                                            <tr>
+                                                <td class="title" style="width: 170px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasType[i].PC_ID")'>--- @ViewBag.powerGasType[i].PC_Name (立方米)</a></td>
+                                                <td class="red" style="width: 120px; ">暂无数据</td>
+                                            </tr> 
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </li>*@
+                       
+                        <li>
+                            <table class="vsTable">
+                                <tbody>
+                                 <tr>
+                                        <td class="title" style="width: 150px; "></td>
+                                        <td class="red" style="width: 120px; ">当天用电量</td>
+                                        <td class="red" style="width: 120px; ">当月用电量</td>
+                                        <td class="red" style="width: 120px; ">当年用电量</td>
+                                    </tr>
+                                @if (ViewBag.powerElecYearReals[0].Val != null)
+                                {
+                                    <tr>
+                                        <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecReals[0].PowerType")'>总用电量 (度)</a></td>
+                                          @if (ViewBag.powerElecReals[0] != null && ViewBag.powerElecReals[0].ValStr != null)
+                                          {
+                                            <td class="" style="width: 120px; "> @ViewBag.powerElecReals[0].ValStr  </td>
+                                          }
+                                          else
+                                          {
+                                             <td class="" style="width: 120px; "> 暂无数据  </td>
+                                          }
+                                        @if (ViewBag.powerElecMonthReals[0] != null && ViewBag.powerElecMonthReals[0].ValStr != null)
+                                        {
+                                             <td class="" style="width: 120px; "> @ViewBag.powerElecMonthReals[0].ValStr  </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="" style="width: 120px; ">  暂无数据</td>
+                                        }
+                                        @if (ViewBag.powerElecYearReals[0] != null && ViewBag.powerElecYearReals[0].ValStr != null)
+                                        {
+                                            <td class="" style="width: 120px; "> @ViewBag.powerElecYearReals[0].ValStr  </td>
+                                        }
+                                        else
+                                        {
+                                             <td class="" style="width: 120px; "> 暂无数据  </td>
+                                        }
+                                    </tr>
+                                }
+                                @if (ViewBag.powerElecYearReals[0].Val == null)
+                                {
+                                    <tr>
+                                        <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecReals[0].PowerType")'>总用电量 (度)</a></td>
+                                        <td class="red" style="width: 120px; ">暂无数据</td>
+                                        <td class="red" style="width: 120px; ">暂无数据</td>
+                                        <td class="red" style="width: 120px; ">暂无数据</td>
+                                    </tr>
+                                }
+                                @for (int i = 0; i < ViewBag.powerElecType.Length; i++)
+                                {
+                                    if (ViewBag.powerElecYearReals[i + 1] != null)
+                                    { 
+                                        <tr>
+                                            <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecType[i].PC_ID")'>--- @ViewBag.powerElecType[i].PC_Name (度)</a></td>
+                                            @if (ViewBag.powerElecReals[i + 1] != null && ViewBag.powerElecReals[i + 1].ValStr != null)
+                                            {
+                                                <td class="" style="width: 120px; "> @ViewBag.powerElecReals[i + 1].ValStr  </td>
+                                            }
+                                            else
+                                            {
+                                                 <td class="" style="width: 120px; "> 暂无数据  </td>
+                                            }
+                                            @if (ViewBag.powerElecMonthReals[i + 1] != null && ViewBag.powerElecMonthReals[i + 1].ValStr != null)
+                                            {
+                                                 <td class="" style="width: 120px; "> @ViewBag.powerElecMonthReals[i + 1].ValStr  </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="" style="width: 120px; ">  暂无数据</td>
+                                            }
+                                            @if (ViewBag.powerElecYearReals[i + 1] != null && ViewBag.powerElecYearReals[i + 1].ValStr != null)
+                                            {
+                                                <td class="" style="width: 120px; "> @ViewBag.powerElecYearReals[i + 1].ValStr  </td>
+                                            }
+                                            else
+                                            {
+                                                 <td class="" style="width: 120px; "> 暂无数据  </td>
+                                            }
+                                        </tr>                                    
+                                    }
+                                    @*if (ViewBag.powerElecYearReals[i + 1] == null)
+                                    {
+                                        <tr>
+                                            <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecType[i].PC_ID")'>--- @ViewBag.powerElecType[i].PC_Name (度)</a></td>
+                                            <td class="red" style="width: 120px; ">暂无数据</td>
+                                            <td class="red" style="width: 120px; ">暂无数据</td>
+                                            <td class="red" style="width: 120px; ">暂无数据</td>
+                                        </tr> 
+                                    }*@
+                                }
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <table class="vsTable">
+                                <tbody>
+                                     <tr>
+                                        <td class="title" style="width: 150px; "></td>
+                                        <td class="red" style="width: 120px; ">当天用水量</td>
+                                        <td class="red" style="width: 120px; ">当月用水量</td>
+                                        <td class="red" style="width: 120px; ">当年用水量</td>
+                                    </tr>
+                                    @if (ViewBag.powerWaterYearReals[0].Val != null)
+                                    {
+                                         <tr>
+                                            <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterReals[0].PowerType")'>总用水量 (吨)</a></td>
+                                                                                    
+                                                @if (ViewBag.powerWaterReals[0] != null && ViewBag.powerWaterReals[0].ValStr != null)
+                                                {
+                                                    <td class="" style="width: 120px; "> @ViewBag.powerWaterReals[0].ValStr  </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="" style="width: 120px; "> 暂无数据  </td>
+                                                }
+                                                @if (ViewBag.powerWaterMonthReals[0] != null && ViewBag.powerWaterMonthReals[0].ValStr != null)
+                                                {
+                                                    <td class="" style="width: 120px; "> @ViewBag.powerWaterMonthReals[0].ValStr  </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="" style="width: 120px; ">  暂无数据</td>
+                                                }
+                                                @if (ViewBag.powerWaterYearReals[0] != null && ViewBag.powerWaterYearReals[0].ValStr != null)
+                                                {
+                                                    <td class="" style="width: 120px; "> @ViewBag.powerWaterYearReals[0].ValStr  </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="" style="width: 120px; "> 暂无数据  </td>
+                                                }                                              
+                                        </tr>
+                                    }
+                                    @if (ViewBag.powerWaterYearReals[0].Val == null)
+                                    {
+                                        <tr>
+                                            <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterReals[0].PowerType")'>总用水量 (吨)</a></td>
+                                            <td class="red" style="width: 120px; "> 暂无数据 </td>
+                                            <td class="red" style="width: 120px; "> 暂无数据 </td>
+                                            <td class="red" style="width: 120px; "> 暂无数据 </td>
+                                        </tr>
+                                    }
+                                    @for (int i = 0; i < ViewBag.powerWaterType.Length; i++)
+                                    {
+                                        if (ViewBag.powerWaterYearReals[i + 1] != null)
+                                        { 
+                                        <tr>
+                                            <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterType[i].PC_ID")'>--- @ViewBag.powerWaterType[i].PC_Name (吨)</a></td>
+                                            @if (ViewBag.powerWaterReals[i + 1] != null && ViewBag.powerWaterReals[i + 1].ValStr != null)
+                                            {
+                                                <td class="" style="width: 120px; "> @ViewBag.powerWaterReals[i + 1].ValStr  </td>
+                                            }
+                                            else
+                                            {
+                                                    <td class="" style="width: 120px; "> 暂无数据  </td>
+                                            }
+                                            @if (ViewBag.powerWaterMonthReals[i + 1] != null && ViewBag.powerWaterMonthReals[i + 1].ValStr != null)
+                                            {
+                                                <td class="" style="width: 120px; "> @ViewBag.powerWaterMonthReals[i + 1].ValStr  </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="" style="width: 120px; ">  暂无数据</td>
+                                            }
+                                            @if (ViewBag.powerWaterYearReals[i + 1] != null && ViewBag.powerWaterYearReals[i + 1].ValStr != null)
+                                            {
+                                                <td class="" style="width: 120px; "> @ViewBag.powerWaterYearReals[i + 1].ValStr  </td>
+                                            }
+                                            else
+                                            {
+                                                    <td class="" style="width: 120px; "> 暂无数据  </td>
+                                            }                                              
+                                        </tr>
+                                        }
+                                        @*if (ViewBag.powerWaterYearReals[i + 1] == null)
+                                        { 
+                                            <tr>
+                                                <td class="title" style="width: 150px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterType[i].PC_ID")'>--- @ViewBag.powerWaterType[i].PC_Name (吨)</a></td>
+                                                <td class="red" style="width: 120px; ">暂无数据</td>
+                                                <td class="red" style="width: 120px; ">暂无数据</td>
+                                                <td class="red" style="width: 120px; ">暂无数据</td>
+                                            </tr> 
+                                        }*@
+                                    }
+                                </tbody>
+                            </table>
+                        </li>
+                        @*<li>
+                            <table class="vsTable">
+                                <tbody>
+                                     <tr>
+                                        <td class="title" style="width: 150px; "></td>
+                                        <td class="red" style="width: 120px; ">当天用气量</td>
+                                        <td class="red" style="width: 120px; ">当月用气量</td>
+                                        <td class="red" style="width: 120px; ">当年用气量</td>
+                                    </tr>
+                                    @if (ViewBag.powerGasReals[0].Val != null)
+                                    {
+                                         <tr>
+                                            <td class="title" style="width: 170px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasReals[0].PowerType")'>总燃气用量 (立方米)</a></td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerGasReals[0].ValStr </td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerGasMonthReals[0].ValStr </td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerGasYearReals[0].ValStr </td>
+                                        </tr>
+                                    }
+                                    @if (ViewBag.powerGasReals[0].Val == null)
+                                    {
+                                        <tr>
+                                            <td class="title" style="width: 170px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasReals[0].PowerType")'>总燃气用量 (立方米)</a></td>
+                                            <td class="red" style="width: 120px; "> 暂无数据 </td>
+                                            <td class="red" style="width: 120px; "> 暂无数据 </td>
+                                            <td class="red" style="width: 120px; ">暂无数据</td>
+                                        </tr>
+                                    }
+                                    @for (int i = 0; i < ViewBag.powerGasType.Length; i++)
+                                    {
+                                        if (ViewBag.powerGasReals[i + 1] != null)
+                                        { 
+                                        <tr>
+                                            <td class="title" style="width: 170px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasType[i].PC_ID")'>--- @ViewBag.powerGasType[i].PC_Name (立方米)</a></td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerGasReals[i + 1].ValStr  </td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerGasMonthReals[i + 1].ValStr  </td>
+                                            <td class="" style="width: 120px; "> @ViewBag.powerGasYearReals[i + 1].ValStr  </td>
+                                        </tr>
+                                        }
+                                        if (ViewBag.powerGasReals[i + 1] == null)
+                                        { 
+                                            <tr>
+                                                <td class="title" style="width: 170px; "><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasType[i].PC_ID")'>--- @ViewBag.powerGasType[i].PC_Name (立方米)</a></td>
+                                                <td class="red" style="width: 120px; ">暂无数据</td>
+                                                <td class="red" style="width: 120px; ">暂无数据</td>
+                                                <td class="red" style="width: 120px; ">暂无数据</td>
+                                            </tr> 
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </li>*@
+                        <div class="clear"></div>
+                    </ul>
+                    </div>
+                    @*<p>@ViewBag.buildingInfo.BDI_Name 的能耗值包括如下：</p>
+                    <div id="tableWrapper" style="width: 100%; ">
+                        <table id="vsTable"><tbody>
+                        <tr>
+                            <td class="title" style="width: 14%; ">bb</td>
+                            <td class="title" style="width: 14%; "><div class="">a</div></td>
+                            <td class="title" style="width: 14%; "><div class="">b</div></td>
+                            <td class="title" style="width: 14%; "><div class="">c</div></td>
+                            <td class="title" style="width: 14%; "><div class="">d</div></td>
+                            <td class="title" style="width: 14%; "><div class="">e</div></td>
+                            <td class="title" style="width: 14%; "><div class="">f</div></td>
+                         </tr>
+                         <tr class="">
+                            <td class="cat second" style="width: 14%; "><div class="">1</div></td>
+                            <td style="width: 14%; " class="text"><div class="">33</div></td>
+                            <td class="cat second" style="width: 14%; "><div class="">1</div></td>
+                            <td style="width: 14%; " class="text"><div class="">33</div></td>
+                            <td class="cat second" style="width: 14%; "><div class="">1</div></td>
+                            <td style="width: 14%; " class="text"><div class="">33</div></td>
+                            <td class="cat second" style="width: 14%; "><div class="">1</div></td></tr>
+                            <tr>
+                                <td class="cat" style="width: 14%; "><div class="">2</div></td>
+                                <td style="width: 14%; " class="text"><div class="">11</div></td>
+                                <td style="width: 14%; "><div class="yes"></div></td>
+                                <td style="width: 14%; "><div class="yes"></div></td>
+                                <td style="width: 14%; "><div class="yes"></div></td>
+                                <td style="width: 14%; "><div class="yes"></div></td>
+                                <td style="width: 14%; "><div class="yes"></div></td></tr><tr class="second"><td class="cat" style="width: 14%; "><div class="">3</div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td></tr><tr><td class="cat" style="width: 14%; "><div class="">4</div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td></tr><tr class="second"><td class="cat" style="width: 14%; "><div class="">5</div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td></tr><tr><td class="cat" style="width: 14%; "><div class="">6</div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td><td style="width: 14%; "><div class="yes"></div></td></tr>
+                            </tbody></table></div>
+
+                    @if (ViewBag.powerElecReals[0] != null)
+                    {
+                        <p><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecReals[0].PowerType")'>用电量</a>当前表值：  @ViewBag.powerElecReals[0].ValStr 度， 其中：</p>
+                    }
+                    @if (ViewBag.powerElecReals[0] == null)
+                    {
+                        <p><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecReals[0].PowerType")'>用电量</a>当前表值：暂无数据， 其中：</p>
+                    }
+                    @for (int i = 0; i < ViewBag.powerElecType.Length; i++)
+                    {
+                        if (ViewBag.powerElecReals[i + 1] != null)
+                        { 
+                            <p class="second_order"><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecType[i].PC_ID")'>@ViewBag.powerElecType[i].PC_Name </a>当前表值： @ViewBag.powerElecReals[i + 1].ValStr  度</p>
+                        }
+                        if (ViewBag.powerElecReals[i + 1] == null)
+                        { 
+                            <p class="second_order"><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerElecType[i].PC_ID")'>@ViewBag.powerElecType[i].PC_Name </a>当前表值: 暂无数据</p>
+                        }
+                    }
+
+                    @if (ViewBag.powerWaterReals[0] != null)
+                    {
+                        <p><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterReals[0].PowerType")'>用水量</a>当前表值：  @ViewBag.powerWaterReals[0].ValStr 度， 其中：</p>
+                    }
+                    @if (ViewBag.powerWaterReals[0] == null)
+                    {
+                        <p><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterReals[0].PowerType")'>用水量</a>当前表值：暂无数据， 其中：</p>
+                    }
+                    @for (int i = 0; i < ViewBag.powerWaterType.Length; i++)
+                    {
+                        if (ViewBag.powerWaterReals[i + 1] != null)
+                        { 
+                            <p class="second_order"><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterType[i].PC_ID")'>@ViewBag.powerWaterType[i].PC_Name </a>当前表值： @ViewBag.powerWaterReals[i + 1].ValStr  度</p>
+                        }
+                        if (ViewBag.powerWaterReals[i + 1] == null)
+                        { 
+                            <p class="second_order"><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerWaterType[i].PC_ID")'>@ViewBag.powerWaterType[i].PC_Name </a>当前表值: 暂无数据</p>
+                        }
+                    }
+
+                    @if (ViewBag.powerGasReals[0] != null)
+                    {
+                        <p><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasReals[0].PowerType")'>燃气用量</a>当前表值：  @ViewBag.powerGasReals[0].ValStr 度， 其中：</p>
+                    }
+                    @if (ViewBag.powerGasReals[0] == null)
+                    {
+                        <p><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasReals[0].PowerType")'>燃气用量</a>当前表值：暂无数据， 其中：</p>
+                    }
+                    @for (int i = 0; i < ViewBag.powerGasType.Length; i++)
+                    {
+                        if (ViewBag.powerGasReals[i + 1] != null)
+                        { 
+                            <p class="second_order"><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasType[i].PC_ID")'>@ViewBag.powerGasType[i].PC_Name </a>当前表值： @ViewBag.powerGasReals[i + 1].ValStr  度</p>
+                        }
+                        if (ViewBag.powerGasReals[i + 1] == null)
+                        { 
+                            <p class="second_order"><a href="javascript:void(0)" onclick='queryRoomsEnergy("@ViewBag.B_ID", "@ViewBag.powerGasType[i].PC_ID")'>@ViewBag.powerGasType[i].PC_Name </a>当前表值: 暂无数据</p>
+                        }
+                    }
+                </div>*@
+                <div id="room_info">
+                <div id="dataDiv">
+                    <table>
+                        <thead><tr>
+                            <th>子层测点名称</th>
+                            <th>最新取值时间</th>
+                            <th>表值（度）</th>
+                            <th>所属能耗类型</th>
+                        </tr></thead>
+                        <tbody id="resultDataDiv"></tbody>
+                    </table>
+                    <div id="pager">
+                    
+                    </div>
+                    <div class="re_energy_info"><a href="javascript:void(0)" onclick="reEnergyInfo()">返回</a></div>
+                    </div>
+                    <div id="noDataDiv" class="content_text"><p style=" float:left;">当前查询范围没有数据</p>
+                        <div class="re_energy_info"><a href="javascript:void(0)" onclick="reEnergyInfo()">返回</a></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="bottom_chart" class="info_container level_container">
+            <div class="container_title">
+                <p class="iw_poi_title" style=" float:left;"> 能耗历史信息 </p>
+                <a id="elec_icon" href="javascript:void(0)" style=" float:left; line-height:31px; padding:0 10px; font-weight:bolder;" onclick="updateElecChart()" >用电量</a>
+                <a id="water_icon" href="javascript:void(0)" style=" float:left; line-height:31px; padding:0 10px;" onclick="updateWaterChart();">用水量</a>
+                <a id="gas_icon" href="javascript:void(0)" style=" float:left; line-height:31px; padding:0 10px;" onclick="updateGasChart();">燃气用量</a>
+                <p id="elecThisYearInfo" class="iw_poi_title" style=" float:left; line-height:31px; padding:0 30px; margin: 0px;">当年已用<span class="energyUsedTitle">用电量（度）</span>：
+                    <span class="energyUsedSpan">@if (ViewBag.ValElecThisYear != 0)
+                                                 {@ViewBag.ValElecThisYear}
+                                                 else
+                                                 {<span>暂缺</span> }</span>&nbsp&nbsp&nbsp  剩余可用<span class="energyUsedTitle">用电量（度）</span>: 
+                    <span class="energyRemainSpan">@if (ViewBag.ValElecRemain != 0)
+                                                   {@ViewBag.ValElecRemain}
+                                                   else
+                                                   {<span>暂缺</span> }</span> 
+                </p>
+                <p id="waterThisYearInfo" class="iw_poi_title hidden" style=" float:left; line-height:31px; padding:0 30px; margin: 0px;">当年已用<span class="energyUsedTitle">用水量（吨）</span>：
+                    <span class="energyUsedSpan">@if (ViewBag.ValWaterThisYear != 0)
+                                                 {@ViewBag.ValWaterThisYear}
+                                                 else
+                                                 {<span>暂缺</span> }</span>&nbsp&nbsp&nbsp  剩余可用<span class="energyUsedTitle">用水量（吨）</span>: 
+                    <span class="energyRemainSpan">@if (ViewBag.ValWaterRemain != 0)
+                                                   {@ViewBag.ValWaterRemain}
+                                                   else
+                                                   {<span>暂缺</span> }</span>
+                 </p>
+                <p id="gasThisYearInfo" class="iw_poi_title hidden" style=" float:left; line-height:31px; padding:0 30px; margin: 0px;">当年已用<span class="energyUsedTitle">用气量（立方米）</span>：
+                    <span class="energyUsedSpan">@if (ViewBag.ValGasThisYear != 0)
+                                                 {@ViewBag.ValGasThisYear}
+                                                 else
+                                                 {<span>暂缺</span> }</span>&nbsp&nbsp&nbsp  剩余可用<span class="energyUsedTitle">用气量（立方米）</span>: 
+                    <span class="energyRemainSpan">@if (ViewBag.ValGasRemain != 0)
+                                                   {@ViewBag.ValGasRemain}
+                                                   else
+                                                   {<span>暂缺</span> }</span> 
+                </p>
+            </div>
+            <div id="hours_chart" class="chart">
+            </div>
+            <div id="days_chart" class="chart">
+            </div>
+            <div id="months_chart" class="chart">
+            </div>
+        </div>
+        <div class="level_container">
+            <div id="select_bd" class="info_container">
+                <div class="container_title">
+                    <p class="iw_poi_title"> 切换建筑 </p>
+                </div>
+                <div id = "building_list">
+                    @if (ViewBag.allBuildingInfo != null)
+                    {
+                        foreach (var areas in ViewBag.allBuildingInfo)
+                        { 
+                             <h3><a href="#" style= "color: #4D4D4D; font-size: 14px; font-weight: bold;  overflow: hidden;">@areas.AreaName</a></h3>
+                            <div>
+                             @foreach (var bd in areas.buildingInfo)
+                             {
+                                    <a href="@Url.Action("BuildingDetail", "Global", new { campusID = ViewBag.Cam_ID, buildingID = bd.BDI_ID })" class="building_link" buildingid="@bd.BDI_ID" >@bd.BDI_Name</a><br/>
+                             }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div id="bd_info" class="info_container">
+                <div class="container_title">
+                    <p class="iw_poi_title"> 建筑信息 </p>
+                </div>
+                @if (ViewBag.buildingInfo.BDI_Introduction != null)
+                { 
+                    <div id="bd_intro"><p>@ViewBag.buildingInfo.BDI_Introduction</p></div>
+                }
+                @if (ViewBag.buildingInfo.BDI_ImageUrl != null)
+                { 
+                    <div id="bd_photo"><img src="@Url.Content(ViewBag.buildingInfo.BDI_ImageUrl)" alt="photo"/></div>
+                }
+            </div>
+        </div>
+        <div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择对象（使用鼠标拖动或Ctrl键或Shift键进行多选）">
+        <div>
+            <ul>
+                <li style="display: block;">
+                    <h4>选择校区</h4>
+                    <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="schoolAreaDiv">
+                    <h4>选择区域</h4>
+                    <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="buildingDiv">
+                    <h4>选择楼宇</h4>
+                    <div id="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+                    </select></div>
+                </li>
+@*                <li id="newRoomDiv">
+                    <h4>选择房间</h4>
+                    <div id="divNewRoom">
+                    <select id="newRoomID" name="newRoomID" multiple="multiple">
+                    </select>
+                    </div>
+                </li>*@
+            </ul>
+        </div>
+            <div class=" ui-widget-content ui-helper-clearfix clear" style=" margin:10px 0px; border:0px;">
+                <div class="ui-dialog-buttonset" style=" text-align:center;">
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="addToCompare()">
+                        <span class="ui-button-text">加入对比</span>
+                    </button>
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="quitFromCompare()">
+                        <span class="ui-button-text">退出对比</span>
+                    </button>
+                </div>
+            </div>
+            <div style="width:100%; height:auto; clear:both;">
+                <select multiple="multiple" name="" id="addedBD" style=" width:100%">
+                </select>
+            </div>
+            <div id="dialogErrorTip1" class="clear a-center red hidden">查询对象不能为空。</div>
+            <div id="dialogErrorTip2" class="clear a-center red hidden">只能查询同一级别的测点的能耗对比。</div>
+            <div id="dialogErrorTip3" class="clear a-center red hidden">不能添加重复的测点，请重新选择。</div>
+            <div id="dialogErrorTip4" class="clear a-center red hidden">加入对比的测点数目不能超过5个。</div>
+        </div>
+    <div id="savedItemsDiv" class="hidden" title="请选择一条对比条目">
+        <select id="savedItemsSelect" multiple="multiple" style="width:100%; height:400;">
+        </select>
+        <div id="savedDialogErrorTip1" class="clear a-center red hidden">请选择一个对象</div>
+        <div id="savedDialogErrorTip2" class="clear a-center red hidden">不能选择多个对象</div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+
+            var fudanMap = new FudanMap('@Url.Content("~")', "@ViewBag.Cam_ID");
+            setTimeout(function () {
+                fudanMap.init("@ViewBag.Cam_ID");
+                fudanMap.activeBuilding("@ViewBag.B_ID");
+                fudanMap.reflashOnClick();
+            }, 1000);
+            var totalWidth = $("#right_info").parent().width();
+            if (totalWidth > 1650) {
+                $("#bottom_chart").css("width", totalWidth);
+            } else {
+                $("#bottom_chart").css("width", 1650);
+            }
+
+            var chartWidth = $("#bottom_chart").width() / 3;
+            $(".chart").css("width", chartWidth);
+            $("#days_chart").css("left", chartWidth);
+            $("#months_chart").css("left", chartWidth * 2);
+            var rightWidth = $("#right_info").parent().width() - $("#left_map").width() - 10;
+            if (rightWidth > 950) { $("#right_info").css("width", rightWidth); }
+            var rightbdinfoWidth = $("#bd_info").parent().width() - $("#select_bd").width() - 10;
+            if (rightbdinfoWidth > 1150) { $("#bd_info").css("width", rightbdinfoWidth); }
+            var hoursChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "HourElecChart", chartWidth, 267, "White");
+            var hoursXmlstr = '' + $("#24hoursElecTemplate").html().replace("width", chartWidth);
+            hoursChart.setDataXml(hoursXmlstr);
+            hoursChart.render("hours_chart");
+
+            var daysChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "DayElecChart", chartWidth, 267, "White");
+            var daysXmlstr = '' + $("#10daysElecTemplate").html().replace("width", chartWidth);
+            daysChart.setDataXml(daysXmlstr);
+            daysChart.render("days_chart");
+
+            var monthsChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "MonthElecChart", chartWidth, 267, "White");
+            var monthsXmlstr = '' + $("#10MonthsElecTemplate").html().replace("width", chartWidth);
+            monthsChart.setDataXml(monthsXmlstr);
+            monthsChart.render("months_chart");
+
+            //selectRoomDiv
+            $("#selectedSchool").change(function () {
+                $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Global")', { schoolID: this.value }, function (jsonData) {
+                    $("#selectedSchoolArea").html("");
+                    $("#selectedBuilding").html("");
+                    $("#newRoomID").html("");
+                    $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                    $("#divSchoolArea").attr("class", "divSelectRoom2");
+                    $("#schoolAreaDiv").fadeIn("fast");
+                    $("#buildingDiv").fadeOut("fast");
+                    $("#newRoomDiv").fadeOut("fast");
+                });
+            });
+            $("#selectedSchoolArea").change(function () {
+                $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Global")', { areaID: this.value }, function (jsonData) {
+                    $("#selectedBuilding").html("");
+                    $("#newRoomID").html("");
+                    $("#roomTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+                    $("#divSchoolArea").attr("class", "divSelectRoom1");
+                    //                    $("#divBuilding").attr("class", "divSelectRoom2");
+                    $("#buildingDiv").fadeIn("fast");
+                    $("#newRoomDiv").fadeOut("fast");
+                });
+            });
+            //            $("#selectedBuilding").change(function () {
+            //                $.getJSON('@Url.Action("GetRoomsByBIDAjax", "Global")', { buildingID: this.value }, function (jsonData) {
+            //                    $("#newRoomID").html("");
+            //                    $("#roomTemplate").tmpl(jsonData).appendTo("#newRoomID");
+            //                    $("#divBuilding").attr("class", "divSelectRoom1");
+            //                    $("#divNewRoom").attr("class", "divSelectRoom4");
+            //                    $("#newRoomDiv").fadeIn("fast");
+            //                });
+            //            });
+            $("#newRoomID").change(function () {
+                $("#divNewRoom").attr("class", "divSelectRoom divSelectRoom3");
+            });
+            $.getJSON('@Url.Action("GetAllShoolAjax", "Global")', null, function (jsonData) {
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+            });
+        });
+
+        var global_totalPages = -1;
+        var current_buildingID = 0;
+        var current_powerType = "";
+        function queryRoomsEnergy(buildingID, powerType) {
+            $("#energy_table").hide();
+            $("#room_info").show();
+            global_totalPages = -1;
+            current_buildingID = buildingID;
+            current_powerType = powerType;
+            pageClick(1);
+        }
+
+        function reEnergyInfo() {
+            $("#room_info").hide();
+            $("#energy_table").show();
+        }
+        function pageClick(pageIndex) {
+            $.getJSON('@Url.Action("QueryPointAjax", "Global")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                objType: 3,
+                objIDs: current_buildingID,
+                powerType: current_powerType,
+                realFlag: -1,
+                statFlag: -1
+            },
+                function (jsonData) {
+                    if (jsonData == null) {
+
+                    }
+                    if (global_totalPages = -1) {
+                        global_totalPages = jsonData.totalPages;
+                    }
+                    if (global_totalPages < 1) {
+                        $("#noDataDiv").show();
+                        $("#dataDiv").hide();
+                        return;
+                    }
+                    $("#noDataDiv").hide();
+                    $("#dataDiv").show();
+                    $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                    $("#resultDataDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                        alternate: function (item) {
+                            return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                        }
+                    }));
+                });
+        }
+        var currentChartType = 0;
+        function updateElecChart() {
+            if (currentChartType == 0) {
+                return;
+            }
+            $("#hours_chart").empty();
+            $("#days_chart").empty();
+            $("#months_chart").empty();
+
+            $("#elec_icon").css("font-weight", "bolder");
+            $("#water_icon").css("font-weight", "normal");
+            $("#gas_icon").css("font-weight", "normal");
+
+            var chartWidth = $("#bottom_chart").width() / 3;
+            var hoursChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "HourElecChart", chartWidth, 267, "White");
+            var hoursXmlstr = '' + $("#24hoursElecTemplate").html().replace("width", chartWidth);
+            hoursChart.setDataXml(hoursXmlstr);
+            hoursChart.render("hours_chart");
+
+            var daysChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "DayElecChart", chartWidth, 267, "White");
+            var daysXmlstr = '' + $("#10daysElecTemplate").html().replace("width", chartWidth);
+            daysChart.setDataXml(daysXmlstr);
+            daysChart.render("days_chart");
+
+            var monthsChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "MonthElecChart", chartWidth, 267, "White");
+            var monthsXmlstr = '' + $("#10MonthsElecTemplate").html().replace("width", chartWidth);
+            monthsChart.setDataXml(monthsXmlstr);
+            monthsChart.render("months_chart");
+            currentChartType = 0;
+            $("#elecThisYearInfo").show();
+            $("#waterThisYearInfo").hide();
+            $("#gasThisYearInfo").hide();
+        }
+
+        function updateWaterChart() {
+            if (currentChartType == 1) {
+                return;
+            }
+            $("#hours_chart").empty();
+            $("#days_chart").empty();
+            $("#months_chart").empty();
+
+            $("#elec_icon").css("font-weight", "normal");
+            $("#water_icon").css("font-weight", "bolder");
+            $("#gas_icon").css("font-weight", "normal");
+
+            var chartWidth = $("#bottom_chart").width() / 3;
+            var hoursChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "HourWaterChart", chartWidth, 267, "White");
+            var hoursXmlstr = '' + $("#24hoursWaterTemplate").html().replace("width", chartWidth);
+            hoursChart.setDataXml(hoursXmlstr);
+            hoursChart.render("hours_chart");
+
+            var daysChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "DayWaterChart", chartWidth, 267, "White");
+            var daysXmlstr = '' + $("#10daysWaterTemplate").html().replace("width", chartWidth);
+            daysChart.setDataXml(daysXmlstr);
+            daysChart.render("days_chart");
+
+            var monthsChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "MonthWaterChart", chartWidth, 267, "White");
+            var monthsXmlstr = '' + $("#10MonthsWaterTemplate").html().replace("width", chartWidth);
+            monthsChart.setDataXml(monthsXmlstr);
+            monthsChart.render("months_chart");
+            currentChartType = 1;
+            $("#elecThisYearInfo").hide();
+            $("#waterThisYearInfo").show();
+            $("#gasThisYearInfo").hide();
+        }
+
+        function updateGasChart() {
+            if (currentChartType == 2) {
+                return;
+            }
+            $("#hours_chart").empty();
+            $("#days_chart").empty();
+            $("#months_chart").empty();
+
+            $("#elec_icon").css("font-weight", "normal");
+            $("#water_icon").css("font-weight", "normal");
+            $("#gas_icon").css("font-weight", "bolder");
+            var chartWidth = $("#bottom_chart").width() / 3;
+            var hoursChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "HourGasChart", chartWidth, 267, "White");
+            var hoursXmlstr = '' + $("#24hoursGasTemplate").html().replace("width", chartWidth);
+            hoursChart.setDataXml(hoursXmlstr);
+            hoursChart.render("hours_chart");
+
+            var daysChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "DayGasChart", chartWidth, 267, "White");
+            var daysXmlstr = '' + $("#10daysGasTemplate").html().replace("width", chartWidth);
+            daysChart.setDataXml(daysXmlstr);
+            daysChart.render("days_chart");
+
+            var monthsChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "monthGasChart", chartWidth, 267, "White");
+            var monthsXmlstr = '' + $("#10MonthsGasTemplate").html().replace("width", chartWidth);
+            monthsChart.setDataXml(monthsXmlstr);
+            monthsChart.render("months_chart");
+            currentChartType = 2;
+
+            $("#elecThisYearInfo").hide();
+            $("#waterThisYearInfo").hide();
+            $("#gasThisYearInfo").show();
+        }
+
+        function MultiBdCompare() {
+            $("#roomSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    "保存": function () {
+                        if (selectedItems.length == 0) {
+                            $("#dialogErrorTip1").slideDown();
+                            return;
+                        }
+                        var idsStr = selectedItems[0];
+                        var titleStr = selectedName[0];
+                        for (var i = 1; i < selectedItems.length; i++) {
+                            idsStr = idsStr + "_" + selectedItems[i];
+                            titleStr = titleStr + "_" + selectedName[i];
+                        }
+                        $.getJSON('@Url.Action("AddSavedCmpItemsAjax", "Global")', { title: titleStr, value: idsStr, queryType: currentCompareType });
+                        $(this).dialog("close");
+                    },
+                    '确认': function () {
+                        if (selectedItems.length == 0) {
+                            $("#dialogErrorTip1").slideDown();
+                            return;
+                        }
+                        var idsStr = selectedItems[0];
+                        for (var i = 1; i < selectedItems.length; i++) {
+                            idsStr = idsStr + "_" + selectedItems[i];
+                        }
+                        window.open('@Url.Action("EnergyCompare", "Global")' + '?IDs=' + idsStr + '&queryType=' + currentCompareType, "_self", false);
+                        $(this).dialog("close");
+                    }
+                },
+                close: function (event, ui) {
+                    selectedItems = [];
+                    selectedName = [];
+                    currentCompareType = 0;
+                    $("#selectedSchool").val([]);
+                    $("#selectedSchoolArea").val([]);
+                    $("#selectedBuilding").val([]);
+                    $("#newRoomID").val([]);
+                    $("#schoolAreaDiv").hide();
+                    $("#buildingDiv").hide();
+                    $("#newRoomDiv").hide();
+                    $("#addedBD option").each(function () { $(this).remove(); });
+                }
+            });
+
+        }
+
+        function savedCompare() {
+            $.getJSON('@Url.Action("GetSavedCmpItemsAjax", "Global")', {}, function (jsonData) {
+                $("#savedItemsSelect").empty();
+                $("#savedCmpItemsTmpl").tmpl(jsonData).appendTo("#savedItemsSelect");
+
+            });
+            $("#savedItemsDiv").dialog({
+                modal: true,
+                width: 400,
+                resizable: false,
+                buttons: {
+                    '确认': function () {
+                        var selected = $("#savedItemsSelect option:selected");
+                        if (selected.length == 0) {
+                            $("#savedDialogErrorTip2").hide();
+                            $("#savedDialogErrorTip1").slideDown();
+                            return;
+                        }
+                        if (selected.length > 1) {
+                            $("#savedDialogErrorTip1").hide();
+                            $("#savedDialogErrorTip2").slideDown();
+                            return;
+                        }
+                        var ids = selected.attr("value");
+                        var queryType = selected.attr("queryType");
+                        window.open('@Url.Action("EnergyCompare", "Global")' + '?IDs=' + ids + '&queryType=' + queryType, "_self", false);
+                        $(this).dialog("close");
+                    },
+                    '删除': function () {
+                        var selected = $("#savedItemsSelect option:selected");
+                        if (selected.length == 0) {
+                            $("#savedDialogErrorTip2").hide();
+                            $("#savedDialogErrorTip1").slideDown();
+                            return;
+                        }
+                        selected.each(function (index, obj) {
+                            $.getJSON('@Url.Action("RemoveSavedCmpItemAjax", "Global")', { title: obj.text });
+                        })
+                        $(this).dialog("close");
+                    }
+                }
+            })
+        }
+
+        var selectedItems = new Array();
+        var selectedName = new Array();
+        var currentCompareType = 0;
+        function addToCompare() {
+            var selected = $("#selectedSchool option:selected");
+            $("#dialogErrorTip1").hide();
+            $("#dialogErrorTip2").hide();
+            $("#dialogErrorTip3").hide();
+            $("#dialogErrorTip4").hide();
+            if (selected.length != 0) {
+                selected = $("#selectedSchoolArea option:selected");
+                if (selected.length != 0) {
+                    selected = $("#selectedBuilding option:selected");
+                    if (selected.length != 0) {
+                        selected = $("#newRoomID option:selected");
+                        if (selected.length != 0) {
+                            if (selectedItems.length + selected.length > 5) {
+                                $("#dialogErrorTip4").slideDown("fast");
+                                return;
+                            }
+                            selected.each(function (index, obj) {
+                                compareType = 4;
+                                for (var i = 0; i < selectedItems.length; i++) {
+                                    if (selectedItems[i] == obj.value) {
+                                        $("#dialogErrorTip3").slideDown("fast");
+                                        return;
+                                    }
+                                }
+                                if (currentCompareType != 0 && compareType == currentCompareType) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                    selectedName.push(obj.text);
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+
+                                }
+                                if (currentCompareType == 0) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                    currentCompareType = compareType;
+                                }
+                                if (currentCompareType != 0 && compareType != currentCompareType) {
+
+                                    $("#dialogErrorTip2").slideDown("normal");
+                                }
+                            });
+                        }
+                        else {
+                            selected = $("#selectedBuilding option:selected");
+                            if (selectedItems.length + selected.length > 5) {
+                                $("#dialogErrorTip4").slideDown("fast");
+                                return;
+                            }
+                            selected.each(function (index, obj) {
+                                compareType = 3;
+                                for (var i = 0; i < selectedItems.length; i++) {
+                                    if (selectedItems[i] == obj.value) {
+                                        $("#dialogErrorTip3").slideDown("fast");
+                                        return;
+                                    }
+                                }
+                                if (currentCompareType != 0 && compareType == currentCompareType) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                }
+                                if (currentCompareType == 0) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                    currentCompareType = compareType;
+                                }
+                                if (currentCompareType != 0 && compareType != currentCompareType) {
+                                    $("#dialogErrorTip2").slideDown("normal");
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        selected = $("#selectedSchoolArea option:selected");
+                        if (selectedItems.length + selected.length > 5) {
+                            $("#dialogErrorTip4").slideDown("fast");
+                            return;
+                        }
+                        selected.each(function (index, obj) {
+                            compareType = 2;
+                            for (var i = 0; i < selectedItems.length; i++) {
+                                if (selectedItems[i] == obj.value) {
+                                    $("#dialogErrorTip3").slideDown("fast");
+                                    return;
+                                }
+                            }
+                            if (currentCompareType != 0 && compareType == currentCompareType) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                            }
+                            if (currentCompareType == 0) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                                currentCompareType = compareType;
+                            }
+                            if (currentCompareType != 0 && compareType != currentCompareType) {
+                                $("#dialogErrorTip2").slideDown("normal");
+                            }
+                        });
+                    }
+                }
+                else {
+                    selected = $("#selectedSchool option:selected");
+                    if (selectedItems.length + selected.length > 5) {
+                        $("#dialogErrorTip4").slideDown("fast");
+                        return;
+                    }
+                    selected.each(function (index, obj) {
+                        compareType = 1;
+                        for (var i = 0; i < selectedItems.length; i++) {
+                            if (selectedItems[i] == obj.value) {
+                                $("#dialogErrorTip3").slideDown("fast");
+                                return;
+                            }
+                        }
+                        if (currentCompareType != 0 && compareType == currentCompareType) {
+                            var bdNameStr = obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                        }
+                        if (currentCompareType == 0) {
+                            var bdNameStr = obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                            currentCompareType = compareType;
+                        }
+                        if (currentCompareType != 0 && compareType != currentCompareType) {
+                            $("#dialogErrorTip2").slideDown("normal");
+                        }
+                    });
+                }
+            }
+        }
+
+        function quitFromCompare() {
+            $("#addedBD option:selected").each(function (index, obj) {
+                for (var i = 0; i < selectedItems.length; i++) {
+                    if (selectedItems[i] == obj.value) {
+                        selectedItems.splice(i, 1);
+                        selectedName.splice(i, 1);
+                    }
+                }
+            }
+            )
+            $("#addedBD option:selected").remove();
+            var remainOptions = $("#addedBD option");
+            if (remainOptions.length == 0) {
+                currentCompareType = 0;
+            }
+        }
+    </script>
+
+<script id="24hoursElecTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="4" IndicatorEnabled="True"> 
+
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去24小时每小时用电量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（时）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用电量（kwh）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var valByHours in ViewBag.historyElecValByHours)
+            {
+                if (valByHours.ChartData.Count > 0)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByHours.PowerType.PC_Name"> 
+                    <vc:DataSeries.DataPoints>
+                            @foreach (var item in valByHours.ChartData)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+            }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+
+    <script id="24hoursWaterTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去24小时每小时用水量"/> 
+        </vc:Chart.Titles> 
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（时）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用水量（吨）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var valByHours in ViewBag.historyWaterValByHours)
+            {
+                if (valByHours.ChartData.Count > 0)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByHours.PowerType.PC_Name"> 
+                    <vc:DataSeries.DataPoints>
+                            @foreach (var item in valByHours.ChartData)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                    </vc:DataSeries.DataPoints>
+                </vc:DataSeries> 
+                }
+            }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+
+    @*<script id="24hoursGasTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="4" IndicatorEnabled="True"> 
+
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去24小时每小时燃气用量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="2"/> 
+          <vc:Axis Title="时间（时）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="燃气用量(立方米)"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3"> 
+                <vc:DataSeries.DataPoints>
+                    @foreach (var valByHours in ViewBag.historyGasValByHours)
+                    {
+                        if (valByHours.ChartData.Count > 0)
+                        {
+                        <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByHours.PowerType.PC_Name"> 
+                            <vc:DataSeries.DataPoints>
+                                    @foreach (var item in valByHours.ChartData)
+                                    {
+                                    <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                    }
+                            </vc:DataSeries.DataPoints>
+                        </vc:DataSeries> 
+                        }
+                    }
+                </vc:DataSeries.DataPoints> 
+            </vc:DataSeries> 
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>*@
+
+<script id="10daysElecTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="4" IndicatorEnabled="True"> 
+
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10天内每天用电量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（日期）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用电量（kwh）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+             @foreach (var valByDays in ViewBag.historyElecValByDays)
+             {
+                 if (valByDays.ChartData.Count > 0)
+                 {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByDays.PowerType.PC_Name"> 
+                    <vc:DataSeries.DataPoints>
+                            @foreach (var item in valByDays.ChartData)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                 }
+             }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+
+<script id="10daysWaterTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10天内每天用水量"/> 
+        </vc:Chart.Titles> 
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（日期）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用水量（吨）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+             @foreach (var valByDays in ViewBag.historyWaterValByDays)
+             {
+                 if (valByDays.ChartData.Count > 0)
+                 {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByDays.PowerType.PC_Name"> 
+                    <vc:DataSeries.DataPoints>
+                            @foreach (var item in valByDays.ChartData)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                 }
+             }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+
+@*<script id="10daysGasTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10天内每天燃气用量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（日期）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="燃气用量（立方米）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3"> 
+                <vc:DataSeries.DataPoints>
+             @foreach (var valByDays in ViewBag.historyGasValByDays)
+             {
+                 if (valByDays.ChartData.Count > 0)
+                 {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByDays.PowerType.PC_Name"> 
+                    <vc:DataSeries.DataPoints>
+                            @foreach (var item in valByDays.ChartData)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                 }
+             }
+                </vc:DataSeries.DataPoints> 
+            </vc:DataSeries> 
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>*@
+
+<script id="10MonthsElecTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="4" IndicatorEnabled="True"> 
+
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10月内每月用电量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（月份）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用电量（kwh）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var valByMonths in ViewBag.historyElecValByMonths)
+            {
+                if (valByMonths.ChartData.Count > 0)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByMonths.PowerType.PC_Name"> 
+                    <vc:DataSeries.DataPoints>
+                            @foreach (var item in valByMonths.ChartData)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+            }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+
+<script id="10MonthsWaterTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10月内每月用水量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（月份）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用水量（吨）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var valByMonths in ViewBag.historyWaterValByMonths)
+            {
+                if (valByMonths.ChartData.Count > 0)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByMonths.PowerType.PC_Name"> 
+                    <vc:DataSeries.DataPoints>
+                            @foreach (var item in valByMonths.ChartData)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+            }
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+
+@*<script id="10MonthsGasTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10月内每月燃气用量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（月份）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="燃气用量（立方米）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3"> 
+                <vc:DataSeries.DataPoints>
+            @foreach (var valByMonths in ViewBag.historyGasValByMonths)
+            {
+                if (valByMonths.ChartData.Count > 0)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText = "@valByMonths.PowerType.PC_Name"> 
+                    <vc:DataSeries.DataPoints>
+                            @foreach (var item in valByMonths.ChartData)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+            }
+                </vc:DataSeries.DataPoints> 
+            </vc:DataSeries> 
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>*@
+
+<script type="text/x-jquery-tmpl" id="bdaccordionTemp">
+    <h3><a href="#" style= "color: #4D4D4D; font-size: 14px; font-weight: bold;  overflow: hidden;">${AreaName}</a></h3>
+    <div>
+        {{each(i, b) Buildings}}
+            <a href="javascript:void(0);" class="building_link" buildingid="${BDI_ID}" onclick="fudanMap.highlightBuilding('${BDI_ID}');">${BDI_Name}</a><br/>
+        {{/each}}
+    </div>
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}">
+    <td>${PName}</td>
+    <td>${Time}</td>
+    <td>${ValStr}</td>
+    <td>${PowerName}</td>
+    </tr>
+</script>
+<script id="roomTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>
+<script id="savedCmpItemsTmpl" type="text/x-jQuery-tmpl">
+    <option value="${value}" queryType="${queryType}">${title}</option>
+</script>
+</body>
+</html>

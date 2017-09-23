@@ -1,0 +1,332 @@
+﻿@{
+    ViewBag.Title = "三级电表管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="">三级电表管理</a></li>
+	    </ul>
+        <div class="tab-div">
+            <form id="myForm" action="#" method="post">
+                <ul class="em-form-ul">
+                    <li>
+                        <ul>
+                            <li>测点编号： </li>
+                            <li><input id="pointID" name="pointID" type="text" class="inputbox"/></li>
+                            <li></li>
+@*                            <li>请选择三级电表：</li>
+                            <li><select id="thirdPointList">
+                                @foreach(var item in ViewBag.){
+                                    <option value=''></option>
+                                }
+                                </select>
+                            </li>*@
+                        </ul>
+                        <ul>
+                            <li>名称： </li>
+                            <li><input id="pointName" name="pointName" type="text" class="inputbox"/></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li><p><span class="red">*</span> 如果您未输入"测点编号"和"名称"的话，系统默认查询所有三级电表。</p></li>
+                    <li>
+                        <ul>
+                            <li>请选择用电量月份： 
+                            <select id="newValYear" >
+                                <option value="2008">2008</option>
+                                <option value="2009">2009</option>
+                                <option value="2010">2010</option>
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                            年
+                            <select id="newValMonth">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            月
+                            </li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li>
+                        <input id="queryButton" type="button" value="  查询数据  " class="btn m-button"/>
+                        <input id="newValButton" type="button" value="  录入数据  " class="btn"/>
+                    </li>
+                </ul>
+            </form>
+            <fieldset id="resultDivForQuery" class="hidden">
+                <div class="dataDiv">
+                <table>
+                    <thead>
+                    <tr>
+                            <th>测点编号</th>
+                            <th>测点名称</th>
+                            <th>当月用电量(度)</th>
+                            <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="resultDataDiv"></tbody>
+                </table>
+                </div>
+                <div class="noDataDiv">当前查询范围没有数据</div>
+            </fieldset>
+            <fieldset id="resultDivForInput" class="hidden">
+                <div class="dataDiv">
+                <table>
+                    <thead>
+                    <tr>
+                            <th>测点编号</th>
+                            <th>测点名称</th>
+                            <th>当月用电量(度)</th>
+                    </tr>
+                    </thead>
+                    <tbody class="resultDataDiv"></tbody>
+                </table>
+                    <input id="submitBotton" type="button" value="  提交  " class="btn m-button" style="margin-left:200px"/>
+                </div>
+                <div class="noDataDiv">当前查询范围没有数据</div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+</div>
+<div id="modifyValDiv" title="输入新的用电量数据" class="hidden">
+    <fieldset>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="newValue" name="newValue" disabled="disabled"/>
+        <p id="newValErrorTip" class="red a-center hidden"></p>
+    </fieldset>
+</div>
+<p id="storeMonthStr"></p>
+
+<script type="text/javascript">
+    $(function () {
+        var timeStr;
+        $("#pointID").change(function () {
+            $("#resultDivForQuery").slideUp("fast");
+            $("#resultDivForInput").slideUp("fast");
+        });
+        $("#pointName").change(function () {
+            $("#resultDivForQuery").slideUp("fast");
+            $("#resultDivForInput").slideUp("fast");
+        });
+        $("#newValYear").change(function () {
+            $("#resultDivForQuery").slideUp("fast");
+            $("#resultDivForInput").slideUp("fast");
+        });
+        $("#newValMonth").change(function () {
+            $("#resultDivForQuery").slideUp("fast");
+            $("#resultDivForInput").slideUp("fast");
+        });
+
+        $("#queryButton").click(function () {
+            var loadingIMG = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#resultDivForQuery .noDataDiv").html(loadingIMG).show();
+            timeStr = $("#newValYear").val() + "-" + $("#newValMonth").val() + "-01";
+            $.getJSON('@Url.Action("QueryThirdPointHasValueAjax", "Information")', {
+                analogNo: $("#pointID").val(),
+                ampName: $("#pointName").val(),
+                month: timeStr
+            }, function (jsonData) {
+                $("#resultDivForInput").hide();
+                if (jsonData == null) {
+                    $("#resultDivForQuery .dataDiv").hide();
+                    $("#resultDivForQuery .noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    $("#resultDivForQuery").show();
+                    return;
+                }
+                if (jsonData.length == 0) {
+                    $("#resultDivForQuery .dataDiv").hide();
+                    $("#resultDivForQuery .noDataDiv").html('对不起，您查询的测点不存在或者该测点当月没有录入数据，您可以通过点击“录入数据”录入该测点的能耗值。').show();
+                    $("#resultDivForQuery").show();
+                    return;
+                }
+                $("#resultDivForQuery .noDataDiv").hide();
+                $("#resultDivForQuery .dataDiv").show();
+                var resultDivHtml = $("#resultDivForQuery .resultDataDiv").html($("#dataTemplateText").tmpl(jsonData, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#resultDivForQuery").show();
+            });
+        });
+
+        $("#newValButton").click(function () {
+            var loadingIMG = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#resultDivForInput .noDataDiv").html(loadingIMG).show();
+            timeStr = $("#newValYear").val() + "-" + $("#newValMonth").val() + "-01";
+            $.getJSON('@Url.Action("QueryThirdPointNeedValueAjax", "Information")', {
+                analogNo: $("#pointID").val(),
+                ampName: $("#pointName").val(),
+                month: timeStr
+            }, function (jsonData) {
+                $("#resultDivForQuery").hide();
+                if (jsonData == null) {
+                    $("#resultDivForInput .dataDiv").hide();
+                    $("#resultDivForInput .noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    $("#resultDivForInput").show();
+                    return;
+                }
+                if (jsonData.length == 0) {
+                    $("#resultDivForInput .dataDiv").hide();
+                    $("#resultDivForInput .noDataDiv").html('对不起，您查询的测点不存在或者该测点当月份已录入数据，您可以通过“查询测点”查询或修改相关信息').show();
+                    $("#resultDivForInput").show();
+                    return;
+                }
+                $("#resultDivForInput .noDataDiv").hide();
+                $("#resultDivForInput .dataDiv").show();
+                $("#resultDivForInput .resultDataDiv").html($("#dataTemplateInput").tmpl(jsonData, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#resultDivForInput").show();
+            })
+        });
+
+        $("#submitBotton").click(function () {
+            var valueStr = "";
+            $("#resultDivForInput .resultDataDiv>tr").each(function () {
+                var pno = $(this).children("td.pno").html();
+                var monthValue = $(this).find("input#monthValue").val();
+                if (monthValue)
+                    valueStr = valueStr + pno + "_" + monthValue + "|";
+            });
+
+            $.getJSON('@Url.Action("AddThirdPointValue", "Information")', {
+                value: valueStr,
+                month: timeStr
+            }, function (jsonData) {
+                if (jsonData.ifSucceed) {
+                    alert("提交成功！");
+                } else {
+                    alert("提交失败！");
+                }
+                $("#resultDivForInput").slideUp("fast");
+            });
+        })
+    });
+
+    function motifyVal(pointID, monthStr) {
+        $("#newValue").attr("disabled", false).val("");
+        $("#newValErrorTip").hide();
+        $("#storeMonthStr").val(monthStr);
+        $("#modifyValDiv").dialog({
+            modal: true,
+            width: 400,
+            resizeable: false,
+            buttons: {
+                '修改': function () {
+                    if (/^-?\d+(\.\d+)?$/.test($("#newValue").val()) == false) {
+                        $("#newValErrorTip").html("添加值必须为数字").slideDown();
+                        return;
+                    }
+                    if (parseInt($("#newValue").val()) < 0) {
+                        $("#newValErrorTip").html("用电量数值必须大于或等于零").slideDown();
+                        return;
+                    }
+                    var valueStr = pointID + "_" + $("#newValue").val() + "|";
+                    var monthStr = $("#storeMonthStr").val() + "-01";
+                    $.getJSON('@Url.Action("ModifyThirdPointValue", "Information")', {
+                        value: valueStr,
+                        month: monthStr
+                    }, function (jsonData) {
+                        if (jsonData == null) {
+                            $("#newValErrorTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                            return;
+                        }
+                        if (!jsonData.ifSucceed) {
+                            $("#newValue").val("");
+                            $("#newValErrorTip").html("修改不成功，检查您输入的新值是否符合要求！").slideDown("fast");
+                        } else {
+                            $("#resultDivForQuery").slideUp("fast");
+                            $("#timeInput").val("");
+                            var newValue = $("#newValue").val();
+                            $("#newValue").val("");
+                            $("#newValErrorTip").hide();
+                            $("#modifyValDiv").dialog("close");
+                        }
+                    });
+                }
+            }
+        });
+    };
+
+
+    function deleteVal(pointID, monthStr) {
+        var month = monthStr + "-01";
+        $.getJSON('@Url.Action("DeleteThirdPointValue", "Information")', {
+            pointID: pointID,
+            month: month
+        }, function (jsonData) {
+            if (jsonData == null) {
+                alert('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)');
+            }
+            if (!jsonData.ifSucceed) {
+                alert("删除数据失败！");
+            } else {
+                $("#resultDivForQuery").slideUp("fast");
+                //                $("#resultDivForQuery .noDataDiv").slideUp("fast");
+                alert("删除数据成功！");
+            }
+        });
+    }
+</script>
+
+<script id="dataTemplateInput" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}"> 
+    <td class="pno">${PNO}</td>
+    <td>${PName}</td>
+    <td><input type="text" id="monthValue" name="monthValue"></td>
+    </tr>
+</script>
+<script id="dataTemplateText" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}" id="tr${PNO}"> 
+    <td class="pno">${PNO}</td>
+    <td>${PName}</td>
+    <td class="val">${val}</td>
+    <td>
+        <a href="javascript:void(0)" onclick="motifyVal( ${PNO}, '${monthStr}')">修改</a>
+        <a href="javascript:void(0)" onclick="deleteVal( ${PNO}, '${monthStr}')">删除</a>
+    </td>
+    </tr>
+</script>
+

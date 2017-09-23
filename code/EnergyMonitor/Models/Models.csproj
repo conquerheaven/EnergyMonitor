@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{96DB1077-7D69-454C-9832-A47CFAD7321F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EnergyMonitor</RootNamespace>
+    <AssemblyName>Models</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extension\Dynamic.cs" />
+    <Compile Include="LinqEntity\EnergyMonitor.cs">
+      <DependentUpon>EnergyMonitor.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="LinqEntity\EnergyMonitor.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnergyMonitor.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Repository\Entity\AllSchoolEnergyInfoEntity.cs" />
+    <Compile Include="Repository\Entity\AreaAndBuilding.cs" />
+    <Compile Include="Repository\Entity\AreaAndSchool.cs" />
+    <Compile Include="Repository\Entity\BECEntity.cs" />
+    <Compile Include="Repository\Entity\BuildingGuanghuaEntity.cs" />
+    <Compile Include="Repository\Entity\ChartStatisEntity.cs" />
+    <Compile Include="Repository\Entity\BuildingAndArea.cs" />
+    <Compile Include="Repository\Entity\AMPExtEntity.cs" />
+    <Compile Include="Repository\Entity\ChartStatisInfo.cs" />
+    <Compile Include="Repository\Entity\AnalogInfoEntity.cs" />
+    <Compile Include="Repository\Entity\ExceptionInfoEntity.cs" />
+    <Compile Include="Repository\Entity\PowerType.cs" />
+    <Compile Include="Repository\Entity\RTUInfo.cs" />
+    <Compile Include="Repository\Entity\EnergyAllTypeEntity.cs" />
+    <Compile Include="Repository\Entity\StateEntity.cs" />
+    <Compile Include="Repository\Entity\EnergyHistory.cs" />
+    <Compile Include="Repository\Entity\TextEntity.cs" />
+    <Compile Include="Repository\Entity\ThirdPoint.cs" />
+    <Compile Include="Repository\Entity\ThirdPointMonthValEntity.cs" />
+    <Compile Include="Repository\Entity\UserInfo.cs" />
+    <Compile Include="Repository\Entity\EnergyEntity.cs" />
+    <Compile Include="Repository\Entity\RoleAndUserCount.cs" />
+    <Compile Include="Repository\Entity\UserAndRole.cs" />
+    <Compile Include="Repository\Entity\RoomAndBuilding.cs" />
+    <Compile Include="Repository\Entity\TimeStatisEntity.cs" />
+    <Compile Include="Repository\Entity\UserRealTimeEnergy.cs" />
+    <Compile Include="Repository\Implement\AMPRepos.cs" />
+    <Compile Include="Repository\Implement\AnalogMeasurePointRepos.cs" />
+    <Compile Include="Repository\Implement\AnnouncementInfoRepos.cs" />
+    <Compile Include="Repository\Implement\BECRepos.cs" />
+    <Compile Include="Repository\Implement\BuildingGuanghuaRepos.cs" />
+    <Compile Include="Repository\Implement\BuildingRepos.cs" />
+    <Compile Include="Repository\Implement\AnalogHistoryRepos.cs" />
+    <Compile Include="Repository\Implement\BuildingTypesRepos.cs" />
+    <Compile Include="Repository\Implement\BuyHistoryRepos.cs" />
+    <Compile Include="Repository\Implement\AnalogInfoRepos.cs" />
+    <Compile Include="Repository\Implement\ElecDistributionInfoRepos.cs" />
+    <Compile Include="Repository\Implement\ElecTSInfoRepos.cs" />
+    <Compile Include="Repository\Implement\ExceptionInfoRepos.cs" />
+    <Compile Include="Repository\Implement\LogRepos.cs" />
+    <Compile Include="Repository\Implement\SystemProfileRepos.cs" />
+    <Compile Include="Repository\Implement\RTURepos.cs" />
+    <Compile Include="Repository\Implement\StateRealRepos.cs" />
+    <Compile Include="Repository\Implement\FuntionRepos.cs" />
+    <Compile Include="Repository\Implement\PowerClassRepos.cs" />
+    <Compile Include="Repository\Implement\RoleRepos.cs" />
+    <Compile Include="Repository\Implement\SchoolAreaRepos.cs" />
+    <Compile Include="Repository\Implement\SchoolRepos.cs" />
+    <Compile Include="Repository\Implement\DepartmentRepos.cs" />
+    <Compile Include="Repository\Implement\RoomRepos.cs" />
+    <Compile Include="Repository\Implement\TransactionRepos.cs" />
+    <Compile Include="Repository\Implement\UpdateInfoRepos.cs" />
+    <Compile Include="Repository\Interface\IAnalogMeasurePoint.cs" />
+    <Compile Include="Repository\Interface\IAnnouncementInfoRepos.cs" />
+    <Compile Include="Repository\Interface\IBECRepos.cs" />
+    <Compile Include="Repository\Interface\IBuildingGuanghuaRepos.cs" />
+    <Compile Include="Repository\Interface\IBuildingTypesRepos.cs" />
+    <Compile Include="Repository\Interface\IElecDistributionInfoRepos.cs" />
+    <Compile Include="Repository\Interface\IElecTSInfoRepos.cs" />
+    <Compile Include="Repository\Interface\IExceptionInfoRepos.cs" />
+    <Compile Include="Repository\Interface\ILogRepos.cs" />
+    <Compile Include="Repository\Interface\ISystemProfileRepos.cs" />
+    <Compile Include="Repository\Interface\IRTURepos.cs" />
+    <Compile Include="Repository\Interface\IAnalogInfoRepos.cs" />
+    <Compile Include="Repository\Interface\IStateRealRepos.cs" />
+    <Compile Include="Repository\Interface\IFunctionRepos.cs" />
+    <Compile Include="Repository\Interface\IPowerClassRepos.cs" />
+    <Compile Include="Repository\Interface\IBuyHistoryRepos.cs" />
+    <Compile Include="Repository\Interface\IAnalogHistoryRepos.cs" />
+    <Compile Include="Repository\Interface\IRoleRepos.cs" />
+    <Compile Include="Repository\Interface\IBuildingRepos.cs" />
+    <Compile Include="Repository\Interface\ISchoolAreaRepos.cs" />
+    <Compile Include="Repository\Interface\ISchoolRepos.cs" />
+    <Compile Include="Repository\Interface\IDepartmentRepos.cs" />
+    <Compile Include="Repository\Interface\IRoomRepos.cs" />
+    <Compile Include="Repository\Interface\IAMPRepos.cs" />
+    <Compile Include="Repository\Interface\ITransactionRepos.cs" />
+    <Compile Include="Repository\Interface\IUpdateInfoRepos.cs" />
+    <Compile Include="Repository\Interface\IUserRepos.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\Implement\UserRepos.cs" />
+    <Compile Include="Repository\Entity\UserRoomFullName.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Repository\Interface\EnergyComptroller\FlexPaperViewer.swf" />
+    <Content Include="Repository\Interface\EnergyComptroller\js\flexpaper_flash.js" />
+    <Content Include="Repository\Interface\EnergyComptroller\js\flexpaper_flash_debug.js" />
+    <Content Include="Repository\Interface\EnergyComptroller\js\jquery.js" />
+    <Content Include="Repository\Interface\EnergyComptroller\Paper.swf" />
+    <Content Include="Repository\Interface\EnergyComptroller\playerProductInstall.swf" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
+    <None Include="ClassDiagram3.cd" />
+    <None Include="ClassDiagram4.cd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="LinqEntity\EnergyMonitor.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>EnergyMonitor.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>EnergyMonitor.Models.LinqEntity</CustomToolNamespace>
+    </None>
+    <Content Include="Repository\Interface\EnergyComptroller\Comptroller.cshtml" />
+    <Content Include="Repository\Interface\EnergyComptroller\ComptrollerDelete.cshtml" />
+    <Content Include="Repository\Interface\EnergyComptroller\Comptrollering.cshtml" />
+    <Content Include="Repository\Interface\EnergyComptroller\Comptrolleringone.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LinqEntity\EnergyMonitor.dbml.layout">
+      <DependentUpon>EnergyMonitor.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

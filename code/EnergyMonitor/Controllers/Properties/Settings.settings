@@ -1,0 +1,83 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EnergyMonitor.Controllers.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="mailServerName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">smtp.126.com</Value>
+    </Setting>
+    <Setting Name="mailFrom" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">energymonitor@126.com</Value>
+    </Setting>
+    <Setting Name="mailUserName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">energymonitor@126.com</Value>
+    </Setting>
+    <Setting Name="mailPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">cis-51355517</Value>
+    </Setting>
+    <Setting Name="activeSubject" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">复旦大学绿色校园能耗监管平台邮箱激活</Value>
+    </Setting>
+    <Setting Name="activeBody" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+    &lt;title&gt;激活&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;{0}，您好：&lt;/p&gt;
+&amp;nbsp;&amp;nbsp;请点击以下链接完成复旦大学校园节能监管平台邮箱修改的激活！&lt;br /&gt;&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;&lt;a href="{1}" style="font-size:25px"&gt;{1}&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;如有问题请联系管理员，谢谢！&lt;br /&gt;
+&amp;nbsp;&amp;nbsp;复旦大学绿色校园监管平台&lt;br /&gt;
+&lt;/body&gt;
+&lt;/html&gt;</Value>
+    </Setting>
+    <Setting Name="activeWebSite" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://218.193.130.178/</Value>
+    </Setting>
+    <Setting Name="pageSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="supportLanguage" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">zh-cn:中文,en-us:English</Value>
+    </Setting>
+    <Setting Name="desKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">f@!_2*-6</Value>
+    </Setting>
+    <Setting Name="desVector" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">[5(%n&gt;*?</Value>
+    </Setting>
+    <Setting Name="loginExpired" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="uisLoginUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://tac.fudan.edu.cn/thirds/jnjp.act?t=</Value>
+    </Setting>
+    <Setting Name="uisLogoutUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://tac.fudan.edu.cn/thirds/logout.act</Value>
+    </Setting>
+    <Setting Name="rdsExpired" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">15</Value>
+    </Setting>
+    <Setting Name="uploadExcelExtens" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">xls,xlsx</Value>
+    </Setting>
+    <Setting Name="wsExpired" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">6</Value>
+    </Setting>
+    <Setting Name="EnergyMonitor" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=10.131.200.70;Initial Catalog=EnergyMonitor;Persist Security Info=True;User ID=sa;Password=LabTel55664465&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=10.131.200.70;Initial Catalog=EnergyMonitor;Persist Security Info=True;User ID=sa;Password=LabTel55664465</Value>
+    </Setting>
+    <Setting Name="SWFToolsPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\Program Files\SWFTools</Value>
+    </Setting>
+    <Setting Name="uploadWordExtens" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">doc,docx,pdf</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

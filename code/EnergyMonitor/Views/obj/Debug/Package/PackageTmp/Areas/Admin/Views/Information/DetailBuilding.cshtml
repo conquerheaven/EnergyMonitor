@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "楼宇管理";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .report-warpper{ width:800px; padding:10px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>楼宇管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+            <li><a href="@Url.Action("QueryBuilding", "Information")">查询楼宇</a></li>
+		    <li><a href="@Url.Action("AddBuilding", "Information")">增加楼宇</a></li>
+            <li class="current"><a>详细报表</a></li>
+	    </ul>
+	    <div class="tab-div">
+        @if (Model != null)
+        {
+            <div class="report-warpper">
+            @Html.Partial("ReportsWarpper/BuildingDetail")
+            </div>
+        }
+        else
+        {
+            <div class="report-warpper">当前没有可用的数据</div>
+        }
+    </div></div>
+</div></div>

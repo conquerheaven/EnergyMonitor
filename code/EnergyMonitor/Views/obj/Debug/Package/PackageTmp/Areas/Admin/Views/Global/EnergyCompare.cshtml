@@ -1,0 +1,1553 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>能耗对比</title>
+    <script src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Visifire.js")" type="text/javascript"></script>
+    <script src="/Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.tmpl.min.js")" type="text/javascript"></script>
+    <link href="/Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet"type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html body{font-family: Arial,Helvetica,sans-serif;  font-size: 13px;}
+        #right_info { height:400px; overflow:hidden;  margin-left:510px; position:absolute; left:0; top:0; }
+        #bd_info { height:400px; position:absolute; left:0px; top:0px; margin-left:510px; }
+        #bottom_chart { height:300px; width:100%;}
+        .container_title { line-height: 31px; background-color: rgb(249, 249, 249); overflow: hidden; height: 31px; white-space: nowrap; width: 100%; text-align:left; border-bottom: 1px solid #CCCCCC;}
+        .iw_poi_title { color: #4D4D4D; font-size: 14px; font-weight: bold;  overflow: hidden; padding-left: 11px; white-space: nowrap; margin:0px;}
+        .chart { width:430px; height:267px;}
+        #days_chart { position:absolute; left:0px; top:32px;}
+        #months_chart{ position:absolute; left:0px; top:32px;}
+        .content_text { margin:5px 10px 5px 10px;}
+        #title {width:100%; height:40px; line-height: 40px; border:1px; padding-left:20px; }
+        #title p { font-size:20px; margin:0px; }
+        a { color: #4174D9;  font-size: 12px; font-weight: normal; margin-left: 10px; text-decoration: none;}
+        .second_order { padding-left:20px;}
+        .content_text p{ margin:3px 0px;}
+        table { padding:10px;}
+        th {   font-size: 14px; text-shadow: 1px 1px 1px #FFFFFF; }
+        th, td { padding: 2px; text-align: left;}
+        .level_container { position:relative; margin-top:10px; width:100%;}
+        select {border: 1px solid #CCCCCC; border-radius: 5px 5px 5px 5px; padding: 7px 10px;}
+        h1, h2, h3, h4, h5 { margin: 0; padding: 0;}
+        .hidden {display: none;}
+        .clear { clear: both;}
+        .red { color: #C61B1B;}
+        ul, li {list-style: none outside none; margin: 0; padding: 0;}
+        .info_container {  border: 1px solid #999999;}
+        
+        /*表格CSS*/
+        table.vsTable {
+            position: relative;
+            z-index: 2;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            border-collapse: collapse;
+            margin: 0 auto;
+            border-right: 1px solid #ccc;
+            width: 100%;
+            font-size: 20px;
+        }
+        table.vsTable td 
+        {
+            
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+        vertical-align: middle;
+        text-align: center;
+        background-color:#D8DFEE;
+        color: #000000;
+        }
+        table.vsTable th.title{
+        background: #3b5998;
+        font-size: 24px;
+        height:20px;
+        color: #fff;
+        text-shadow: 1px 1px 0 #000;
+        border: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+        vertical-align: middle;
+        text-align: center;
+        text-decoration: none;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="title" class="container_title">
+    @if (ViewBag.queryType == 3)
+    { 
+            <p class="title_p" > >> 能耗信息对比 (
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            { 
+                <text>@energyItem.building.BDI_Name </text>
+            }
+            ）
+            
+            <a href="@Url.Action("FullScrMap", "Global", new { campusID = 0 })" >地图浏览</a>
+            <a href="@Url.Action("Welcome", "Home")" >系统首页</a>
+            <a href="javascript:void(0)" onclick="MultiBdCompare()">能耗对比</a>
+            <a href="javascript:void(0)" onclick="savedCompare()">已保存对比条目</a>
+            </p>
+    }
+    @if (ViewBag.queryType == 5)
+    { 
+        <p class="title_p" > >> 能耗信息对比 (
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            { 
+                <text>@energyItem.point.AMP_Name</text>
+            }
+            ）
+            <a href="@Url.Action("FullScrMap", "Global", new { campusID = 0 })" >地图浏览</a>
+            <a href="@Url.Action("Welcome", "Home")" >系统首页</a>
+            <a href="javascript:void(0)" onclick="MultiBdCompare()">能耗对比</a>
+            <a href="javascript:void(0)" onclick="savedCompare()">已保存对比条目</a>
+            </p>
+    }
+       @if (ViewBag.queryType == 2)
+    { 
+        <p class="title_p" > >> 能耗信息对比 (
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            { 
+                <text>@energyItem.area.AreaName </text>
+            }
+            ）
+            <a href="@Url.Action("FullScrMap", "Global", new { campusID = 0 })" >地图浏览</a>
+            <a href="@Url.Action("Welcome", "Home")" >系统首页</a>
+            <a href="javascript:void(0)" onclick="MultiBdCompare()">能耗对比</a>
+            <a href="javascript:void(0)" onclick="savedCompare()">已保存对比条目</a>
+            </p>
+    }
+    @if (ViewBag.queryType == 1)
+    { 
+        <p class="title_p" > >> 能耗信息对比 (
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            { 
+                <text>@energyItem.school.SchoolName</text>
+            }
+            ）
+            <a href="@Url.Action("FullScrMap", "Global", new { campusID = 0 })" >地图浏览</a>
+            <a href="@Url.Action("Welcome", "Home")" >系统首页</a>
+            <a href="javascript:void(0)" onclick="MultiBdCompare()">能耗对比</a>
+            <a href="javascript:void(0)" onclick="savedCompare()">已保存对比条目</a>
+            </p>
+    }
+    </div>
+    <div id="energy_table" class="info_container level_container">
+        <div class="container_title">
+            <p class="iw_poi_title">各建筑当前能耗表值列表</p>
+        </div>
+<div align="left" id="energy_val_div">
+    <h3><a href="#">用电量</a></h3>
+    <div>
+        <table class="vsTable" cellspacing="0" >
+            <thead>
+                <tr>
+                    <th class="title"></th>
+                    @if (ViewBag.queryType == 5)
+                    {
+                        foreach (var energyItem in ViewBag.allTypeEnergy)
+                        { 
+                        <th class="title">@energyItem.point.AMP_Name</th>
+                        }
+                    }
+                    @if (ViewBag.queryType == 3)
+                    {
+                        foreach (var energyItem in ViewBag.allTypeEnergy)
+                        { 
+                        <th class="title">@energyItem.building.BDI_Name</th>
+                        }
+                    }
+                    @if (ViewBag.queryType == 2)
+                    {
+                        foreach (var energyItem in ViewBag.allTypeEnergy)
+                        { 
+                        <th class="title">@energyItem.area.AreaName</th>
+                        }
+                    }
+                    @if (ViewBag.queryType == 1)
+                    {
+                        foreach (var energyItem in ViewBag.allTypeEnergy)
+                        { 
+                        <th class="title">@energyItem.school.SchoolName</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="row_head">用电量 (度)</td>
+                    @foreach (var energyItem in ViewBag.allTypeEnergy)
+                    {
+                        if (energyItem.powerElecReals[0] != null)
+                        { 
+                                <td class="row">@energyItem.powerElecReals[0].ValStr</td>
+                        }
+                        else
+                        { 
+                                <td class="row">暂无数据</td>
+                        }
+                    }
+                </tr>
+                @for (int i = 0; i < ViewBag.powerElecType.Length; i++)
+                {
+                     <tr>
+                        <td class="row_head">---@ViewBag.powerElecType[i].PC_Name (度)</td>
+                        @foreach (var energyItem in ViewBag.allTypeEnergy)
+                        {
+                            if (energyItem.powerElecReals[i + 1] != null)
+                            { 
+                                <td class="row">@energyItem.powerElecReals[i + 1].ValStr</td>
+                            }
+                            else
+                            { 
+                                <td class="row">暂无数据</td>
+                            }
+                        }
+                     </tr>
+                }
+            </tbody>
+            
+        </table>
+    </div>
+        <h3><a href="#">用水量</a></h3>
+    <div>
+        <table class="vsTable" cellspacing="0" >
+            <tr>
+                <th class="title"></th>
+                @if (ViewBag.queryType == 5)
+                {
+                    foreach (var energyItem in ViewBag.allTypeEnergy)
+                    { 
+                    <th class="title">@energyItem.point.AMP_Name</th>
+                    }
+                }
+                @if (ViewBag.queryType == 3)
+                {
+                    foreach (var energyItem in ViewBag.allTypeEnergy)
+                    { 
+                    <th class="title">@energyItem.building.BDI_Name</th>
+                    }
+                }
+                @if (ViewBag.queryType == 2)
+                {
+                    foreach (var energyItem in ViewBag.allTypeEnergy)
+                    { 
+                    <th class="title">@energyItem.area.AreaName</th>
+                    }
+                }
+                @if (ViewBag.queryType == 1)
+                {
+                    foreach (var energyItem in ViewBag.allTypeEnergy)
+                    { 
+                    <th class="title">@energyItem.school.SchoolName</th>
+                    }
+                }
+            </tr>
+            <tr>
+                <td class="row_head">用水量 (吨)</td>
+                @foreach (var energyItem in ViewBag.allTypeEnergy)
+                {
+                    if (energyItem.powerWaterReals[0] != null)
+                    { 
+                            <td class="row">@energyItem.powerWaterReals[0].ValStr</td>
+                    }
+                    else
+                    { 
+                            <td class="row">暂无数据</td>
+                    }
+                }
+            </tr>
+            @for (int i = 0; i < ViewBag.powerWaterType.Length; i++)
+            {
+                 <tr>
+                    <td class="row_head">---@ViewBag.powerWaterType[i].PC_Name (吨)</td>
+                    @foreach (var energyItem in ViewBag.allTypeEnergy)
+                    {
+                        if (energyItem.powerWaterReals[i + 1] != null)
+                        { 
+                            <td class="row">@energyItem.powerWaterReals[i + 1].ValStr</td>
+                        }
+                        else
+                        { 
+                            <td class="row">暂无数据</td>
+                        }
+                    }
+                 </tr>
+            }
+        </table>
+    </div>
+        <h3><a href="#">燃气用量</a></h3>
+    <div>
+        <table class="vsTable" cellspacing="0" >
+            <tr>
+                <th class="title"></th>
+                @if (ViewBag.queryType == 5)
+                {
+                    foreach (var energyItem in ViewBag.allTypeEnergy)
+                    { 
+                    <th class="title">@energyItem.point.AMP_Name</th>
+                    }
+                }
+                @if (ViewBag.queryType == 3)
+                {
+                    foreach (var energyItem in ViewBag.allTypeEnergy)
+                    { 
+                    <th class="title">@energyItem.building.BDI_Name</th>
+                    }
+                }
+                @if (ViewBag.queryType == 2)
+                {
+                    foreach (var energyItem in ViewBag.allTypeEnergy)
+                    { 
+                    <th class="title">@energyItem.area.AreaName</th>
+                    }
+                }
+                @if (ViewBag.queryType == 1)
+                {
+                    foreach (var energyItem in ViewBag.allTypeEnergy)
+                    { 
+                    <th class="title">@energyItem.school.SchoolName</th>
+                    }
+                }
+            </tr>
+            <tr>
+                <td class="row_head">燃气用量 (立方米)</td>
+                @foreach (var energyItem in ViewBag.allTypeEnergy)
+                {
+                    if (energyItem.powerGasReals[0] != null)
+                    { 
+                            <td class="row">@energyItem.powerGasReals[0].ValStr</td>
+                    }
+                    else
+                    { 
+                            <td class="row">暂无数据</td>
+                    }
+                }
+            </tr>
+            @for (int i = 0; i < ViewBag.powerGasType.Length; i++)
+            {
+                 <tr>
+                    <td class="row_head">---@ViewBag.powerGasType[i].PC_Name (立方米)</td>
+                    @foreach (var energyItem in ViewBag.allTypeEnergy)
+                    {
+                        if (energyItem.powerGasReals[i + 1] != null)
+                        { 
+                            <td class="row">@energyItem.powerGasReals[i + 1].ValStr</td>
+                        }
+                        else
+                        { 
+                            <td class="row">暂无数据</td>
+                        }
+                    }
+                 </tr>
+            }
+        </table>
+    </div>
+
+</div>
+
+    </div>
+    <div id="bottom_chart" class="info_container level_container">
+        <div class="container_title">
+            <p class="iw_poi_title" style=" float:left;"> 能耗对比信息 </p>
+                <a id="elec_icon" href="javascript:void(0)" style=" float:left; line-height:31px; padding:0 10px; font-weight:bolder;" onclick="updateElecChart()" >用电量</a>
+                <a id="water_icon" href="javascript:void(0)" style=" float:left; line-height:31px; padding:0 10px;" onclick="updateWaterChart();">用水量</a>
+                <a id="gas_icon" href="javascript:void(0)" style=" float:left; line-height:31px; padding:0 10px;" onclick="updateGasChart();">燃气用量</a>
+        </div>
+        <div id="hours_chart" class="chart">
+        </div>
+        <div id="days_chart" class="chart">
+        </div>
+        <div id="months_chart" class="chart">
+        </div>
+        <div id="selectTimeRange" class="">
+        </div>
+    </div>
+    <div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择对象（使用鼠标拖动或Ctrl键或Shift键进行多选）">
+        <div>
+            <ul>
+                <li style="display: block;">
+                    <h4>选择校区</h4>
+                    <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="schoolAreaDiv">
+                    <h4>选择区域</h4>
+                    <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="buildingDiv">
+                    <h4>选择楼宇</h4>
+                    <div id="divBuilding">
+                        <select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+                        </select>
+                    </div>
+                </li>
+@*                <li id="newRoomDiv">
+                    <h4>选择测点</h4>
+                    <div id="divNewRoom">
+                    <select id="newRoomID" name="newRoomID" multiple="multiple">
+                    </select>
+                    </div>
+                </li>*@
+            </ul>
+        </div>
+            <div class=" ui-widget-content ui-helper-clearfix clear" style=" margin:10px 0px; border:0px;">
+                <div class="ui-dialog-buttonset" style=" text-align:center;">
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="addToCompare()">
+                        <span class="ui-button-text">加入对比</span>
+                    </button>
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="quitFromCompare()">
+                        <span class="ui-button-text">退出对比</span>
+                    </button>
+                </div>
+            </div>
+            <div style="width:100%; height:auto; clear:both;">
+                <select multiple="multiple" name="" id="addedBD" style=" width:100%">
+                </select>
+            </div>
+            <div id="dialogErrorTip1" class="clear a-center red hidden">查询对象不能为空。</div>
+            <div id="dialogErrorTip2" class="clear a-center red hidden">只能查询同一级别的测点的能耗对比。</div>
+            <div id="dialogErrorTip3" class="clear a-center red hidden">不能添加重复的测点，请重新选择。</div>
+            <div id="dialogErrorTip4" class="clear a-center red hidden">加入对比的测点数目不能超过5个。</div>
+    </div>
+    
+    <div id="savedItemsDiv" class="hidden" title="请选择一条对比条目">
+        <select id="savedItemsSelect" multiple="multiple" style="width:100%">
+        </select>
+        <div id="savedDialogErrorTip1" class="clear a-center red hidden">请选择一个对象</div>
+        <div id="savedDialogErrorTip2" class="clear a-center red hidden">不能选择多个对象</div>
+    </div>
+    <script type="text/javascript" >
+        $(function () {
+            var chartWidth = $("#bottom_chart").width() / 3;
+            $(".chart").css("width", chartWidth);
+            $("#days_chart").css("left", chartWidth);
+            $("#months_chart").css("left", chartWidth * 2);
+            var hoursChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "HourElecChart", chartWidth, 267, "White");
+            var hoursXmlstr = '' + $("#24hoursElecTemplate").html().replace("width", chartWidth);
+            hoursChart.setDataXml(hoursXmlstr);
+            hoursChart.render("hours_chart");
+
+            var daysChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "DayElecChart", chartWidth, 267, "White");
+            var daysXmlstr = '' + $("#10daysElecTemplate").html().replace("width", chartWidth);
+            daysChart.setDataXml(daysXmlstr);
+            daysChart.render("days_chart");
+
+            var monthsChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "MonthElecChart", chartWidth, 267, "White");
+            var monthsXmlstr = '' + $("#10MonthsElecTemplate").html().replace("width", chartWidth);
+            monthsChart.setDataXml(monthsXmlstr);
+            monthsChart.render("months_chart");
+
+
+            $("#energy_val_div").accordion();
+            //table
+            $(".vstable").find('tbody').find('tr').each(function (index) {
+                $(this).addClass('even');
+            });
+
+            //selectRoomDiv
+            $("#selectedSchool").change(function () {
+                $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Global")', { schoolID: this.value }, function (jsonData) {
+                    $("#selectedSchoolArea").html("");
+                    $("#selectedBuilding").html("");
+                    $("#newRoomID").html("");
+                    $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                    $("#divSchoolArea").attr("class", "divSelectRoom2");
+                    $("#schoolAreaDiv").fadeIn("fast");
+                    $("#buildingDiv").fadeOut("fast");
+                    $("#newRoomDiv").fadeOut("fast");
+                });
+            });
+            $("#selectedSchoolArea").change(function () {
+                $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Global")', { areaID: this.value }, function (jsonData) {
+                    $("#selectedBuilding").html("");
+                    $("#newRoomID").html("");
+                    $("#roomTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+                    $("#divSchoolArea").attr("class", "divSelectRoom1");
+                    //                    $("#divBuilding").attr("class", "divSelectRoom2");
+                    $("#buildingDiv").fadeIn("fast");
+                    $("#newRoomDiv").fadeOut("fast");
+                });
+            });
+            //            $("#selectedBuilding").change(function () {
+            //                $.getJSON('@Url.Action("GetPointsBySchoolAjax", "Global")', { buildingID: this.value }, function (jsonData) {
+            //                    $("#newRoomID").html("");
+            //                    $("#roomTemplate").tmpl(jsonData).appendTo("#newRoomID");
+            //                    $("#divBuilding").attr("class", "divSelectRoom1");
+            //                    $("#divNewRoom").attr("class", "divSelectRoom4");
+            //                    $("#newRoomDiv").fadeIn("fast");
+            //                });
+            //            });
+            $("#newRoomID").change(function () {
+                $("#divNewRoom").attr("class", "divSelectRoom divSelectRoom3");
+            });
+            $.getJSON('@Url.Action("GetAllShoolAjax", "Global")', null, function (jsonData) {
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+            });
+        });
+        var currentChartType = 0;
+        function updateElecChart() {
+            if (currentChartType == 0) {
+                return;
+            }
+            $("#hours_chart").empty();
+            $("#days_chart").empty();
+            $("#months_chart").empty();
+
+            $("#elec_icon").css("font-weight", "bolder");
+            $("#water_icon").css("font-weight", "normal");
+            $("#gas_icon").css("font-weight", "normal");
+
+            var chartWidth = $("#bottom_chart").width() / 3;
+            var hoursChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "HourElecChart", chartWidth, 267, "White");
+            var hoursXmlstr = '' + $("#24hoursElecTemplate").html().replace("width", chartWidth);
+            hoursChart.setDataXml(hoursXmlstr);
+            hoursChart.render("hours_chart");
+
+            var daysChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "DayElecChart", chartWidth, 267, "White");
+            var daysXmlstr = '' + $("#10daysElecTemplate").html().replace("width", chartWidth);
+            daysChart.setDataXml(daysXmlstr);
+            daysChart.render("days_chart");
+
+            var monthsChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "MonthElecChart", chartWidth, 267, "White");
+            var monthsXmlstr = '' + $("#10MonthsElecTemplate").html().replace("width", chartWidth);
+            monthsChart.setDataXml(monthsXmlstr);
+            monthsChart.render("months_chart");
+            currentChartType = 0;
+        }
+
+        function updateWaterChart() {
+            if (currentChartType == 1) {
+                return;
+            }
+            $("#hours_chart").empty();
+            $("#days_chart").empty();
+            $("#months_chart").empty();
+
+            $("#elec_icon").css("font-weight", "normal");
+            $("#water_icon").css("font-weight", "bolder");
+            $("#gas_icon").css("font-weight", "normal");
+
+            var chartWidth = $("#bottom_chart").width() / 3;
+            var hoursChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "HourWaterChart", chartWidth, 267, "White");
+            var hoursXmlstr = '' + $("#24hoursWaterTemplate").html().replace("width", chartWidth);
+            hoursChart.setDataXml(hoursXmlstr);
+            hoursChart.render("hours_chart");
+
+            var daysChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "DayElecChart", chartWidth, 267, "White");
+            var daysXmlstr = '' + $("#10daysWaterTemplate").html().replace("width", chartWidth);
+            daysChart.setDataXml(daysXmlstr);
+            daysChart.render("days_chart");
+
+            var monthsChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "MonthWaterChart", chartWidth, 267, "White");
+            var monthsXmlstr = '' + $("#10MonthsWaterTemplate").html().replace("width", chartWidth);
+            monthsChart.setDataXml(monthsXmlstr);
+            monthsChart.render("months_chart");
+            currentChartType = 1;
+        }
+
+        function updateGasChart() {
+            if (currentChartType == 2) {
+                return;
+            }
+            $("#hours_chart").empty();
+            $("#days_chart").empty();
+            $("#months_chart").empty();
+
+            $("#elec_icon").css("font-weight", "normal");
+            $("#water_icon").css("font-weight", "normal");
+            $("#gas_icon").css("font-weight", "bolder");
+            var chartWidth = $("#bottom_chart").width() / 3;
+            var hoursChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "HourGasChart", chartWidth, 267, "White");
+            var hoursXmlstr = '' + $("#24hoursGasTemplate").html().replace("width", chartWidth);
+            hoursChart.setDataXml(hoursXmlstr);
+            hoursChart.render("hours_chart");
+
+            var daysChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "DayGasChart", chartWidth, 267, "White");
+            var daysXmlstr = '' + $("#10daysGasTemplate").html().replace("width", chartWidth);
+            daysChart.setDataXml(daysXmlstr);
+            daysChart.render("days_chart");
+
+            var monthsChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "monthGasChart", chartWidth, 267, "White");
+            var monthsXmlstr = '' + $("#10MonthsGasTemplate").html().replace("width", chartWidth);
+            monthsChart.setDataXml(monthsXmlstr);
+            monthsChart.render("months_chart");
+            currentChartType = 2;
+        }
+
+        function MultiBdCompare() {
+            $("#roomSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    "保存": function () {
+                        if (selectedItems.length == 0) {
+                            $("#dialogErrorTip1").slideDown();
+                            return;
+                        }
+                        var idsStr = selectedItems[0];
+                        var titleStr = selectedName[0];
+                        for (var i = 1; i < selectedItems.length; i++) {
+                            idsStr = idsStr + "_" + selectedItems[i];
+                            titleStr = titleStr + "_" + selectedName[i];
+                        }
+                        $.getJSON('@Url.Action("AddSavedCmpItemsAjax", "Global")', { title: titleStr, value: idsStr, queryType: currentCompareType });
+                        $(this).dialog("close");
+                    },
+                    '确认': function () {
+                        if (selectedItems.length == 0) {
+                            $("#dialogErrorTip1").slideDown();
+                            return;
+                        }
+                        var idsStr = selectedItems[0];
+                        for (var i = 1; i < selectedItems.length; i++) {
+                            idsStr = idsStr + "_" + selectedItems[i];
+                        }
+                        window.open('@Url.Action("EnergyCompare", "Global")' + '?IDs=' + idsStr + '&queryType=' + currentCompareType, "_self", false);
+                        $(this).dialog("close");
+                    }
+                },
+                close: function (event, ui) {
+                    selectedItems = [];
+                    selectedName = [];
+                    currentCompareType = 0;
+                    $("#selectedSchool").val([]);
+                    $("#selectedSchoolArea").val([]);
+                    $("#selectedBuilding").val([]);
+                    $("#newRoomID").val([]);
+                    $("#schoolAreaDiv").hide();
+                    $("#buildingDiv").hide();
+                    $("#newRoomDiv").hide();
+                    $("#addedBD option").each(function () { $(this).remove(); });
+                }
+            });
+
+        }
+
+        function savedCompare() {
+            $.getJSON('@Url.Action("GetSavedCmpItemsAjax", "Global")', {}, function (jsonData) {
+                $("#savedItemsSelect").empty();
+                $("#savedCmpItemsTmpl").tmpl(jsonData).appendTo("#savedItemsSelect");
+
+            });
+            $("#savedItemsDiv").dialog({
+                modal: true,
+                width: 400,
+                resizable: false,
+                buttons: {
+                    '确认': function () {
+                        var selected = $("#savedItemsSelect option:selected");
+                        if (selected.length == 0) {
+                            $("#savedDialogErrorTip2").hide();
+                            $("#savedDialogErrorTip1").slideDown();
+                            return;
+                        }
+                        if (selected.length > 1) {
+                            $("#savedDialogErrorTip1").hide();
+                            $("#savedDialogErrorTip2").slideDown();
+                            return;
+                        }
+                        var ids = selected.attr("value");
+                        var queryType = selected.attr("queryType");
+                        window.open('@Url.Action("EnergyCompare", "Global")' + '?IDs=' + ids + '&queryType=' + queryType, "_self", false);
+                        $(this).dialog("close");
+                    },
+                    '删除': function () {
+                        var selected = $("#savedItemsSelect option:selected");
+                        if (selected.length == 0) {
+                            $("#savedDialogErrorTip2").hide();
+                            $("#savedDialogErrorTip1").slideDown();
+                            return;
+                        }
+                        selected.each(function (index, obj) {
+                            $.getJSON('@Url.Action("RemoveSavedCmpItemAjax","Global")', { title: obj.text });
+                        })
+                        $(this).dialog("close");
+                    }
+                }
+            })
+        }
+
+        var selectedItems = new Array();
+        var selectedName = new Array();
+        var currentCompareType = 0;
+        function addToCompare() {
+            var selected = $("#selectedSchool option:selected");
+            $("#dialogErrorTip1").hide();
+            $("#dialogErrorTip2").hide();
+            $("#dialogErrorTip3").hide();
+            $("#dialogErrorTip4").hide();
+            if (selected.length != 0) {
+                selected = $("#selectedSchoolArea option:selected");
+                if (selected.length != 0) {
+                    selected = $("#selectedBuilding option:selected");
+                    if (selected.length != 0) {
+                        selected = $("#newRoomID option:selected");
+                        if (selected.length != 0) {
+                            if (selectedItems.length + selected.length > 5) {
+                                $("#dialogErrorTip4").slideDown("fast");
+                                return;
+                            }
+                            selected.each(function (index, obj) {
+                                compareType = 5;
+                                for (var i = 0; i < selectedItems.length; i++) {
+                                    if (selectedItems[i] == obj.value) {
+                                        $("#dialogErrorTip3").slideDown("fast");
+                                        return;
+                                    }
+                                }
+                                if (currentCompareType != 0 && compareType == currentCompareType) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                    selectedName.push(obj.text);
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+
+                                }
+                                if (currentCompareType == 0) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                    currentCompareType = compareType;
+                                }
+                                if (currentCompareType != 0 && compareType != currentCompareType) {
+
+                                    $("#dialogErrorTip2").slideDown("normal");
+                                }
+                            });
+                        }
+                        else {
+                            selected = $("#selectedBuilding option:selected");
+                            if (selectedItems.length + selected.length > 5) {
+                                $("#dialogErrorTip4").slideDown("fast");
+                                return;
+                            }
+                            selected.each(function (index, obj) {
+                                compareType = 3;
+                                for (var i = 0; i < selectedItems.length; i++) {
+                                    if (selectedItems[i] == obj.value) {
+                                        $("#dialogErrorTip3").slideDown("fast");
+                                        return;
+                                    }
+                                }
+                                if (currentCompareType != 0 && compareType == currentCompareType) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                }
+                                if (currentCompareType == 0) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                    currentCompareType = compareType;
+                                }
+                                if (currentCompareType != 0 && compareType != currentCompareType) {
+                                    $("#dialogErrorTip2").slideDown("normal");
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        selected = $("#selectedSchoolArea option:selected");
+                        if (selectedItems.length + selected.length > 5) {
+                            $("#dialogErrorTip4").slideDown("fast");
+                            return;
+                        }
+                        selected.each(function (index, obj) {
+                            compareType = 2;
+                            for (var i = 0; i < selectedItems.length; i++) {
+                                if (selectedItems[i] == obj.value) {
+                                    $("#dialogErrorTip3").slideDown("fast");
+                                    return;
+                                }
+                            }
+                            if (currentCompareType != 0 && compareType == currentCompareType) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                            }
+                            if (currentCompareType == 0) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                                currentCompareType = compareType;
+                            }
+                            if (currentCompareType != 0 && compareType != currentCompareType) {
+                                $("#dialogErrorTip2").slideDown("normal");
+                            }
+                        });
+                    }
+                }
+                else {
+                    selected = $("#selectedSchool option:selected");
+                    if (selectedItems.length + selected.length > 5) {
+                        $("#dialogErrorTip4").slideDown("fast");
+                        return;
+                    }
+                    selected.each(function (index, obj) {
+                        compareType = 1;
+                        for (var i = 0; i < selectedItems.length; i++) {
+                            if (selectedItems[i] == obj.value) {
+                                $("#dialogErrorTip3").slideDown("fast");
+                                return;
+                            }
+                        }
+                        if (currentCompareType != 0 && compareType == currentCompareType) {
+                            var bdNameStr = obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                        }
+                        if (currentCompareType == 0) {
+                            var bdNameStr = obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                            currentCompareType = compareType;
+                        }
+                        if (currentCompareType != 0 && compareType != currentCompareType) {
+                            $("#dialogErrorTip2").slideDown("normal");
+                        }
+                    });
+                }
+            }
+        }
+
+        function quitFromCompare() {
+            $("#addedBD option:selected").each(function (index, obj) {
+                for (var i = 0; i < selectedItems.length; i++) {
+                    if (selectedItems[i] == obj.value) {
+                        selectedItems.splice(i, 1);
+                        selectedName.splice(i, 1);
+                    }
+                }
+            }
+            )
+            $("#addedBD option:selected").remove();
+            var remainOptions = $("#addedBD option");
+            if (remainOptions.length == 0) {
+                currentCompareType = 0;
+            }
+        }
+    </script>
+<script id="24hoursElecTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去24小时每小时用电量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（时）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用电量（kwh）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                { 
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name"> 
+                        <vc:DataSeries.DataPoints>
+                        @if (energyItem.valByHoursElec != null)
+                        {
+                            foreach (var item in energyItem.valByHoursElec)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex"  YValue="@item.StatisSVal"/>
+                            }
+                        }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 4)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode"> 
+                    <vc:DataSeries.DataPoints>
+                        @if (energyItem.valByHoursElec != null)
+                        {
+                            foreach (var item in energyItem.valByHoursElec)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                        }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 2)
+                { 
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName"> 
+                        <vc:DataSeries.DataPoints>
+                        @if (energyItem.valByHoursElec != null)
+                        {
+                            foreach (var item in energyItem.valByHoursElec)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex"  YValue="@item.StatisSVal"/>
+                            }
+                        }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 1)
+                { 
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName"> 
+                        <vc:DataSeries.DataPoints>
+                        @if (energyItem.valByHoursElec != null)
+                        {
+                            foreach (var item in energyItem.valByHoursElec)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex"  YValue="@item.StatisSVal"/>
+                            }
+                        }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+            }
+            }
+            
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+<script id="24hoursWaterTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去24小时每小时用水量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（时）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用水量（吨）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name">  
+                    <vc:DataSeries.DataPoints>
+                    @if (energyItem.valByHoursWater != null)
+                    {
+                        foreach (var item in energyItem.valByHoursWater)
+                        {
+                        <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex"  YValue="@item.StatisSVal"/>
+                        }
+                    }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 4)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode">  
+                    <vc:DataSeries.DataPoints>
+                    @if (energyItem.valByHoursWater != null)
+                    {
+                        foreach (var item in energyItem.valByHoursWater)
+                        {
+                        <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                        }
+                    }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries>                  
+                }
+                if (ViewBag.queryType == 2)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName">  
+                    <vc:DataSeries.DataPoints>
+                    @if (energyItem.valByHoursWater != null)
+                    {
+                        foreach (var item in energyItem.valByHoursWater)
+                        {
+                        <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                        }
+                    }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries>                  
+                }
+                if (ViewBag.queryType == 1)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName">  
+                    <vc:DataSeries.DataPoints>
+                    @if (energyItem.valByHoursWater != null)
+                    {
+                        foreach (var item in energyItem.valByHoursWater)
+                        {
+                        <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                        }
+                    }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries>                  
+                }
+            }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+<script id="24hoursGasTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去24小时每小时燃气用量"/> 
+        </vc:Chart.Titles> 
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（时）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="燃气用量（立方米）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByHoursGas != null)
+                            {
+                                foreach (var item in energyItem.valByHoursGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 4)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByHoursGas != null)
+                            {
+                                foreach (var item in energyItem.valByHoursGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 2)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByHoursGas != null)
+                            {
+                                foreach (var item in energyItem.valByHoursGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 1)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByHoursGas != null)
+                            {
+                                foreach (var item in energyItem.valByHoursGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+            }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+
+<script id="10daysElecTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10天每天用电量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（日期）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用电量（kwh）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                { 
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysElec != null)
+                            {
+                                foreach (var item in energyItem.valByDaysElec)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 4)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysElec != null)
+                            {
+                                foreach (var item in energyItem.valByDaysElec)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 2)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByHoursGas != null)
+                            {
+                                foreach (var item in energyItem.valByHoursGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 1)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByHoursGas != null)
+                            {
+                                foreach (var item in energyItem.valByHoursGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.HTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+            }
+            
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+<script id="10daysWaterTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10天每天用水量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（日期）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用水量（吨）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysWater != null)
+                            {
+                                foreach (var item in energyItem.valByDaysWater)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 4)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysWater != null)
+                            {
+                                foreach (var item in energyItem.valByDaysWater)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 2)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysWater != null)
+                            {
+                                foreach (var item in energyItem.valByDaysWater)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 1)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysWater != null)
+                            {
+                                foreach (var item in energyItem.valByDaysWater)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+            }
+            
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+<script id="10daysGasTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="6" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10天每天燃气用量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（日期）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="燃气用量（立方米）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                {
+                <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name"> 
+                    <vc:DataSeries.DataPoints>
+                        @if (energyItem.valByDaysGas != null)
+                        {
+                            foreach (var item in energyItem.valByDaysGas)
+                            {
+                            <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                            }
+                        }
+                    </vc:DataSeries.DataPoints> 
+                </vc:DataSeries>  
+                }
+                if (ViewBag.queryType == 4)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysGas != null)
+                            {
+                                foreach (var item in energyItem.valByDaysGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries>  
+                }
+                if (ViewBag.queryType == 2)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysGas != null)
+                            {
+                                foreach (var item in energyItem.valByDaysGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries>  
+                }
+                if (ViewBag.queryType == 1)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByDaysGas != null)
+                            {
+                                foreach (var item in energyItem.valByDaysGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.DTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries>  
+                }
+            }
+            
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+<script id="10MonthsElecTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="4" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10月每月用电量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（月份）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用电量（kwh）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsElec != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsElec)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 4)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsElec != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsElec)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 2)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsElec != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsElec)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 1)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsElec != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsElec)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+            }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+
+<script id="10MonthsWaterTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="4" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10月每月用水量"/> 
+        </vc:Chart.Titles> 
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（月份）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="用水量（吨）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsWater != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsWater)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 4)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsWater != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsWater)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 2)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsWater != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsWater)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 1)
+                {
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsWater != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsWater)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+            }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+<script id="10MonthsGasTemplate" type="text/x-jQuery-tmpl">
+    <vc:Chart  xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" AnimatedUpdate="True"  
+    Width="width" Height="267" Theme="Theme1" BorderBrush="Gray" Padding="4" IndicatorEnabled="True"> 
+        <vc:Chart.Titles> 
+            <vc:Title Text="过去10月每月燃气用量"/> 
+        </vc:Chart.Titles> 
+     
+        <vc:Chart.AxesX> 
+          <vc:Axis Padding="4"/> 
+          <vc:Axis Title="时间（月份）"/>
+        </vc:Chart.AxesX> 
+        <vc:Chart.AxesY> 
+          <vc:Axis Title="燃气用量（立方米）"/>
+        </vc:Chart.AxesY> 
+        <vc:Chart.Series> 
+            @foreach (var energyItem in ViewBag.allTypeEnergy)
+            {
+                if (ViewBag.queryType == 3)
+                { 
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.building.BDI_Name"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsGas != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 4)
+                { 
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.roomAndBuilding.RoomCode"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsGas != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 2)
+                { 
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.area.AreaName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsGas != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+                if (ViewBag.queryType == 1)
+                { 
+                    <vc:DataSeries RenderAs="Line" MarkerType="Circle" SelectionEnabled="True" LineThickness="3" LegendText="@energyItem.school.SchoolName"> 
+                        <vc:DataSeries.DataPoints>
+                            @if (energyItem.valByMonthsGas != null)
+                            {
+                                foreach (var item in energyItem.valByMonthsGas)
+                                {
+                                <vc:DataPoint AxisXLabel="@item.MTimeStr" XValue="@item.EntityIndex" YValue="@item.StatisSVal"/>
+                                }
+                            }
+                        </vc:DataSeries.DataPoints> 
+                    </vc:DataSeries> 
+                }
+            }
+        </vc:Chart.Series> 
+    </vc:Chart>
+</script>
+<script id="roomTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>
+<script id="savedCmpItemsTmpl" type="text/x-jQuery-tmpl">
+    <option value="${value}" queryType="${queryType}">${title}</option>
+</script>
+</body>
+</html>

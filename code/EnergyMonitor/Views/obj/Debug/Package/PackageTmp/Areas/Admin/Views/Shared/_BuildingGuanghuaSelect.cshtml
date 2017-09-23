@@ -1,0 +1,48 @@
+﻿
+<link href="@Url.Content("~/Content/css/RoomSelect.css")" rel="stylesheet" type="text/css" />
+<div id="buildingGuanghuaSelectDiv" class="roomSelectDiv hidden" title="请选择统计对象">
+    <ul>
+        <li style="display:block;">
+            <h4>选择建筑</h4>
+            <div id="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="schoolAreaDiv">
+            <h4>选择配电室</h4>
+            <div id="divSwitchingRoom"><select id="selectedSwitchingRoom" name="selectedSwitchingRoom" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="buildingDiv">
+            <h4>选择变压器</h4>
+            <div id="divTransformer"><select id="selectedTransformer" name="selectedTransformer" multiple="multiple">
+            </select></div>
+        </li>
+    </ul>
+    <div id="dialogErrorTip" class="clear a-center red hidden">请选择一个对象</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#selectedBuilding").change(function () {
+            $.getJSON('@Url.Action("GetSwitchingRoomsByBuildingIDAjax", "Util")', { buildingID: this.value }, function (jsonData) {
+                $("#selectedSwitchingRoom").html($("#buildingDataTemplate").tmpl(jsonData));
+                $("#divSwitchingRoom").attr("class", "divSelectRoom4");
+                $("#schoolAreaDiv").fadeIn("fast");
+                $("#buildingDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedSwitchingRoom").change(function () {
+            $.getJSON('@Url.Action("GetTransformersBySwitchingRoomIDAjax", "Util")', { SwitchingRoomID: this.value }, function (jsonData) {
+                $("#selectedTransformer").html($("#buildingDataTemplate").tmpl(jsonData));
+                $("#divSwitchingRoom").attr("class", "divSelectRoom1");
+                $("#divTransformer").attr("class", "divSelectRoom4");                            
+                $("#buildingDiv").fadeIn("fast");
+            });
+        });
+        $.getJSON('@Url.Action("GetGuanghuaBuildingAjax", "Util")', null, function (jsonData) {
+            $("#buildingDataTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+        });
+    });
+</script>
+<script id="buildingDataTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>

@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "校园区域月用水报表";
+}
+@section head{
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .report-warpper{ width:800px; margin-left: 20px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>校园区域月用水报表</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("Elec", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑报表</a></li>
+		    <li><a href="@Url.Action("BuildingElecMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑月用电报表</a></li>
+		    <li><a href="@Url.Action("BuildingWaterMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑月用水报表</a></li>
+		    <li><a href="@Url.Action("BuildingElecDay", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑日用电报表</a></li>
+            <li><a href="@Url.Action("BuildingEnergyMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑能耗总表</a></li>            
+            <li class="current"><a>校园区域月用水报表</a></li>
+            <li><a href="@Url.Action("ThirdPointMonth", "Report")">三级电表报表</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <ul class="em-form-ul">
+            <li>
+                <form action="@Url.Action("AreaWaterMonth", "Report")" method="get">
+                <ul>
+                    <li><span class="red">* </span>选择一个校园区域： </li>
+                    <li><input id="queryObj" name="an" type="text" class="inputbox" readonly="readonly" value="@ViewBag.areaName"/>
+                    <input type="hidden" id="areaId" name="a" value="@Model" /></li>
+                    <li id="areaError" class="hidden red">请选择一个校园区域</li>
+                </ul>
+                <ul style=" width:105px;">
+                    <li><span class="red">* </span>选择年份： </li>
+                    <li><select name="y">
+                    @if (ViewBag.year == null)
+                    {
+                        <option value="" selected="selected">今年</option>
+                    }
+                    else
+                    {
+                        <option value="">今年</option>
+                    }
+                    @for (int i = 2011; i <= DateTime.Now.Year; i++)
+                    {
+                        if (ViewBag.year != null && ViewBag.year == i)
+                        {
+                            <option value="@i" selected="selected">@i</option>
+                        }
+                        else
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li style="visibility:hidden;">.</li>
+                    <li><button id="queryButton" type="submit" class="btn" >  查看报表  </button></li>
+                    <li></li>
+                </ul>
+                </form>
+                <div class="clear"></div>
+            </li>
+         </ul>
+            @if (Model != null)
+            {
+                <div class="report-warpper">
+                @Html.Partial("ReportsWarpper/AreaWaterMonth")
+                </div>
+            }
+        </div></div>
+</div></div>
+
+<div id="areaSelectDiv" class="roomSelectDiv hidden" title="请选择区域">
+    <ul>
+        <li style="display: block;">
+            <h4>选择校区</h4>
+            <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="schoolAreaDiv">
+            <h4>选择区域</h4>
+            <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+            </select></div>
+        </li>
+    </ul>
+    <div id="dialogErrorTip" class="clear a-center red hidden">请选择一个区域</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#queryButton").click(function () {
+            if (+$("#areaId").val() <= 0) {
+                $("#areaError").slideDown("fast");
+                return false;
+            }
+        });
+        $("#queryObj").click(function () {
+            $("#areaSelectDiv").dialog({
+                modal: true,
+                width: 385,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var selectedObjs = $("#selectedSchoolArea option:selected");
+                        if (selectedObjs.length == 1) {
+                            var areaFullName = $("#selectedSchool option:selected").html() + ">"
+                                           + $("#selectedSchoolArea option:selected").html();
+                            $("#queryObj").val(areaFullName);
+                            $("#areaId").val($("#selectedSchoolArea").val());
+                            $("#areaError").slideUp("fast");
+                            $(this).dialog("close");
+                        } else {
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    },
+                    '清除': function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Util")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html("");
+                $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                $("#divSchoolArea").attr("class", "divSelectRoom4");
+                $("#schoolAreaDiv").fadeIn("fast");
+            });
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "Util")', null, function (jsonData) {
+            $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+
+    });
+</script>
+<script id="roomDataTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>

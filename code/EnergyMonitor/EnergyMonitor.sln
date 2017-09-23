@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controllers", "Controllers\Controllers.csproj", "{923C3B8F-B737-4B60-9E90-41D876B6F17D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{96DB1077-7D69-454C-9832-A47CFAD7321F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "Resources\Resources.csproj", "{C7F42CDD-5F12-441F-A4EC-74AFA6EA62F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Views", "Views\Views.csproj", "{87FD3729-BB80-444B-8684-C39B92F3890E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{923C3B8F-B737-4B60-9E90-41D876B6F17D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{923C3B8F-B737-4B60-9E90-41D876B6F17D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{923C3B8F-B737-4B60-9E90-41D876B6F17D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{923C3B8F-B737-4B60-9E90-41D876B6F17D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96DB1077-7D69-454C-9832-A47CFAD7321F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96DB1077-7D69-454C-9832-A47CFAD7321F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96DB1077-7D69-454C-9832-A47CFAD7321F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96DB1077-7D69-454C-9832-A47CFAD7321F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F42CDD-5F12-441F-A4EC-74AFA6EA62F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F42CDD-5F12-441F-A4EC-74AFA6EA62F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F42CDD-5F12-441F-A4EC-74AFA6EA62F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F42CDD-5F12-441F-A4EC-74AFA6EA62F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87FD3729-BB80-444B-8684-C39B92F3890E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87FD3729-BB80-444B-8684-C39B92F3890E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87FD3729-BB80-444B-8684-C39B92F3890E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87FD3729-BB80-444B-8684-C39B92F3890E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+EndGlobal

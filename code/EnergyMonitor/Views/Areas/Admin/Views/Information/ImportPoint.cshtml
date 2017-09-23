@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "测点管理";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        fieldset{margin: 20px;}
+        .step-tip{ float:left; width:400px; margin:10px;}
+        .step-img{ float:left; margin:10px;}
+        hr{margin: 20px auto;}
+        .import-upload{ padding:10px; margin: auto 10px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("QueryPoint", "Information")">查询测点</a></li>
+            <li><a href="@Url.Action("AddRealPoint", "Information")">增加真实测点</a></li>
+		    <li><a href="@Url.Action("AddPoint", "Information")">增加虚拟测点</a></li>
+            <li class="current"><a>导入历史数据</a></li>
+            <li><a href="@Url.Action("UpdateList", "Information")">数据更新列表</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <fieldset><legend>导入步奏</legend>
+        <div class="step-tip">
+        <p>1、增加所属对象能耗类型为“历史用电”的测点，或者查询已有的该测点编号</p>
+        <p>2、<a href="@Url.Action("DownloadImportExcel", "Information")" class="highlighted">点击下载</a>导入的Excel模板</p>
+        <p>3、参照指定的模板输入数据，其中第一行为月日期数据，输入格式如“2012-06”，第一列为所属对象名称，第二列为测点编号，其他地区输入测点某月的历史用能值</p>
+        <p>4、请严格按照模板格式输入，否则会导致导入数据出错，模板数据格式见图例</p>
+        </div>
+        <div class="step-img">
+        <img src="@Url.Content("~/Content/images/importsample.jpg")" />
+        </div>
+        <hr class="clear" />
+        <form id="myForm" action="@Url.Action("ImportingPoint", "Information")" method="post" enctype="multipart/form-data" >
+        <span class="red">* </span>上传文件： <input id="uploadExcel" name="uploadExcel" type="file" class="import-upload" />
+        <button id="queryButton" type="submit" class="btn m-button" > 上 传 </button>
+        </form>
+        </fieldset>
+    </div></div>
+</div></div>
+<script type="text/javascript">
+    $(function () {
+        $("#queryButton").click(function () {
+            if ($("#uploadExcel").val() == "") {
+                return false;
+            }
+        });
+</script>

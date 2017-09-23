@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewBag.Title = "批量测点管理";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        fieldset{margin: 20px;}
+        .step-tip{ float:left; width:400px; margin:10px;}
+        .step-img{ float:left; margin:10px;}
+        hr{margin: 20px auto;}
+        .import-upload{ padding:10px; margin: auto 10px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>批量测点管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">		 
+            <li class="current"><a>批量增加真实测点</a></li>
+            <li><a href="@Url.Action("BatchPointTrans", "Information")">批量测点迁移</a></li>
+	    </ul>
+        <div class="tab-div">
+        <fieldset><legend>导入测点信息</legend>
+            <div id="dataDiv">
+            <table>
+                <thead><tr>
+                    <th>ID</th>
+                    <th>RTU编号</th>
+                    <th>序列号</th>
+                    <th>测点名称</th>
+                    <th>单位</th>
+                    <th>所属对象</th>
+                    <th>能耗类型</th>
+                    <th>父测点编号</th>
+                    <th>父测点名称</th>
+                    <th>选为父测点</th>
+                </tr></thead>
+                <tbody id="pointDataDiv"></tbody>
+            </table>
+            <div id="pager"></div>
+            </div>
+            <div id="noDataDiv">提交的Excel中没有数据</div>
+            <div class="status success">
+                <p><img src="@Url.Content("~/Content/images/img/icons/icon_success.png") " alt="Success" />测点导入成功，继续 @Html.ActionLink("上传", "BatchPointManagement", "Information")</p>
+            </div>
+            <div class="status error">
+                <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Error" /><span id="errorMessage"></span>,重新 @Html.ActionLink("上传", "BatchPointManagement", "Information")</p>
+            </div>
+        </fieldset>
+        <button id="addButton" class="btn m-button" style="margin-left: 600px;"> 添 加 </button>
+        <input id="filePath" type="hidden" class="btn m-button" value="@ViewBag.filePath"/>
+    </div></div>
+</div> </div>
+<script type="text/javascript">
+    $(function () {
+        var global_totalPages = -1;
+
+        $("#addButton").click(function () {
+            $("#addButton").hide();
+            $("#dataDiv").hide();
+            $("#noDataDiv").html('<img alt="Loading" src="@Url.Content("~/Content/images/loading_mid.gif")">').show();
+            $.getJSON('@Url.Action("BatchAddRealPoints", "Information")', {
+                filePath: $("#filePath").val()
+            }, function (jsonData) {
+                if (jsonData.ifSuccess == true) {
+                    $("#dataDiv").hide();
+                    $("#addButton").hide();
+                    $("#noDataDiv").hide();
+                    $(".error").hide();
+                    $(".success").show();
+                }
+                else {
+                    $("#dataDiv").hide();
+                    $("#addButton").hide();
+                    $("#noDataDiv").hide();
+                    $("#errorMessage").html(jsonData.message+"");
+                    $(".error").show();
+                    $(".success").hide();
+                }
+            });
+        });
+
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#dataDiv").hide();
+            $(".error").hide();
+            $(".success").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $.getJSON('@Url.Action("GetBatchImportPointsAjax", "Information")', {
+                filePath: $("#filePath").val(),
+                currentPage: pageIndex,
+                totalPages: global_totalPages
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#addButton").hide();
+                    $(".error").hide();
+                    $(".success").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages == -1) {
+                    global_totalPages = jsonData.resultData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("提交的Excel中没有数据").show();
+                    $("#addButton").hide();
+                    $("#dataDiv").hide();
+                    $(".error").hide();
+                    $(".success").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $(".error").hide();
+                $(".success").hide();
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                $("#pointDataDiv").html($("#dataTemplate").tmpl(jsonData.resultData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.resultData.data) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#addButton").show();
+                $("#dataDiv").show();
+            })
+        }
+
+        pageClick(1);
+
+        $(".check").change(function () {
+            var flag = 0;
+            var id = $(this).val();
+            if ($(this).attr("checked")) {
+                flag = 1;
+            } else {
+                flag = 0;
+            }
+            $.getJSON('@Url.Action("ChooseOrCancelParentPoint", "Information")', {
+                filePath: $("#filePath").val(),
+                ID: id,
+                Flag: flag
+            });
+        });
+
+    });
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}">
+    <td>${ID}</td>
+    <td>${RTU_No}</td>
+    <td>${AI_Serial}</td>
+    <td>${AI_Name}</td>
+    <td>${AI_Base}</td>
+    <td>${theObject}</td>
+    <td>${powerType}</td>
+    <td>${parentNo}</td>
+    <td>${parentName}</td>
+    <td>{{if parentFlag == 1}}<input type="checkbox" checked="checked" class="check" value="${ID}">{{else}}<input type="checkbox" class="check" value="${ID}">
+    {{/if}}
+    </td>
+    </tr>
+</script>

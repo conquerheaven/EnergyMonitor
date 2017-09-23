@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <div style="margin:100px 40%; width:400px;">
+        <h1>测试登录</h1>
+        @using(Html.BeginForm("Login","Homes")){
+            @:用户名:<input type="text" name="userID" />
+            <input type="submit" value=" 登 录 " />
+        }
+        <span style="color:Red">@ViewBag.loginError</span>
+        <h1><a href="@Url.Action("Map", "Global", new { area = "Admin" })">地图展示</a></p></h1>
+    </div>
+</body>
+</html>

@@ -1,0 +1,265 @@
+﻿
+<link href="@Url.Content("~/Content/css/RoomSelect.css")" rel="stylesheet" type="text/css" />
+<div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择对象（使用鼠标拖动或Ctrl键或Shift键进行多选）">
+        <div>
+            <ul>
+                <li style="display: block;">
+                    <h4>选择校区</h4>
+                    <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="schoolAreaDiv">
+                    <h4>选择区域</h4>
+                    <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="buildingDiv">
+                    <h4>选择楼宇</h4>
+                    <div id="divBuilding">
+                        <select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+                        </select>
+                    </div>
+                </li>
+                <li id="newRoomDiv">
+                    <h4>选择测点</h4>
+                    <div id="divNewRoom">
+                    <select id="newRoomID" name="newRoomID" multiple="multiple" style=" width:300px">
+                    </select>
+                    </div>
+                </li>
+            </ul>
+        </div>
+            <div class=" ui-widget-content ui-helper-clearfix clear" style=" margin:10px 0px; border:0px;">
+                <div class="ui-dialog-buttonset" style=" text-align:center;">
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="addToCompare()">
+                        <span class="ui-button-text">加入对比</span>
+                    </button>
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="quitFromCompare()">
+                        <span class="ui-button-text">退出对比</span>
+                    </button>
+                </div>
+            </div>
+            <div style="width:100%; height:auto; clear:both;">
+                <select multiple="multiple" name="" id="addedBD" style=" width:100%">
+                </select>
+            </div>
+            <div id="dialogErrorTip1" class="clear a-center red hidden">查询对象不能为空。</div>
+            <div id="dialogErrorTip2" class="clear a-center red hidden">只能查询同一级别的测点的能耗对比。</div>
+            <div id="dialogErrorTip3" class="clear a-center red hidden">不能添加重复的测点，请重新选择。</div>
+            <div id="dialogErrorTip4" class="clear a-center red hidden">加入对比的测点数目不能超过5个。</div>
+    </div>
+
+    <script type="text/javascript">
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Util")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html("");
+                $("#selectedBuilding").html("");
+                $("#newRoomID").html("");
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                $("#divSchoolArea").attr("class", "divSelectRoom2");
+                $("#schoolAreaDiv").fadeIn("fast");
+                $("#buildingDiv").fadeOut("fast");
+                $("#newRoomDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedSchoolArea").change(function () {
+            $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Util")', { areaID: this.value }, function (jsonData) {
+                $("#selectedBuilding").html("");
+                $("#newRoomID").html("");
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+                $("#divSchoolArea").attr("class", "divSelectRoom1");
+                $("#divBuilding").attr("class", "divSelectRoom2");
+                $("#buildingDiv").fadeIn("fast");
+                $("#newRoomDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedBuilding").change(function () {
+            $.getJSON('@Url.Action("GetPointsByBuildingAjax", "Util")', { buildingID: this.value }, function (jsonData) {
+                $("#newRoomID").html("");
+                $("#pointTemplate").tmpl(jsonData).appendTo("#newRoomID");
+                $("#divBuilding").attr("class", "divSelectRoom1");
+                $("#divNewRoom").attr("class", "divSelectRoom4");
+                $("#newRoomDiv").fadeIn("fast");
+            });
+        });
+        $("#newRoomID").change(function () {
+            $("#divNewRoom").attr("class", "divSelectRoom divSelectRoom3");
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "Util")', null, function (jsonData) {
+            $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+
+        var selectedItems = new Array();
+        var selectedName = new Array();
+        var currentCompareType = 0;
+        function addToCompare() {
+            var selected = $("#selectedSchool option:selected");
+            $("#dialogErrorTip1").hide();
+            $("#dialogErrorTip2").hide();
+            $("#dialogErrorTip3").hide();
+            $("#dialogErrorTip4").hide();
+            if (selected.length != 0) {
+                selected = $("#selectedSchoolArea option:selected");
+                if (selected.length != 0) {
+                    selected = $("#selectedBuilding option:selected");
+                    if (selected.length != 0) {
+                        selected = $("#newRoomID option:selected");
+                        if (selected.length != 0) {
+                            if (selectedItems.length + selected.length > 5) {
+                                $("#dialogErrorTip4").slideDown("fast");
+                                return;
+                            }
+                            selected.each(function (index, obj) {
+                                compareType = 5;
+                                for (var i = 0; i < selectedItems.length; i++) {
+                                    if (selectedItems[i] == obj.value) {
+                                        $("#dialogErrorTip3").slideDown("fast");
+                                        return;
+                                    }
+                                }
+                                if (currentCompareType != 0 && compareType == currentCompareType) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                    selectedName.push(obj.text);
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+
+                                }
+                                if (currentCompareType == 0) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                    currentCompareType = compareType;
+                                    $("#objType").val(compareType);
+                                }
+                                if (currentCompareType != 0 && compareType != currentCompareType) {
+
+                                    $("#dialogErrorTip2").slideDown("normal");
+                                }
+                            });
+                        }
+                        else {
+                            selected = $("#selectedBuilding option:selected");
+                            if (selectedItems.length + selected.length > 5) {
+                                $("#dialogErrorTip4").slideDown("fast");
+                                return;
+                            }
+                            selected.each(function (index, obj) {
+                                compareType = 3;
+                                for (var i = 0; i < selectedItems.length; i++) {
+                                    if (selectedItems[i] == obj.value) {
+                                        $("#dialogErrorTip3").slideDown("fast");
+                                        return;
+                                    }
+                                }
+                                if (currentCompareType != 0 && compareType == currentCompareType) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                }
+                                if (currentCompareType == 0) {
+                                    var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + obj.text;
+                                    $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                    selectedItems.push(obj.value);
+                                    selectedName.push(obj.text);
+                                    currentCompareType = compareType;
+                                    $("#objType").val(compareType);
+                                }
+                                if (currentCompareType != 0 && compareType != currentCompareType) {
+                                    $("#dialogErrorTip2").slideDown("normal");
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        selected = $("#selectedSchoolArea option:selected");
+                        if (selectedItems.length + selected.length > 5) {
+                            $("#dialogErrorTip4").slideDown("fast");
+                            return;
+                        }
+                        selected.each(function (index, obj) {
+                            compareType = 2;
+                            for (var i = 0; i < selectedItems.length; i++) {
+                                if (selectedItems[i] == obj.value) {
+                                    $("#dialogErrorTip3").slideDown("fast");
+                                    return;
+                                }
+                            }
+                            if (currentCompareType != 0 && compareType == currentCompareType) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                            }
+                            if (currentCompareType == 0) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                                currentCompareType = compareType;
+                                $("#objType").val(compareType);
+                            }
+                            if (currentCompareType != 0 && compareType != currentCompareType) {
+                                $("#dialogErrorTip2").slideDown("normal");
+                            }
+                        });
+                    }
+                }
+                else {
+                    selected = $("#selectedSchool option:selected");
+                    if (selectedItems.length + selected.length > 5) {
+                        $("#dialogErrorTip4").slideDown("fast");
+                        return;
+                    }
+                    selected.each(function (index, obj) {
+                        compareType = 1;
+                        for (var i = 0; i < selectedItems.length; i++) {
+                            if (selectedItems[i] == obj.value) {
+                                $("#dialogErrorTip3").slideDown("fast");
+                                return;
+                            }
+                        }
+                        if (currentCompareType != 0 && compareType == currentCompareType) {
+                            var bdNameStr = obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                        }
+                        if (currentCompareType == 0) {
+                            var bdNameStr = obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                            currentCompareType = compareType;
+                            $("#objType").val(compareType);
+                        }
+                        if (currentCompareType != 0 && compareType != currentCompareType) {
+                            $("#dialogErrorTip2").slideDown("normal");
+                        }
+                    });
+                }
+            }
+        }
+
+        function quitFromCompare() {
+            $("#addedBD option:selected").each(function (index, obj) {
+                for (var i = 0; i < selectedItems.length; i++) {
+                    if (selectedItems[i] == obj.value) {
+                        selectedItems.splice(i, 1);
+                        selectedName.splice(i, 1);
+                    }
+                }
+            }
+            )
+            $("#addedBD option:selected").remove();
+        }
+    </script>
+
+    <script id="roomTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}" title="${dataValue}">${dataValue}</option>
+    </script>
+    <script id="pointTemplate" type="text/x-jQuery-tmpl">
+        <option value="${analogNo}" title="${analogName}">${analogName}</option>
+    </script>
+

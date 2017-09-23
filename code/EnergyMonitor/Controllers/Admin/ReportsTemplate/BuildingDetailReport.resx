@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="textBox42.Value" xml:space="preserve">
+    <value>___市政蒸汽或热水</value>
+  </data>
+  <data name="textBox59.Value" xml:space="preserve">
+    <value>水泵：</value>
+  </data>
+  <data name="textBox17.Value" xml:space="preserve">
+    <value>建筑结构形式：{Fields.BDI_Structure}
+窗墙比：{Fields.BDI_AreaRatio} ％</value>
+  </data>
+  <data name="textBox69.Value" xml:space="preserve">
+    <value>=Fields.LD_Power</value>
+  </data>
+  <data name="textBox72.Value" xml:space="preserve">
+    <value>照明开启时间</value>
+  </data>
+  <data name="textBox20.Value" xml:space="preserve">
+    <value>玻璃类型：{Fields.BDI_Glass}
+窗框材料：{Fields.BDI_Win}</value>
+  </data>
+  <data name="textBox64.Value" xml:space="preserve">
+    <value>=Fields.LD_Region</value>
+  </data>
+  <data name="textBox87.Value" xml:space="preserve">
+    <value>风机：</value>
+  </data>
+  <data name="textBox31.Value" xml:space="preserve">
+    <value>冷热源设备（可多选）：</value>
+  </data>
+  <data name="textBox68.Value" xml:space="preserve">
+    <value>总功率W</value>
+  </data>
+  <data name="textBox23.Value" xml:space="preserve">
+    <value>___风机盘管＋新风系统</value>
+  </data>
+  <data name="textBox50.Value" xml:space="preserve">
+    <value>照明灯具数量</value>
+  </data>
+  <data name="textBox66.Value" xml:space="preserve">
+    <value>=Fields.LD_Type</value>
+  </data>
+  <data name="textBox51.Value" xml:space="preserve">
+    <value>功率 kW</value>
+  </data>
+  <data name="textBox70.Value" xml:space="preserve">
+    <value>照度lx</value>
+  </data>
+  <data name="textBox25.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox1.Value" xml:space="preserve">
+    <value>建筑名称：{Fields.BDI_Name}</value>
+  </data>
+  <data name="textBox98.Value" xml:space="preserve">
+    <value>= IIf(Fields.KED_Type&lt;&gt;"炉子",
+Fields.KED_Num+"台，功率："+Fields.KED_Power+"kW，全年运行时间："+Fields.KED_YearRuntime+"h",
+Fields.KED_Num+"台，燃料形式："+Fields.KED_FuelType+"，燃料消耗量："+Fields.KED_Consumption+"kg/h(m3/h)，全年运行时间："+Fields.KED_YearRuntime+"h"
+)</value>
+  </data>
+  <data name="textBox45.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="headTextBox.Value" xml:space="preserve">
+    <value>建筑基本信息表</value>
+  </data>
+  <data name="textBox32.Value" xml:space="preserve">
+    <value>___分体式空调或VRV的局部式机组</value>
+  </data>
+  <data name="textBox40.Value" xml:space="preserve">
+    <value>___燃油锅炉
+___燃气锅炉
+</value>
+  </data>
+  <data name="textBox24.Value" xml:space="preserve">
+    <value>空调系统形式：</value>
+  </data>
+  <data name="textBox95.Value" xml:space="preserve">
+    <value>=Fields.KED_Type</value>
+  </data>
+  <data name="textBox67.Value" xml:space="preserve">
+    <value>=Fields.LD_Num</value>
+  </data>
+  <data name="textBox36.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox39.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox54.Value" xml:space="preserve">
+    <value>厂家及型号</value>
+  </data>
+  <data name="textBox28.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox26.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox11.Value" xml:space="preserve">
+    <value>以前是否实施过节能改造? (如果是，注明改造项目) {IIf(Fields.BDI_TransforFlag=0,"否","是，改造项目："+Fields.BDI_TransforContent)}</value>
+  </data>
+  <data name="textBox74.Value" xml:space="preserve">
+    <value>调节方式</value>
+  </data>
+  <data name="textBox46.Value" xml:space="preserve">
+    <value>___其他（请注明）：_____________</value>
+  </data>
+  <data name="textBox81.Value" xml:space="preserve">
+    <value>=Fields.ED_Power</value>
+  </data>
+  <data name="textBox33.Value" xml:space="preserve">
+    <value>___水冷式机组（离心式、螺杆式等）</value>
+  </data>
+  <data name="textBox78.Value" xml:space="preserve">
+    <value>=Fields.OED_Type</value>
+  </data>
+  <data name="textBox76.Value" xml:space="preserve">
+    <value>=Fields.ED_SerialNum</value>
+  </data>
+  <data name="textBox44.Value" xml:space="preserve">
+    <value>___热电联产机组</value>
+  </data>
+  <data name="textBox53.Value" xml:space="preserve">
+    <value>电梯类型</value>
+  </data>
+  <data name="textBox35.Value" xml:space="preserve">
+    <value>___空气源热泵机组
+___水源热泵机组
+___地源（土壤源）热泵机组
+___水环热泵机组
+</value>
+  </data>
+  <data name="textBox27.Value" xml:space="preserve">
+    <value>___分体式空调或VRV的局部式机组系统</value>
+  </data>
+  <data name="textBox12.Value" xml:space="preserve">
+    <value>以前是否进行过能源审计? (如果是，给出审计日期){IIf(Fields.BDI_AauditFlag=0,"否","是，日期："+Fields.BDI_AauditDate)}</value>
+  </data>
+  <data name="textBox8.Value" xml:space="preserve">
+    <value>统计人员电话：{Fields.BDI_StatManPhone}</value>
+  </data>
+  <data name="textBox55.Value" xml:space="preserve">
+    <value>电梯：</value>
+  </data>
+  <data name="textBox47.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox29.Value" xml:space="preserve">
+    <value>___其他（请注明）：_____________</value>
+  </data>
+  <data name="textBox82.Value" xml:space="preserve">
+    <value>运行时间</value>
+  </data>
+  <data name="textBox48.Value" xml:space="preserve">
+    <value>照明系统：</value>
+  </data>
+  <data name="textBox34.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox77.Value" xml:space="preserve">
+    <value>=Fields.ED_Type</value>
+  </data>
+  <data name="textBox10.Value" xml:space="preserve">
+    <value>建筑运行时间表：
+一天运行{Fields.BDI_RunPerWeek}小时：从{Fields.BDI_WeekStart}到{Fields.BDI_WeekEnd}
+一周运行{Fields.BDI_RunPreMonth}天：  从{Fields.BDI_MonthStart}到{Fields.BDI_MonthEnd}
+一年运行{Fields.BDI_RunPerYear}月：  从{Fields.BDI_YearStart}到{Fields.BDI_YearStart}
+假期：{Fields.BDI_Holiday}</value>
+  </data>
+  <data name="textBox61.Value" xml:space="preserve">
+    <value>照明区域</value>
+  </data>
+  <data name="textBox6.Value" xml:space="preserve">
+    <value>能源统计负责人电话：{Fields.BDI_LinkManPhone}</value>
+  </data>
+  <data name="textBox38.Value" xml:space="preserve">
+    <value>___电锅炉</value>
+  </data>
+  <data name="textBox7.Value" xml:space="preserve">
+    <value>统计人员：{Fields.BDI_StatMan}</value>
+  </data>
+  <data name="htmlTextBox2.Value" xml:space="preserve">
+    <value>建筑面积：{Fields.BDI_Area} m&lt;sup&gt;2&lt;/sup&gt;；空调面积：{Fields.BDI_AreaAir} m&lt;sup&gt;2&lt;/sup&gt;；&lt;br /&gt;采暖面积：{Fields.BDI_AreaHot} m&lt;sup&gt;2&lt;/sup&gt;；特殊区域面积：{Fields.BDI_AreaHot} m&lt;sup&gt;2&lt;/sup&gt;</value>
+  </data>
+  <data name="textBox93.Value" xml:space="preserve">
+    <value>{IIf(Fields.WMD_Type&lt;&gt;"卫生间排气扇",
+Fields.WMD_Num+"台，风量："+Fields.WMD_windAmount+"m3/h，风压："+Fields.WMD_Intensity+"Pa，功率："+Fields.WMD_Power+"kW，全年运行时间："+Fields.WMD_YearRuntime+"h",
+Fields.WMD_Num+"台，功率："+Fields.WMD_Power+"kW，全年运行时间："+Fields.WMD_YearRuntime+"h"
+)}</value>
+  </data>
+  <data name="textBox13.Value" xml:space="preserve">
+    <value>电力公司名称：{Fields.BDI_ElectricCompName}</value>
+  </data>
+  <data name="textBox80.Value" xml:space="preserve">
+    <value>{Fields.OED_Num}台，额定功率{Fields.OED_FixedPower}W，共{Fields.OED_YearPower}kW，运行时间：从上午{Fields.OED_Start}点到下午{Fields.OED_End}点</value>
+  </data>
+  <data name="textBox56.Value" xml:space="preserve">
+    <value>建筑类型：{Fields.BDI_Type}
+建造年代：{Fields.BDI_Date}</value>
+  </data>
+  <data name="textBox91.Value" xml:space="preserve">
+    <value>=Fields.WMD_Type</value>
+  </data>
+  <data name="textBox73.Value" xml:space="preserve">
+    <value>上午{Fields.LD_Start}点到下午{Fields.LD_End}点</value>
+  </data>
+  <data name="textBox15.Value" xml:space="preserve">
+    <value>燃气供应公司名称：{Fields.BDI_GasCompName}</value>
+  </data>
+  <data name="textBox4.Value" xml:space="preserve">
+    <value>楼主电话：{Fields.BDI_Telephone}</value>
+  </data>
+  <data name="textBox75.Value" xml:space="preserve">
+    <value>=Fields.LD_Mode</value>
+  </data>
+  <data name="textBox49.Value" xml:space="preserve">
+    <value>电梯编号</value>
+  </data>
+  <data name="textBox19.Value" xml:space="preserve">
+    <value>外窗类型：{Fields.BDI_WinOut}
+有无遮阳：{IIf(Fields.BDI_Visor=null,"否","是："+Fields.BDI_Visor)}</value>
+  </data>
+  <data name="textBox62.Value" xml:space="preserve">
+    <value>区域面积m2</value>
+  </data>
+  <data name="textBox85.Value" xml:space="preserve">
+    <value>=Fields.ED_Mode</value>
+  </data>
+  <data name="textBox37.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox83.Value" xml:space="preserve">
+    <value>从上午{Fields.ED_Start}点到下午{Fields.ED_End}点</value>
+  </data>
+  <data name="textBox21.Value" xml:space="preserve">
+    <value>___集中式全空气系统</value>
+  </data>
+  <data name="textBox94.Value" xml:space="preserve">
+    <value>=Fields.WPD_Type</value>
+  </data>
+  <data name="textBox89.Value" xml:space="preserve">
+    <value>厨房设备：</value>
+  </data>
+  <data name="textBox57.Value" xml:space="preserve">
+    <value>其他用能设备</value>
+  </data>
+  <data name="textBox96.Value" xml:space="preserve">
+    <value>{Fields.WPD_Num}台，流量：{Fields.WPD_Flow}m3/h，扬程：{Fields.WPD_Lifting}m，功率：{Fields.WPD_Power}kW，全年运行时间：{Fields.WPD_YearRuntime}h</value>
+  </data>
+  <data name="textBox9.Value" xml:space="preserve">
+    <value>建筑朝向：{Fields.BDI_Direction}；建筑高度：{Fields.BDI_Height} m
+建筑层数：地上{Fields.BDI_FloorUp} 层，地下{Fields.BDI_FloorDn} 层，
+标准层层高：{Fields.BDI_FloorHeight}m</value>
+  </data>
+  <data name="textBox79.Value" xml:space="preserve">
+    <value>=Fields.ED_FactoryModel</value>
+  </data>
+  <data name="textBox41.Value" xml:space="preserve">
+    <value>详见附表</value>
+  </data>
+  <data name="textBox18.Value" xml:space="preserve">
+    <value>外墙材料：{Fields.BDI_KindsOut}
+是否保温：{IIf(Fields.BDI_WarmKeep=null,"否","是："+Fields.BDI_WarmKeep)}
+</value>
+  </data>
+  <data name="textBox16.Value" xml:space="preserve">
+    <value>空调系统：</value>
+  </data>
+  <data name="textBox84.Value" xml:space="preserve">
+    <value>控制方式</value>
+  </data>
+  <data name="textBox2.Value" xml:space="preserve">
+    <value>详细地址：{Fields.BDI_Address}</value>
+  </data>
+  <data name="textBox14.Value" xml:space="preserve">
+    <value>建筑围护结构：</value>
+  </data>
+  <data name="textBox71.Value" xml:space="preserve">
+    <value>=Fields.LD_Dgree</value>
+  </data>
+  <data name="textBox3.Value" xml:space="preserve">
+    <value>所属院系：{Fields.BDI_Academy}</value>
+  </data>
+  <data name="textBox63.Value" xml:space="preserve">
+    <value>灯具类型</value>
+  </data>
+  <data name="textBox5.Value" xml:space="preserve">
+    <value>能源统计负责人：{Fields.BDI_LinkMan}</value>
+  </data>
+  <data name="textBox22.Value" xml:space="preserve">
+    <value>空调设定温度：供冷{Fields.BDI_TemCool} ℃，供热{Fields.BDI_TemHot} ℃，特殊区域：供冷 ℃，供热 ℃</value>
+  </data>
+  <data name="textBox65.Value" xml:space="preserve">
+    <value>=Fields.LD_Area</value>
+  </data>
+  <data name="textBox52.Value" xml:space="preserve">
+    <value>室内办公设备：</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.ShowSnapGrid" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>zh-Hans</value>
+  </metadata>
+</root>

@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "系统运行状态";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/mktree.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/mktree.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .tip{margin-left:20px; }
+        .tip .item{margin-left:20px;}
+        hr{clear:both; margin: 20px 0;border:1px #EAEAEA solid;}
+        .good{ color: Green;}
+        .bad{ color: Red;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>系统运行状态</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li class="current"><a>展开查看</a></li>
+            <li><a href="@Url.Action("BadState", "System")">查看故障</a></li>
+            <li><a href="@Url.Action("AllState", "System")">查看全部</a></li>
+            <li><a href="@Url.Action("DiagramState", "System")">图表查看</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <div class="tip">
+            <div class="left"><span class="good">绿色</span>：该设备正常</div>
+            <div class="left item"><span class="bad">红色</span>：该设备故障</div>
+        </div>
+        <hr />
+        <div>
+            <ul class="mktree">
+                <li class="liOpen"><span class="good"> 系统状态 </span>
+                <ul>
+                @foreach (var item in Model)
+                {
+                    <li id="@item.Type@("_")@item.StateNo">@if (item.Status == 1) { <span class="good"> @item.Info </span> } else { <span class="bad"> @item.Info </span> } <ul class="noRender"><li><span><img src="@Url.Content("~/Content/images/loading_small.gif")" alt="Loading"/> 加载中...</span></li></ul></li>
+                }
+                </ul>
+                </li>
+            </ul>
+        </div>
+    </div></div>
+</div></div>
+<script type="text/javascript">
+    $(function () {
+        convertTrees();
+
+        function renderSubTreeHtml(data, clickedObj, ul, type) {
+            if (data != null) {
+                if (type != "R") {
+                    ul.html($("#dataTemplate").tmpl(data));
+                    $(".bullet", ul).toggle(
+                        function () {
+                            $(this).parent().attr("class", "liOpen");
+                        },
+                        function () {
+                            $(this).parent().attr("class", "liClosed");
+                        }
+                    );
+                    $(".bullet", ul).click(function () {
+                        renderSubTree($(this));
+                    });
+                } else {
+                    ul.html($("#data2Template").tmpl(data));
+                }
+            } else {
+                ul.html('<li class="liBullet"><span class="bullet">&nbsp;</span> 没有数据 </li>');
+            }
+            ul.removeAttr("class");
+        }
+
+        function renderSubTree(clickedObj) {
+            var ul = clickedObj.next().next("ul");
+            if (ul.length == 1 && ul.attr("class") == "noRender") {
+                var strs = clickedObj.parent().attr("id").split("_");
+                var stateType = strs[0];
+                var stateNo = strs[1];
+                if (stateType == "W") {
+                    $.getJSON('@Url.Action("GetRTUState", "System")', {
+                        workstationNo: stateNo
+                    }, function (jsonData) {
+                        renderSubTreeHtml(jsonData, clickedObj, ul, stateType);
+                    });
+                } else if (stateType == "R") {
+                    $.getJSON('@Url.Action("GetIntrumentState", "System")', {
+                        rtuNo: stateNo
+                    }, function (jsonData) {
+                        renderSubTreeHtml(jsonData, clickedObj, ul, stateType);
+                    });
+                }
+            }
+        }
+
+        $(".liClosed .bullet").click(function () {
+            renderSubTree($(this));
+        });
+
+
+    });
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <li id="${Type}_${StateNo}" class="liClosed">
+    <span class="bullet">&nbsp; </span>
+    {{if Status==1}}<span class="good"> ${Info} </span>{{else}}<span class="bad"> ${Info} </span>{{/if}}
+        <ul class="noRender">
+        <li class="liBullet">
+        <span class="bullet">&nbsp;</span>
+        <span><img alt="Loading" src="@Url.Content("~/Content/images/loading_small.gif")"> 加载中... </span>
+        </li>
+        </ul>
+    </li>
+</script>
+<script id="data2Template" type="text/x-jQuery-tmpl">
+    <li class="liBullet"><span class="bullet">&nbsp;</span>{{if Status==1}}<span class="good"> ${Info} </span>{{else}}<span class="bad"> ${Info} </span>{{/if}}</li>
+</script>

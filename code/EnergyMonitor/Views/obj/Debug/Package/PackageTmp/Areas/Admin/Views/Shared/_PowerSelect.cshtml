@@ -1,0 +1,95 @@
+﻿@using System.Xml;
+@{
+   XmlDocument[] xmlDocs = null; 
+    if (Model != null)
+    {
+        var powerList = (IList<EnergyMonitor.Models.LinqEntity.PowerClass>)Model;
+        var parentPowerList = powerList.Where(x => x.PC_ID.Length == 3).ToList();
+        xmlDocs = new XmlDocument[parentPowerList.Count];
+        for (int i = 0; i < parentPowerList.Count; i++)
+        {
+            var parentPower = parentPowerList[i];
+            var subPowerList = powerList.Where(x => x.PC_ID.StartsWith(parentPower.PC_ID));
+            var sortedPowerList = subPowerList.OrderBy(x => x.PC_ID);
+            xmlDocs[i] = new XmlDocument();
+            foreach (var item in sortedPowerList)
+            {
+                XmlElement li = xmlDocs[i].CreateElement("li");
+                XmlElement input = xmlDocs[i].CreateElement("input");
+                input.SetAttribute("type", "checkbox");
+                input.SetAttribute("value", item.PC_ID);
+                li.AppendChild(input);
+                XmlElement label = xmlDocs[i].CreateElement("label");
+                label.InnerText = item.PC_Name;
+                li.AppendChild(label);
+
+                int len = item.PC_ID.Length;
+                if (len == 3)
+                {
+                    xmlDocs[i].AppendChild(li);
+                }
+                else
+                {
+                    string parentID = item.PC_ID.Substring(0, len - 3);
+                    XmlNode parentInput = xmlDocs[i].SelectSingleNode("//input[@value='" + parentID + "'] ");
+                    XmlNode parentUl = parentInput.NextSibling.NextSibling;
+
+                    if (parentUl != null)
+                    {
+                        parentUl.AppendChild(li);
+                    }
+                    else
+                    {
+                        parentUl = xmlDocs[i].CreateElement("ul");
+                        parentUl.AppendChild(li);
+                        parentInput.ParentNode.AppendChild(parentUl);
+                    }
+                }
+            }
+            
+        }
+
+    }
+}
+@if (Model != null)
+{
+<link href="../../../../Content/css/tree.css" rel="stylesheet" type="text/css" />
+<script src="../../../../Scripts/jquery.checktree.pack.js" type="text/javascript"></script>
+<style type="text/css">
+    #powerTreeDiv .ui-widget-header{border-top: none;border-left: none; border-right: none;}
+    #powerTreeDiv .em-tree{ border: 1px #DFD9C3 solid; border-top: none;}
+</style>
+<div id="powerTreeDiv" class="hidden" title="请选择能耗分类">
+    <ul>
+    @for (int i = 0; i < xmlDocs.Length; i++)
+    {
+        <li><a href="#powerTreeDiv-@i">@xmlDocs[i].FirstChild.ChildNodes[1].InnerText</a></li>
+    }
+	</ul>
+    @for (int i = 0; i < xmlDocs.Length; i++)
+    {
+        <ul id="powerTreeDiv-@i" class="em-tree">
+        @Html.Raw(xmlDocs[i].OuterXml)
+        </ul>
+    }
+<div id="treeDialogErrorTip" class="clear a-center red hidden">当前能耗分类不能为空</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#powerTreeDiv").tabs();
+        $("#powerTreeDiv ul.em-tree").checkTree({ labelAction: "check" });
+    });
+
+    function globalPowerFn_getElecStr() {
+        var elecStr = "";
+        $.each($(":checkbox", "#powerTreeDiv-0"), function (index, item) {
+            if (elecStr != "") {
+                elecStr += "_" + $(item).val();
+            } else {
+                elecStr = $(item).val();
+            }
+        });
+        return elecStr;
+    }
+</script>
+}

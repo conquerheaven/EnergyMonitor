@@ -1,0 +1,46 @@
+﻿@using EnergyMonitor.Models.LinqEntity;
+@{
+    ViewBag.Title = "欢迎使用复旦大学绿色校园能耗监管平台";
+}
+@section head{
+    <style type="text/css">
+        .contentbox h2{margin: 10px;}
+        .contentbox h3{margin: 10px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>欢迎使用！</h2></div>
+    <div class="contentbox">
+    <fieldset id="resultDiv" class="hidden"><legend>查询结果</legend>
+         @if (Model == null)
+         {
+            <div id="noDataDiv">当前查询范围没有数据</div>
+         }
+         else
+         {
+            <div id="dataDiv">
+            <table id="dataTable" class="hidden" width="500">
+                <thead>
+                    <tr>
+                        <th>校区名称</th>
+                        <th >用电值</th>
+                        <th >用电值</th>
+                        <th >用电值</th>
+                        <th >用电值</th>
+                        <th >用电值</th>
+                        <th >用电值</th>
+                    </tr>
+                </thead>
+                <tbody id="resultDataDiv">
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    <tr><td>Model[i].SchoolName</td> <td>Model[i].YearVal</td><td>Model[i].PerYearVal</td><td>Model[i].MonthVal</td><td>Model[i].PerMonthVal</td><td>Model[i].DayVal</td><td>Model[i].PerDayVal</td></tr>
+                }
+                </tbody>
+            </table>      
+            <div id="pager"></div>
+            <input id="exportExcel" name="exportExcel" type="button" value=" 导出Excel " class="btn" />
+            </div>
+         }
+     </fieldset>
+</div></div>

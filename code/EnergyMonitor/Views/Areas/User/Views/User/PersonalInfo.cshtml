@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "个人信息";
+}
+@section head{
+    <style type="text/css">
+        .contentbox table { margin-left: 20px;}
+        .contentbox table tr td{padding: 10px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>个人信息</h2></div>
+    <div class="contentbox">
+    <table>
+        <tr>
+            <td>学号 / 工号：</td>
+            <td>@ViewBag.userID</td>
+        </tr>
+        <tr class="alt">
+            <td>姓名：</td>
+            <td >@ViewBag.userName</td>
+        </tr>
+        <tr>
+            <td>所属院系：</td>
+            <td>@ViewBag.userDepartName</td>
+        </tr>
+        <tr class="alt">
+            <td>联系邮箱：</td>
+            <td>@ViewBag.userMail</td>
+        </tr>
+        <tr>
+            <td>房间信息：</td>
+            <td>
+            @foreach (var room in Model){
+                <div>@room.urFullName</div>
+            }
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+
+

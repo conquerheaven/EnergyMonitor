@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="textBox5.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox6.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox8.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox10.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox12.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox14.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox16.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox18.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox19.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox20.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox21.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox22.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox23.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox24.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox26.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox27.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox28.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox29.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox30.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox31.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox32.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox34.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox35.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox36.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox37.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox38.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox39.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox40.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox42.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox43.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox44.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox45.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox46.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox47.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox48.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox50.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox51.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox52.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox53.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox54.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox55.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox56.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox58.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox59.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox60.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox61.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox62.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox63.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox64.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox66.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox67.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox68.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox69.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox70.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox71.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox72.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox74.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox75.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox76.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox77.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox78.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox79.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox80.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox82.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox83.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox84.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox85.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox86.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox87.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox88.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox90.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox91.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox92.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox93.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox94.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox95.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox96.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox98.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox99.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox100.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox101.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox102.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox103.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox104.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox106.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox107.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox108.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox109.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox110.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox111.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox112.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox114.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox115.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox116.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox117.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox118.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox119.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox120.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox124.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox126.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox122.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox125.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox127.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox128.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+</root>

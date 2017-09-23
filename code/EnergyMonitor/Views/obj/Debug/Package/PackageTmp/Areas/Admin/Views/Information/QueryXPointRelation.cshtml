@@ -1,0 +1,686 @@
+﻿@{
+    ViewBag.Title = "测点关联管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery_ui_timepicker_addon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/mktree.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/mktree.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        .left {float: left; width: 45%; }
+        .right {float: right; width:45%; }
+        hr {clear: both; margin: 20px 0; border: 1px #EAEAEA solid; }
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点关联管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <!--<li><a href="@Url.Action("QueryPointRelation", "Information")">所属对象列表</a></li>-->
+            <li><a href="@Url.Action("QueryPointList", "Information")">测点关联列表</a></li>
+            <li class="current"><a>查询指定测点关联关系</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="#" method="post">
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li>测点编号： </li>
+                    <li><input id="pointID" name="pointID" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>名称： </li>
+                    <li><input id="pointName" name="pointName" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>所属对象： </li>
+                    <li><input id="queryObj" name="queryObj" type="text" class="inputbox" readonly="readonly"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>所属能耗类型： </li>
+                    @*<li><input id="powerName" name="powerName" type="text" class="inputbox" readonly="readonly"/></li>*@
+                     <li><select id="powerType" name="powerType">
+                        <option label="所有能耗类型" value="">所有能耗类型</option>
+                        @foreach (var item in Model)
+                        {
+                            if (item.PC_ID.Length == 3)
+                            {
+                                if (item.PC_ID == "004" || item.PC_ID == "005" || item.PC_ID == "006") 
+                                {
+                                    var prefix = "所有";
+                                    <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+                                }else{
+                                    var prefix = "所有用";
+                                    <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+                                }
+                            }
+                            else
+                            {
+                                var s = new string('-', item.PC_ID.Length - 3);
+                                <option value="@item.PC_ID">@s@item.PC_Name</option>
+                            }
+                        }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>所属RTU： </li>
+                    <li><select id="queryRTU">
+                    <option value="-1">所有RTU</option>
+                    @foreach (var rtuItem in ViewBag.RTUList)
+                    { 
+                        <option value= '@rtuItem.RTU_No'>@rtuItem.RTU_Name</option>
+                    }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>序列号： </li>
+                    <li><input id="querySerial" name="querySerial" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>是否真实点： </li>
+                    <li>
+                        <div id="realFlagSet">
+                            <input type="radio" id="realAll" name="realFlag" value="-1" checked="checked" /><label for="realAll"> 所有点 </label>
+                            <input type="radio" id="realTrue" name="realFlag" value="1"/><label for="realTrue"> 真实点 </label>
+                            <input type="radio" id="realFalse" name="realFlag" value="0" /><label for="realFalse"> 虚拟点 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>是否统计点： </li>
+                    <li>
+                        <div id="statFlagSet">
+                            <input type="radio" id="statAll" name="statFlag" value="-1" checked="checked" /><label for="statAll"> 所有点 </label>
+                            <input type="radio" id="statTrue" name="statFlag" value="1"/><label for="statTrue"> 统计点 </label>
+                            <input type="radio" id="statFalse" name="statFlag" value="0" /><label for="statFalse"> 非统计点 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" type="button" value="  查  询  " class="btn m-button"/></li>
+         </ul>
+         </form>
+         <fieldset id="resultDiv" class="hidden"><legend>查询结果</legend>
+            <div id="dataDiv">
+            <table>
+                <thead><tr>
+                    <th>测点编号</th>
+                    <th>测点名称</th>
+                    <th>所属对象</th>
+                    <th>所属能耗类型</th>
+                    <th>父测点编号</th>
+                    <th>是否真实点</th>
+                    <th>是否统计点</th>
+                    <th>操作</th>
+                </tr></thead>
+                <tbody id="resultDataDiv"></tbody>
+            </table>
+            <div id="pager"></div>
+            @*<a id="exportExcel" name="exportExcel" class="btn" > 导出Excel </a>*@
+            </div>
+            <div id="noDataDiv">当前查询范围没有数据</div>
+        </fieldset>
+        <div style="margin-top:20px; ">
+            <fieldset id="relationDiv" class="hidden left"><legend>父测点与子侧点</legend>
+                <div id="relationDataDiv">
+                    <ul class="mktree" id="relationDataTree">
+                    </ul>
+                </div>
+                <div id="noRelationDataDiv">当前查询范围没有数据</div>
+            </fieldset>
+            <fieldset id="ruleDiv" class="hidden right"><legend>公式关联</legend>
+                <div id="ruleDataDiv"> 
+                    <ul class="mktree" id="ruleDataTree">
+                    </ul>
+                </div>
+                <div id="noRuleDataDiv">当前查询范围没有数据</div>
+            </fieldset>
+        </div><hr style="border: white" />
+    </div></div>
+</div></div>
+<input type="hidden" id="selectAnalogId" value="0" />
+<input type="hidden" id="valMinRange" value="" />
+<input type="hidden" id="valMaxRange" value="" />
+
+<input type="hidden" id="objIDs" value="0" />
+<input type="hidden" id="objType" value=""/>
+@*<input type="hidden" id="powerType" value=""/>*@
+<script type="text/javascript">
+    $(function () {
+        $("#realFlagSet").buttonset();
+        $("#statFlagSet").buttonset();
+        $("#timeInput").datetimepicker();
+        $("#timeInput").change(function () {
+            var selectedDateTime = $.trim($(this).val());
+            if (selectedDateTime == "") {
+                return;
+            }
+            $.getJSON('@Url.Action("QueryValRange", "Information")', {
+                analogId: $("#selectAnalogId").val(),
+                inputDateTime: selectedDateTime
+            }, function (data) {
+                if (data == null) {
+                    $("#dataDiv").hide();
+                    $("#newValErrorTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').slideDown("fast");
+                    return;
+                }
+                if ($.isEmptyObject(data)) {
+                    $("#newValErrorTip").html("该时刻已存在值，请重新输入时间").slideDown("fast");
+                } else {
+                    $("#valMinRange").val(data.min);
+                    $("#valMaxRange").val(data.max);
+                    if (data.min != "" || data.max != "") {
+                        var str = "";
+                        if (data.min != "") {
+                            str = "添加值需大于 " + data.min;
+                        }
+                        if (data.max != "") {
+                            if (str != "") {
+                                str += (" 并且小于 " + data.max);
+                            } else {
+                                str = "添加值需小于 " + data.max;
+                            }
+                        }
+                        $("#newValTip").html(str).slideDown("fast");
+                        $("#newValErrorTip").slideUp("fast");
+                    } else {
+                        $("#newValTip").html("该测点没有历史值，请填加新值").slideDown("fast");
+                        $("#newValErrorTip").slideUp("fast");
+                    }
+                    $("#newValue").val("").attr("disabled", false);
+
+                }
+            });
+        });
+        $("#pointID").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#relationDiv").slideUp("fast");
+            $("#relationDataDiv").hide();
+            $("#ruleDiv").slideUp("fast");
+            $("#ruleDataDiv").hide();
+        });
+        $("#powerType").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#relationDiv").slideUp("fast");
+            $("#relationDataDiv").hide();
+            $("#ruleDiv").slideUp("fast");
+            $("#ruleDataDiv").hide();
+        })
+        $("#pointName").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#relationDiv").slideUp("fast");
+            $("#relationDataDiv").hide();
+            $("#ruleDiv").slideUp("fast");
+            $("#ruleDataDiv").hide();
+        });
+        $("input[name='realFlag']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#relationDiv").slideUp("fast");
+            $("#relationDataDiv").hide();
+            $("#ruleDiv").slideUp("fast");
+            $("#ruleDataDiv").hide();
+        });
+        $("input[name='statFlag']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#relationDiv").slideUp("fast");
+            $("#relationDataDiv").hide();
+            $("#ruleDiv").slideUp("fast");
+            $("#ruleDataDiv").hide();
+        });
+        $("#queryRTU").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#relationDiv").slideUp("fast");
+            $("#relationDataDiv").hide();
+            $("#ruleDiv").slideUp("fast");
+            $("#ruleDataDiv").hide();
+        });
+        $("#querySerial").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#relationDiv").slideUp("fast");
+            $("#relationDataDiv").hide();
+            $("#ruleDiv").slideUp("fast");
+            $("#ruleDataDiv").hide();
+        });
+        $("#exportExcel").click(function () {
+            var parameters = "?pointID=" + $("#pointID").val()
+                             + "&pointName=" + $("#pointName").val()
+                             + "&objType=" + $("#objType").val()
+                             + "&objIDs=" + $("#objIDs").val()
+                             + "&powerType=" + $("#powerType").val()
+                             + "&realFlag=" + $("input[name='realFlag']:checked").val()
+                             + "&statFlag=" + $("input[name='statFlag']:checked").val();
+            window.open('@Url.Action("GetPointExcel", "Information")' + parameters, "_blank");
+        });
+
+        $("#queryObj").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#buildingSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        selectedObjs = $("#selectedBuilding option:selected");
+                        if (selectedObjs.length == 0) {
+                            selectedObjs = $("#selectedSchoolArea option:selected");
+                            if (selectedObjs.length == 0) {
+                                selectedObjs = $("#selectedSchool option:selected");
+                                if (selectedObjs.length > 0) {
+                                    $("#objType").val(1);
+                                }
+                            } else {
+                                $("#objType").val(2);
+                            }
+                        } else {
+                            $("#objType").val(3);
+                        }
+                        if (selectedObjs.length == 1) {
+                            $("#queryObj").val(selectedObjs.text());
+                            $("#objIDs").val(selectedObjs.val());
+                            $("#resultDiv").slideUp("fast");
+                            $("#dataDiv").hide();
+                            $("#relationDiv").slideUp("fast");
+                            $("#relationDataDiv").hide();
+                            $("#ruleDiv").slideUp("fast");
+                            $("#ruleDataDiv").hide();
+                            $(this).dialog("close");
+                        } else if (selectedObjs.length > 1) {
+                            $("#dialogErrorTip").text("只能选择单个对象");
+                            $("#dialogErrorTip").slideDown("fast");
+                        } else {
+                            $("#dialogErrorTip").text("查询对象不能为空");
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+
+                        var selectedObjID = $("#objIDs").val();
+                        var selectedObjType = +$("#objType").val();
+                        if (selectedObjID != null && selectedObjID != 0) {
+                            $.getJSON('@Url.Action("PowerTypesOfObj", "Information")', {
+                                objID: selectedObjID,
+                                objType: selectedObjType
+                            }, function (jsonData) {
+                                if (jsonData == null) {
+                                    return;
+                                }
+                                if (jsonData.length == 0) {
+                                    var optionStr = "<option value=\"0\" > 无任何能耗类型 </option>";
+                                    $("#powerType").html(optionStr);
+                                    //                                    $("#powerType").val("0");
+                                    //                                    $("#powerTypeName").val("无");
+                                    //                                    $("#powerTreeDiv ul.em-tree ul li").each(function (index, item) {
+                                    //                                        $(item).hide();
+                                    //                                    });
+                                }
+                                else if (jsonData.length == 1) {
+                                    var powerID = new String(jsonData[0].PowerTypeID);
+                                    var powerName = jsonData[0].PowerTypeName;
+                                    var optionStr = "<option value=\"" + powerID + "\" > ---" + powerName + " </option>"
+                                    $("#powerType").html(optionStr);
+                                }
+                                else {
+                                    var optionStr = "";
+                                    var allOptionStr = "<option value=\"\" > 所有能耗类型 </option>";
+                                    var elecOptionStr = "<option value=\"001\" > 所有用电 </option>";
+                                    var waterOptionStr = "<option value=\"002\" > 所有用水 </option>";
+                                    var gasOptionStr = "<option value=\"003\" > 所有用气 </option>";
+                                    for (i = 0; i < jsonData.length; i++) {
+                                        var powerID = new String(jsonData[i].PowerTypeID);
+                                        var powerIDPrefix = powerID.substr(0, 3);
+                                        var powerName = jsonData[i].PowerTypeName;
+                                        if (powerIDPrefix == "001") {
+                                            elecOptionStr = elecOptionStr + "<option value=\"" + powerID + "\" > ---" + powerName + " </option>";
+                                        }
+                                        else if (powerIDPrefix == "002") {
+                                            waterOptionStr = waterOptionStr + "<option value=\"" + powerID + "\" > --- " + powerName + " </option>";
+                                        } else if (powerIDPrefix == "003") {
+                                            gasOptionStr = gasOptionStr + "<option value=\"" + powerID + "\" > --- " + powerName + " </option>";
+                                        }
+                                    }
+                                    optionStr = allOptionStr + elecOptionStr + waterOptionStr + gasOptionStr;
+                                    $("#powerType").html(optionStr);
+                                }
+                            });
+                        }
+                    },
+                    '清空': function () {
+                        $("#objType").val("");
+                        $("#objIDs").val("");
+                        $("#queryObj").val("");
+                        $("#resultDiv").slideUp("fast");
+                        $("#relationDiv").slideUp("fast");
+                        $("#ruleDiv").slideUp("fast");
+                        var powerTypeOptions = $("#powerTypeTemplate").html();
+                        $("#powerType").html(powerTypeOptions);
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+        //        $("#powerName").click(function () {
+        //            $("#treeDialogErrorTip").hide();
+        //            $("#powerTreeDiv").dialog({
+        //                modal: true,
+        //                width: 500,
+        //                resizable: false,
+        //                buttons: {
+        //                    '选择': function () {
+        //                        var tempName = "";
+        //                        var tempIDs = "";
+        //                        var checkedObjs = $("#powerTreeDiv div.checked");
+        //                        checkedObjs.each(function (index, item) {
+        //                            if (tempName == "") {
+        //                                tempName = $(item).next().html();
+        //                            }
+        //                            if (tempIDs == "") {
+        //                                tempIDs = $(item).next().next().val();
+        //                            } else {
+        //                                tempIDs += ("_" + $(item).next().next().val());
+        //                            }
+        //                        });
+        //                        $("#powerType").val(tempIDs);
+        //                        if (checkedObjs.length > 1) {
+        //                            $("#powerName").val(tempName + " ... （" + checkedObjs.length + "）");
+        //                        } else {
+        //                            $("#powerName").val(tempName);
+        //                        }
+        //                        $("#resultDiv").slideUp("fast");
+        //                        $("#dataDiv").hide();
+        //                        $(this).dialog("close");
+        //                    }
+        //                }
+        //            });
+
+        //        });
+
+        $("#queryButton").click(function () {
+            if ($("#resultDiv").is(":hidden")) {
+                global_totalPages = -1;
+                pageClick(1);
+            }
+        })
+
+        var global_totalPages = -1;
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("QueryPointAjax", "Information")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                pointID: $("#pointID").val(),
+                pointName: $("#pointName").val(),
+                objType: $("#objType").val(),
+                objIDs: $("#objIDs").val(),
+                powerType: $("#powerType").val(),
+                realFlag: $("input[name='realFlag']:checked").val(),
+                statFlag: $("input[name='statFlag']:checked").val(),
+                RTU_No: $("#queryRTU").val(),
+                AI_Serial: $("#querySerial").val()
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages = -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                $("#resultDataDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#dataDiv").show();
+            });
+        }
+
+    })
+
+    function queryRelations(pno) {
+        $("#relationDiv").slideDown("fast");
+        $("#ruleDiv").slideDown("fast");
+        $.getJSON('@Url.Action("GetParentPointByAnalogNo", "Information")', {
+            AnalogNo: pno
+        }, function (jsonData) {
+            setRelationDataDiv(jsonData.pointList);
+        });
+        $.getJSON('@Url.Action("GetOperateRuleContainsAnalogNo", "Information")', {
+            AnalogNo: pno
+        }, function (jsonData) {
+            setRuleDataDiv(jsonData.ruleList);
+        });
+    }
+
+    function setRelationDataDiv(pointList) {
+        $("#noRelationDataDiv").show();
+        $("#relationDataDiv").hide();
+        if(pointList.length==0){
+            return;
+        }
+        var current = "relationDataTree";
+        var next;
+        $("#"+current).children().remove();
+
+        for (var i = pointList.length-1; i > 0; i--) {
+            next = pointList[i].pointID;
+            $("#" + current).append("<li id='"+pointList[i].pointLevel+"_"+pointList[i].pointID+"' class='liOpen' ><span class='bullet'>&nbsp; </span>"+
+                "<span>" + pointList[i].pointName + "[" + pointList[i].pointID + "]" + " </span><ul id='" + next + "'></ul></li>");
+            if(i!=pointList.length-1){
+                if(pointList[i].pointIsCount==1)
+                    $("#" + current+" .bullet").append("<input type='checkbox' disabled='true' checked />");
+                else
+                    $("#" + current+" .bullet").append("<input type='checkbox' disabled='true' />");
+            }
+            current = next;
+        }
+        if (pointList[0].pointCptFlag == 1){
+            $("#" + current).append("<li id='"+pointList[0].pointLevel+"_"+pointList[0].pointID+"' class='liBullet'><span class='bullet'>&nbsp; </span><span style='color:red;'>" + pointList[0].pointName + "[" + pointList[0].pointID + "]" + " </span></li>");
+        }
+        else {
+            $("#" + current).append("<li id='"+pointList[0].pointLevel+"_"+pointList[0].pointID+"' class='liClosed'><span class='bullet'>&nbsp; </span><span style='color:red;'>" + pointList[0].pointName + "[" + pointList[0].pointID + "]" + " </span>"+
+                "<ul class='noRender'><li class='liBullet'><span class='bullet'>&nbsp;</span><span><img src='@Url.Content("~/Content/images/loading_small.gif")' alt='Loading'/> 加载中...</span></li></ul></li>");
+        }
+        if(pointList.length-1!=0){
+            if(pointList[0].pointIsCount==1)
+                $("#" + current+" .bullet").append("<input type='checkbox' disabled='true' checked />");
+            else
+                $("#" + current+" .bullet").append("<input type='checkbox' disabled='true' />");
+        }
+        $(".liOpen .bullet, .liClosed .bullet").toggle(
+                function () {
+                    $(this).parent().attr("class", "liOpen");
+                },
+                function () {
+                    $(this).parent().attr("class", "liClosed");
+                }
+            );
+        $(".liClosed .bullet").click(function () {
+            renderSubTree($(this));
+        });
+        $("#noRelationDataDiv").hide();
+        $("#relationDataDiv").show();
+    }
+
+    function renderSubTree(clickedObj) {
+        var ul = clickedObj.next().next("ul");
+        if (ul.length == 1 && ul.attr("class") == "noRender") {
+            var strs = clickedObj.parent().attr("id").split("_");
+            var dataLevel = strs[0];
+            var dataID = strs[1];
+            $.getJSON('@Url.Action("GetMeasurePointByParentNoAjax", "Information")', {
+                ParentNo: dataID, Level: dataLevel
+            }, function (jsonData) {
+                renderSubTreeHtml(jsonData, clickedObj, ul);
+            });
+        }
+    }
+
+    function renderSubTreeHtml(data, clickedObj, ul) {
+        if (data.ifSucceed == true &&data.data.length>0) {
+            ul.html($("#relationDataTemplate").tmpl(data.data));
+            $(".liOpen .bullet, .liClosed .bullet", ul).toggle(
+                function () {
+                    $(this).parent().attr("class", "liOpen");
+                },
+                function () {
+                    $(this).parent().attr("class", "liClosed");
+                }
+            );
+            $(".liOpen .bullet, .liClosed .bullet", ul).click(function () {
+                renderSubTree($(this));
+            });
+        } else {
+            ul.html('<li class="liBullet"><span class="bullet">&nbsp;</span> 没有数据 </li>');
+        }
+        ul.removeAttr("class");
+    }
+
+    function setRuleDataDiv(ruleList){
+        $("#noRuleDataDiv").show();
+        $("#ruleDataDiv").hide();
+        if(ruleList.length==0){
+            return;
+        }
+        $("#ruleDataTree").children().remove();
+        for(var i = 0; i < ruleList.length; i++){
+            if(ruleList[i].HJFlag==1){
+                $("#ruleDataTree").append("<li class='liClosed'>"+
+                    "<span class='bullet'>&nbsp; </span><span><input class='rule' type='checkbox' checked='checked' disabled='disabled'/>"+ruleList[i].buildingName+"["+ruleList[i].OperateRule+"]</span>"+
+                    "<ul id="+ruleList[i].buildingID+"></ul></li>");
+            }
+            else{
+                $("#ruleDataTree").append("<li class='liClosed'>"+
+                    "<span class='bullet'>&nbsp; </span><span><input class='rule' type='checkbox' disabled='disabled'/>"+ruleList[i].buildingName+"["+ruleList[i].OperateRule+"]</span>"+
+                    "<ul id="+ruleList[i].buildingID+"></ul></li>");
+            }
+            for(var j = 0;j<ruleList[i].pointList.length;j++){
+                $("#"+ruleList[i].buildingID).append("<li class='liBullet'><span class='bullet'>&nbsp; </span><span>" + ruleList[i].pointList[j].pointName + "[" + ruleList[i].pointList[j].pointNo + "]" + " </span></li>");
+            }
+        }
+        $(".liOpen .bullet, .liClosed .bullet").toggle(
+            function () {
+                $(this).parent().attr("class", "liOpen");
+            },
+            function () {
+                $(this).parent().attr("class", "liClosed");
+            }
+        );
+        $("#noRuleDataDiv").hide();
+        $("#ruleDataDiv").show();
+    }
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}">
+    <td>${PNO}</td>
+    <td>${PName}</td>
+    <td>${IName}</td>
+    <td>${PowerName}</td>
+    <td>${ParentNoStr}</td>
+    <td>${RealFlagStr}</td>
+    <td>${StatFlagStr}</td>
+    <td><a onclick="queryRelations(${PNO});" style="text-decoration: underline; cursor:pointer">查看关联关系</a></td>
+    </tr>
+</script>
+<script id="powerTypeTemplate" type="text/x-jQuery-tmpl">
+    <option label="所有能耗类型" value="">所有能耗类型</option>
+    @foreach (var item in Model)
+    {
+        if (item.PC_ID.Length == 3)
+        {
+            if (item.PC_ID == "004" || item.PC_ID == "005" || item.PC_ID == "006") 
+            {
+                var prefix = "所有";
+                <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+            }else{
+                var prefix = "所有用";
+                <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+            }
+        }
+        else
+        {
+            var s = new string('-', item.PC_ID.Length - 3);
+            <option value="@item.PC_ID">@s@item.PC_Name</option>
+        }
+    }
+</script>
+<script id="relationDataTemplate" type="text/x-jQuery-tmpl">
+    {{if pointCptFlag!=1}}
+    <li id="${pointLevel}_${pointID}" class="liClosed">
+    <span class="bullet">&nbsp; 
+    {{if pointIsCount==1}}
+    <input type="checkbox" disabled="true" checked />
+    {{else}}
+    <input type="checkbox" disabled="true" />
+    {{/if}}
+    </span>
+    <span>${pointName} [${pointID}]</span>
+        <ul class="noRender">
+        <li class="liBullet">
+        <span class="bullet">&nbsp;</span>
+        <span><img alt="Loading" src="@Url.Content("~/Content/images/loading_small.gif")"> 加载中... </span>
+        </li>
+        </ul>
+    </li>
+    {{else}}
+    <li id="${pointLevel}_${pointID}" class="liBullet">
+    <span class="bullet">&nbsp; 
+    {{if pointIsCount==1}}
+    <input type="checkbox" disabled="true" checked />
+    {{else}}
+    <input type="checkbox" disabled="true" />
+    {{/if}}
+    </span>
+    <span>${pointName} [${pointID}]</span>
+    </li>
+    {{/if}}
+</script>
+
+@Html.Partial("_buildingSelect")
+@Html.Partial("_PowerSelect")
+

@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "三级电表报表";
+}
+@section head{
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .report-warpper{ width:800px; margin-left: 20px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>三级电表报表</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("Elec", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑报表</a></li>
+		    <li><a href="@Url.Action("BuildingElecMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑月用电报表</a></li>
+		    <li><a href="@Url.Action("BuildingWaterMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑月用水报表</a></li>
+		    <li><a href="@Url.Action("BuildingElecDay", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑日用电报表</a></li>
+            <li><a href="@Url.Action("BuildingEnergyMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑能耗总表</a></li>            
+            <li><a href="@Url.Action("AreaWaterMonth", "Report")">校园区域月用水报表</a></li>
+            <li class="current"><a>三级电表报表</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <ul class="em-form-ul">
+            <li>
+                <form action="@Url.Action("ThirdPointMonth", "Report")" method="get">               
+                <ul style=" width:105px;">
+                    <li><span class="red">* </span>选择年份： </li>
+                    <li><select name="y">
+                    @if (ViewBag.year == null)
+                    {
+                        <option value="" selected="selected">今年</option>
+                    }
+                    else
+                    {
+                        <option value="">今年</option>
+                    }
+                    @for (int i = 2008; i <= DateTime.Now.Year; i++)
+                    {
+                        if (ViewBag.year != null && ViewBag.year == i)
+                        {
+                            <option value="@i" selected="selected">@i</option>
+                        }
+                        else
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li style="visibility:hidden;">.</li>
+                    <li><button id="queryButton" type="submit" class="btn" >  查看报表  </button></li>
+                    <li style="visibility:hidden;"><input id="model" name = "b" value=""/></li>
+                </ul>               
+                </form>
+                <div class="clear"></div>
+            </li>
+         </ul>        
+           @if(Model != null)
+           {
+                <div id="thirdPointMonth" class="report-warpper">
+                @Html.Partial("ReportsWarpper/ThirdPointMonth")
+                </div>
+           } 
+        </div></div>
+</div></div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#queryButton").click(function () {
+            $("#model").val("1");         
+        });
+    });
+</script>
+
+

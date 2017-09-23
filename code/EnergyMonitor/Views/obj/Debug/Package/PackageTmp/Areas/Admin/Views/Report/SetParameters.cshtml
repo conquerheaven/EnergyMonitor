@@ -1,0 +1,392 @@
+﻿@{
+    ViewBag.Title = "报表参数管理";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .em-form-ul li.col3-alt-width ul input{ width:135px;}
+        .em-form-ul li.col3-alt-width ul li select{ width:70px;}
+        .em-form-ul li.col3-alt-width ul li span.time-add{ font-weight:bold; border:1px outset black; cursor:pointer; color:white; background-color:#525252;}
+        .em-form-ul li.col3-alt-width ul li span.time-remove{ font-weight:bold; border:1px outset black; cursor:pointer; color:white; background-color:#525252;}
+        .time-range{ margin-left:15px;}
+        .time-range tr.time-block td{ border:1px solid black;width:25px; height:20px; padding:0;}
+        .time-range tr.time-block td.high{background-color:red;}
+        .time-range tr.time-block td.normal{background-color:yellow;}
+        .time-range tr.time-block td.low{background-color:green;}
+        .time-scale{ margin-left:1px;}
+        .time-scale tr td{border:1px solid white;width: 10px;width:25px; height:20px; padding:0; text-align:center;}
+        #timeTipDiv{ margin-left:10px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>报表参数管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li class="current"><a>时段价格设置</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="@Url.Action("ModifyParameters", "Report")" method="post" >
+        <ul class="em-form-ul">
+            <li class="col1-width">
+                <div style="margin-left:15px;">
+                是否修改峰平谷时段：
+                <span id="modifyTimeBlockFlagSet" >
+                    <input type="radio" id="modifyTimeBlockFlag0" name="modifyTimeBlockFlag" checked="checked" value="0" /><label for="modifyTimeBlockFlag0"> 不修改 </label>
+                    <input type="radio" id="modifyTimeBlockFlag1" name="modifyTimeBlockFlag" value="1" /><label for="modifyTimeBlockFlag1"> 修改 </label>
+                </span>
+                </div>
+            </li>
+            <li id="timeBlockOldTimeTable" class="col1-width">
+                <table class="time-range">
+                <tr class="time-block">
+                @for (int i = 0; i < 24; i++)
+                {
+                    <td class="@ViewBag.timeFlagDic[i]"></td>
+                }
+                </tr>
+                </table>
+                <div style="margin-left:10px; margin-top:5px;">@ViewBag.timeTipStr</div>
+            </li>
+            <li id="timeBlockTip" class="col3-alt-width hidden">
+                <ul>
+                    <li>峰时时段： <span id="addHighTime" class="time-add">＋</span></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>平时时段： <span id="addNormalTime" class="time-add">＋</span></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>谷时时段： <span id="addLowTime" class="time-add">＋</span></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li id="timeBlockTable" class="col1-width hidden">
+                <table id="newTimeTable" class="time-range">
+                <tr id="timeBlock" class="time-block"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                </table>
+                <table class="time-scale">
+                <tr><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td>
+                <td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr>
+                </table>
+                <div id="timeTipDiv"></div>
+            </li>
+            <li class="col3-alt-width">
+                <ul>
+                    <li>峰时电价：</li>
+                    <li><input type="text" name="price_highTime" maxlength="100" class="inputbox" value="@Model["price_highTime"].SP_Value" /> 元/kWh</li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>平时电价：</li>
+                    <li><input type="text" name="price_normalTime" maxlength="100" class="inputbox" value="@Model["price_normalTime"].SP_Value" /> 元/kWh</li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>谷时电价：</li>
+                    <li><input type="text" name="price_lowTime" maxlength="100" class="inputbox" value="@Model["price_lowTime"].SP_Value" /> 元/kWh</li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li class="col3-alt-width">
+                <ul>
+                    <li>水价：</li>
+                    <li><input type="text" name="price_water" maxlength="100" class="inputbox" value="@Model["price_water"].SP_Value" /> 元/t</li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>排污价：</li>
+                    <li><input type="text" name="price_pollution" maxlength="100" class="inputbox" value="@Model["price_pollution"].SP_Value" /> 元/t</li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" type="submit" value="  修  改  " class="btn m-button"/></li>
+         </ul>
+         <input id="timeHigh" type="hidden" name="time_high" value="@ViewBag.timeDic["time_high"].SP_Value" />
+         <input id="timeNormal" type="hidden" name="time_normal" value="@ViewBag.timeDic["time_normal"].SP_Value" />
+         <input id="timeLow" type="hidden" name="time_low" value="@ViewBag.timeDic["time_low"].SP_Value" />
+         </form>
+    </div></div>
+</div></div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#modifyTimeBlockFlagSet").buttonset();
+        $("input[name='modifyTimeBlockFlag']").change(function () {
+            if (+$(this).val() == 1) {
+                $("#timeBlockOldTimeTable").hide();
+                $("#timeBlockTip").slideDown("fast");
+                $("#timeBlockTable").slideDown("fast");
+            } else {
+                $("#timeBlockTip").hide();
+                $("#timeBlockTable").hide();
+                $("#timeBlockOldTimeTable").slideDown("fast");
+            }
+        });
+
+        function addTime(timeAddSpanObj, timeClassName) {
+            var startSelectHtml = $("<select><option value='-1'>开始</option></select>").change(function () {
+                if (+$(this).val() >= 0) {
+                    $(this).next().attr("disabled", false);
+                } else {
+                    $(this).next().attr("disabled", true);
+                }
+            });
+            var endSelectHtml = $("<select disabled='disabled'><option value='-1'>结束</option></select>").change(function () {
+                var startVal = +$(this).prev().val();
+                var endVal = +$(this).val();
+                if (startVal >= 0 && endVal >= 0) {
+                    if (endVal >= startVal) {
+                        for (var i = startVal; i < endVal; i++) {
+                            $("#timeBlock").children(":eq(" + i + ")").attr("class", timeClassName);
+                        }
+                    } else {
+                        for (var i = 0; i < endVal; i++) {
+                            $("#timeBlock").children(":eq(" + i + ")").attr("class", timeClassName);
+                        }
+                        for (var i = startVal; i < 24; i++) {
+                            $("#timeBlock").children(":eq(" + i + ")").attr("class", timeClassName);
+                        }
+                    }
+                    $(this).prev().attr("disabled", true);
+                    $(this).attr("disabled", true);
+                    renderTimeTip();
+                }
+            });
+            var isNullToColor = false;
+            $.each($("#timeBlock").children(), function (i, obj) {
+                if ($.trim(obj.className) == "") {
+                    startSelectHtml.append("<option value='" + i + "'>" + i + "点</option>");
+                    endSelectHtml.append("<option value='" + i + "'>" + i + "点</option>");
+                    isLastSetTimed = true;
+                } else {
+                    if (isLastSetTimed) {
+                        endSelectHtml.append("<option value='" + i + "'>" + i + "点</option>");
+                    }
+                    isLastSetTimed = false;
+                }
+            });
+            if ($.trim($("#timeBlock").children(":last").attr("class")) == "") {
+                endSelectHtml.append("<option value='24'>24点</option>");
+            }
+            var removeSpan = $("<span class='time-remove'>&nbsp;×&nbsp;</span>").click(function () {
+                var parentLi = $(this).parent();
+                var startVal = +parentLi.children("select:first").val();
+                var endVal = +parentLi.children("select:last").val();
+                if (startVal >= 0 && endVal >= 0) {
+                    if (endVal >= startVal) {
+                        for (var i = startVal; i < endVal; i++) {
+                            $("#timeBlock").children(":eq(" + i + ")").attr("class", "");
+                        }
+                    } else {
+                        for (var i = 0; i < endVal; i++) {
+                            $("#timeBlock").children(":eq(" + i + ")").attr("class", "");
+                        }
+                        for (var i = startVal; i < 24; i++) {
+                            $("#timeBlock").children(":eq(" + i + ")").attr("class", "");
+                        }
+                    }
+                }
+                parentLi.remove();
+                renderTimeTip();
+            });
+            $("<li></li>").append(startSelectHtml)
+            .append(" - ").append(endSelectHtml)
+            .append(" ").append(removeSpan)
+            .appendTo(timeAddSpanObj.parent().parent());
+        }
+
+        function renderTimeTip() {
+            var start = 0;
+            var tipStrArray = new Array("", "", "");
+            var timeArray = new Array("", "", "");
+            var lastType = "";
+            var lastTypeIndex = 0;
+            for (var i = 0; i < 24; i++) {
+                var timeClassName = $("#timeBlock").children(":eq(" + i + ")").attr("class");
+                if (timeClassName == "high") {
+                    if (lastType != "" && lastType != timeClassName) {
+                        if (timeArray[lastTypeIndex] == "") {
+                            tipStrArray[lastTypeIndex] += start + "点-" + i + "点";
+                            timeArray[lastTypeIndex] += start + "-" + i;
+                        } else {
+                            tipStrArray[lastTypeIndex] += "," + start + "点-" + i + "点";
+                            timeArray[lastTypeIndex] += "," + start + "-" + i;
+                        }
+                        start = i;
+                    }
+                    lastType = "high";
+                    lastTypeIndex = 0;
+                } else if (timeClassName == "normal") {
+                    if (lastType != "" && lastType != timeClassName) {
+                        if (timeArray[lastTypeIndex] == "") {
+                            tipStrArray[lastTypeIndex] += start + "点-" + i + "点";
+                            timeArray[lastTypeIndex] += start + "-" + i;
+                        } else {
+                            tipStrArray[lastTypeIndex] += "," + start + "点-" + i + "点";
+                            timeArray[lastTypeIndex] += "," + start + "-" + i;
+                        }
+                        start = i;
+                    }
+                    lastType = "normal";
+                    lastTypeIndex = 1;
+                } else if (timeClassName == "low") {
+                    if (lastType != "" && lastType != timeClassName) {
+                        if (timeArray[lastTypeIndex] == "") {
+                            tipStrArray[lastTypeIndex] += start + "点-" + i + "点";
+                            timeArray[lastTypeIndex] += start + "-" + i;
+                        } else {
+                            tipStrArray[lastTypeIndex] += "," + start + "点-" + i + "点";
+                            timeArray[lastTypeIndex] += "," + start + "-" + i;
+                        }
+                        start = i;
+                    }
+                    lastType = "low";
+                    lastTypeIndex = 2;
+                } else {
+                    if (lastType != "") {
+                        if (timeArray[lastTypeIndex] == "") {
+                            tipStrArray[lastTypeIndex] += start + "点-" + i + "点";
+                            timeArray[lastTypeIndex] += start + "-" + i;
+                        } else {
+                            tipStrArray[lastTypeIndex] += "," + start + "点-" + i + "点";
+                            timeArray[lastTypeIndex] += "," + start + "-" + i;
+                        }
+                        start = i;
+                    }
+                    lastType = "";
+                    lastTypeIndex = 0;
+                    start++;
+                }
+            }
+            if (lastType != "") {
+                if (timeArray[lastTypeIndex] == "") {
+                    tipStrArray[lastTypeIndex] += start + "点-" + i + "点";
+                    timeArray[lastTypeIndex] += start + "-" + i;
+                } else {
+                    tipStrArray[lastTypeIndex] += "," + start + "点-" + i + "点";
+                    timeArray[lastTypeIndex] += "," + start + "-" + i;
+                }
+            }
+            $("#timeHigh").val(timeArray[0]);
+            $("#timeNormal").val(timeArray[1]);
+            $("#timeLow").val(timeArray[2]);
+            var tipStr = "";
+            if (tipStrArray[0] != "") {
+                tipStr += "【峰时：" + tipStrArray[0] + "】";
+            }
+            if (tipStrArray[1] != "") {
+                tipStr += "【平时：" + tipStrArray[1] + "】";
+            }
+            if (tipStrArray[2] != "") {
+                tipStr += "【谷时：" + tipStrArray[2] + "】";
+            }
+            $("#timeTipDiv").html(tipStr);
+        }
+
+        $("#addHighTime").click(function () {
+            addTime($(this), "high");
+        });
+        $("#addNormalTime").click(function () {
+            addTime($(this), "normal");
+        });
+        $("#addLowTime").click(function () {
+            addTime($(this), "low");
+        });
+
+        $("#myForm").validate({
+            rules: {
+                "price_highTime": {
+                    required: true,
+                    number: true,
+                    min: 0.000001
+                },
+                "price_normalTime": {
+                    required: true,
+                    number: true,
+                    min: 0.000001
+                },
+                "price_lowTime": {
+                    required: true,
+                    number: true,
+                    min: 0.000001
+                },
+                "price_water": {
+                    required: true,
+                    number: true,
+                    min: 0.000001
+                },
+                "price_pollution": {
+                    required: true,
+                    number: true,
+                    min: 0.000001
+                }
+            },
+            messages: {
+                "price_highTime": {
+                    required: "不能为空",
+                    number: "必须为大于0的数字",
+                    min: "必须为大于0的数字"
+                },
+                "price_normalTime": {
+                    required: "不能为空",
+                    number: "必须为大于0的数字",
+                    min: "必须为大于0的数字"
+                },
+                "price_lowTime": {
+                    required: "不能为空",
+                    number: "必须为大于0的数字",
+                    min: "必须为大于0的数字"
+                },
+                "price_water": {
+                    required: "不能为空",
+                    number: "必须为大于0的数字",
+                    min: "必须为大于0的数字"
+                },
+                "price_pollution": {
+                    required: "不能为空",
+                    number: "必须为大于0的数字",
+                    min: "必须为大于0的数字"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (+$("input[name='modifyTimeBlockFlag']:checked").val() == 1) {
+                    var flag = false;
+                    for (var i = 0; i < 24; i++) {
+                        if ($.trim($("#timeBlock").children(":eq(" + i + ")").attr("class")) == "") {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        $("#timeTipDiv").html("峰平谷时段设置不完整，请重新修改！");
+                        return false;
+                    }
+                }
+                if (confirm("确认提交?")) {
+                    form.submit();
+                }
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+    });
+
+   
+</script>

@@ -1,0 +1,26 @@
+﻿.em-form-ul li { margin: 5px;}
+.em-form-ul li ul{ float:left; width:379px; margin-left: 10px; }
+.em-form-ul li ul li{ margin: 5px;}
+.em-form-ul li.col1-width ul { float:none; width:100%;margin-left: 0px;}
+.em-form-ul li.col1-width ul label{ width: 100px; float:left; margin-left:5px;}
+.em-form-ul li.col1-width ul input{ width:40px;}
+.em-form-ul li.col3-width ul{ width:220px;}
+.em-form-ul li.col3-width ul input{ width:185px;}
+.em-form-ul li.col3-width ul select{ width:200px;}
+.em-form-ul li.col3-alt-width ul{ width:230px;}
+.em-form-ul li.col3-alt-width ul input,ul.em-form-ul li.col3-alt-width ul select{ width:165px;}
+.em-form-ul li.col4-width ul{ width:163px;}
+.em-form-ul li.col4-width ul input { width:128px;}
+.em-form-ul li.col4-width ul select{ width:155px;}
+.em-form-ul li.col4-alt-width ul{ width:163px;}
+.em-form-ul li.col4-alt-width ul input{ width:105px;}
+.em-form-ul li.col5-width ul{ width:auto;}
+.em-form-ul li.col5-width ul input{ width:200px;}
+.em-form-ul li.col5-width ul select{ width:100px;}
+.em-form-ul li.col5-alt-width ul{ width:220px;}
+.em-form-ul li.col5-alt-width ul input,ul.em-form-ul li.col3-alt-width ul select{ width:165px;}
+.em-form-ul li .m-button { margin-left: 332px;}
+
+.contentbox fieldset { margin:10px; padding : 10px;}
+.contentbox fieldset table{min-width: 500px;}
+

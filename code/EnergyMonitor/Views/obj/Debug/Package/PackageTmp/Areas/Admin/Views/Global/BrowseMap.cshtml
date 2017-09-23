@@ -1,0 +1,181 @@
+﻿@{
+    ViewBag.Title = "地图展示";
+}
+@section head{
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<script src="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/" type="text/javascript"></script>
+<script src="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/js/esri/nls/jsapi_en-us.js"></script>
+<link href="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/js/dojo/dijit/themes/tundra/tundra.css"
+    rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/css/jquery-ui/base/jquery-ui.css")" rel="stylesheet"
+type="text/css" />
+<script src="@Url.Content("~/Scripts/jquery-ui.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Visifire.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.tmpl.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/util.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/arcgismap.js")" type="text/javascript"></script>
+<style type="text/css">
+    html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
+    #map{ border:1px solid #BFBFBF; background-color:White; width:auto; height: 100%; overflow:hidden;  position:relative; }
+    #mainWindow {width: 100%; height: 100%; margin: 0px;}
+    #sidebar {width:244px; margin: 5px; background-color:whitesmoke; float:right; height:auto;}
+    #buildingNameTip {display:none; font-size:12px;height:16px;white-space: nowrap;border: 1px solid #333333; padding: 2px; background-color: #ffffcc; z-index:1;}
+    #fullscreenIcon { float:right; width: 40px; height: 20px; background-color:Silver;  border-color:Black; text-align:center; z-index: 2; position: absolute; bottom: auto; right: 10px; top: 10px; left: auto; cursor:pointer;}
+    #mapLoading {position:relative; top:40%; left:40%;}
+    #infoWindowContent {display:none;}
+    #detailLink {width: 100px; position:absolute; right:0px; top:0px;}
+    #campusTab {position:absolute; width:250px; left:10px; right:10px; z-index:3}
+    #campusTab h2 {float:left; width:50px; height:26px; line-height: 26px; font-size:10px; font-weight:normal; text-align:center; color:#00007F; cursor: pointer;}
+    #toolsbar {background: url("/Content/images/nav_bj.gif") repeat-x scroll 0 0 transparent; height: 32px; position:relative; white-space: nowrap; z-index:3;  }
+    #toolContainer { width: 450px; background: url("/Content/images/nav_bj.gif") repeat-x scroll 0 0 transparent; float:right; }
+    #toolContainer .span_l { margin: 4px 3px 0 0; position:relative; }
+    #toolContainer .span_r { cursor: pointer; line-height: 25px; margin-left: 1px; overflow:hidden; padding:0 5px;}
+    #toolContainer .span_r a {text-decoration:none; color:Black;}
+    #toolContainer .span_l, #toolContainer .span_r {float:left; height:24px; }
+    #toolContainer .full_icon .span_r {padding-left: 21px;}
+    #toolContainer .full_icon b { background-position: -45px -158px; top:7px;}
+    #toolContainer b { background: url("/Content/images/tools_img.png") no-repeat scroll 0 -158px transparent; height:12px; width:12px; overflow: hidden; position:absolute; top:6px; left: 5px; }
+    #toolContainer .span_over, #toolContainer .span_focus{ color: #4C73C2; }
+    #toolContainer .span_over, #toolContainer .span_focus, #toolContainer .span_over .span_r, #toolContainer .span_focus .span_r { background: url("/Content/images/tools_img.png") no-repeat scroll 0 0 transparent;}
+    #toolContainer .span_over .span_r {background-position: right 0;}
+    #toolContainer .return_full_icon .span_r { padding-left: 21px;}
+    #toolContainer .return_full_icon b { background-position: -15px -208px; top: 7px; }
+    #toolContainer .search_icon .span_r { padding-left: 22px;}
+    #toolContainer .search_icon b { background-position: 0 -158px; width:13px; }
+</style>
+}
+
+
+<div id="mainWindow" class="tundra">
+    <div id="sidebar">
+        <div>
+            <input id="searchText" value="" type="text" />
+            <input id="Button1" type="button" value="搜索建筑" onclick="fudanMap.searchBuilding(dojo.byId('searchText').value);"/>
+            <div id = "tabs" style=" margin-top:5px;">
+                <ul>
+                    <li><a href="#building_list"><span>建筑列表</span></a></li>
+                    <li><a href="#building_search_res"><span>搜索结果</span></a></li>
+                </ul>
+                <div id = "building_list">
+                    <ul>
+                    </ul>
+                </div>
+                <div id = "building_search_res">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="map" >
+        <div id="buildingNameTip">
+        </div>
+        <div id="toolsbar">
+            <div id="toolContainer" >
+                <div class="campus_on span_l"><span class="span_r"><a href="@Url.Action("BrowseMap", "Global", new { campusID = 0})">邯郸校区</a></span></div>
+                <div class=" span_l"><span class="span_r"><a href="@Url.Action("BrowseMap", "Global", new { campusID = 1})">江湾校区</a></span></div>
+                <div class=" span_l"><span class="span_r"><a href="@Url.Action("BrowseMap", "Global", new { campusID = 2})">枫林校区</a></span></div>
+                <div class=" span_l"><span class="span_r"><a href="@Url.Action("BrowseMap", "Global", new { campusID = 3})">张江校区</a></span></div>
+                <div id="tool_bdsearch" class="span_l search_icon" title="查找或搜索建筑">
+                    <span class="span_r"><b></b>搜索建筑</span>
+                </div>
+                <div id="tool_fullScr" class="span_l full_icon" title="进入全屏状态">
+                    <span class="span_r"><b></b><span id="tool_fullScrF"><a href="@Url.Action("FullScrMap", "Global", new {campus_ID = 0})">全屏</a></span></span>
+                </div>
+            </div>
+        </div>
+        <div id="mapLoading"><img src=@Url.Content("~/Content/images/loading_mid.gif") /></div>
+    </div>
+ 
+    <div id="infoWindowContent" >
+        <fieldset>
+            <legend>
+                请选择查询能耗类别和时间范围
+            </legend>
+            <form  name="chartForm">
+                查询能耗类别：
+                <input name="typeRadio" type="radio" value="1" checked="checked" onclick="chartUpdate(this.form)"/> 电
+                <input name="typeRadio" type="radio" value="2" onclick="chartUpdate(this.form)"/>水
+                <input name="typeRadio" type="radio" value="3" onclick="chartUpdate(this.form)"/>煤气
+                <br />
+                <div style="">
+                    查询时间范围：
+                    <input name="gradingRadio" type="radio" value="1" onclick="chartUpdate(this.form)" checked="checked"/> 最近十月
+                    <input name="gradingRadio" type="radio" value="2" onclick="chartUpdate(this.form)"/> 最近十天
+                    <input name="gradingRadio" type="radio" value="3" onclick="chartUpdate(this.form)" /> 最近24小时
+                </div>
+            </form>
+        </fieldset>
+        <div id="chartContainer" style=" width:380px; height:210"></div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var fudanMap;
+    dojo.addOnLoad(function () {
+        fudanMap = new FudanMap('@Url.Content("~")',"@Model");
+        fudanMap.init("@Model");
+        fudanMap.buildingListInit();
+        fudanMap.showInfoOnClick();
+    });
+
+    function chartUpdate(obj) {
+        fudanMap.chartUpdate(obj);
+    }
+</script>
+<script type="x-jquery-tmpl" id="searchResultTemplate">
+    <li><b>建筑<a class="building_link" href="javascript:void(0);" buildingid="${BuildingID}"><span class="building_option">${BuildingName}</span></a>, 属于区域 ${AreaName}</b></li>
+</script>
+<script type="x-jquery-tmpl" id="buildingListTemplate">
+    <li>
+        <p class="building_list_title_p ui-widget-header" style="background-color:Blue; width:100%; cursor:pointer; margin: 2px; ">${AreaName}</p>
+        <div class="building_list_detail" style="width:240px; margin-left:10px; line-height:14px;  display:none">
+            <table style="table-layout:fixed; word-wrap:break-word;">
+                <tbody>
+                {{each(i, b) Buildings}}
+                    {{if i%4==0}}
+                        <tr>
+                            <td style="width:50px; height:5px; padding: 2px; overflow:hidden; "><a class="building_link" href="javascript:void(0);" buildingid="${BDI_ID}">${BDI_Name}</a></td>
+                    {{else i%4==3}}
+                            <td style="width:50px; height:5px; padding: 2px; overflow:hidden; "><a class="building_link" href="javascript:void(0);" buildingid="${BDI_ID}">${BDI_Name}</a></td>
+                        </tr>
+                    {{else (i+1)==b.length}}
+                            <td style="width:50px; height:5px; padding: 2px; overflow:hidden; "><a class="building_link" href="javascript:void(0);" buildingid="${BDI_ID}">${BDI_Name}</a></td>
+                        </tr>
+                    {{else}}
+                            <td style="width:50px; height:5px; padding: 2px; overflow:hidden; "><a class="building_link" href="javascript:void(0);" buildingid="${BDI_ID}">${BDI_Name}</a></td>
+                    {{/if}}
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </li>
+</script>
+
+<script type="x-jquery-tmpl" id="chartTemplate">
+    <vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+            ZoomingEnabled="True" AnimationEnabled="true" Width="370" Height="200" Theme="Theme1" 
+            BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="False" ShadowEnabled="True">
+        <vc:Chart.Titles>
+            <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+
+        <vc:Chart.AxesX>
+            <vc:Axis Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+
+        <vc:Chart.Series>
+            <vc:DataSeries RenderAs="${renderType}">
+                <vc:DataSeries.DataPoints>
+                    {{each queryList}}
+                        <vc:DataPoint AxisXLabel="${TimeBlock}" YValue="${StatisVal}"/>
+                    {{/each}}
+                </vc:DataSeries.DataPoints>
+            </vc:DataSeries>
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>

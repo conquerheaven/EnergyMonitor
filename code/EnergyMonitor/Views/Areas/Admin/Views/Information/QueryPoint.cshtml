@@ -1,0 +1,590 @@
+﻿@{
+    ViewBag.Title = "测点管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery_ui_timepicker_addon.css"
+        rel="stylesheet" type="text/css" />
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li class="current"><a>查询测点</a></li>
+            <li><a href="@Url.Action("AddRealPoint", "Information")">增加真实测点</a></li>
+            <li><a href="@Url.Action("AddPoint", "Information")">增加虚拟测点</a></li>
+            <li><a href="@Url.Action("ImportPoint", "Information")">导入历史数据</a></li>
+            <li><a href="@Url.Action("UpdateList", "Information")">数据更新列表</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="#" method="post">
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li>测点编号： </li>
+                    <li><input id="pointID" name="pointID" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>名称： </li>
+                    <li><input id="pointName" name="pointName" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>所属对象： </li>
+                    <li><input id="queryObj" name="queryObj" type="text" class="inputbox" readonly="readonly"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>所属能耗类型： </li>
+                    @*<li><input id="powerName" name="powerName" type="text" class="inputbox" readonly="readonly"/></li>*@
+                     <li><select id="powerType" name="powerType">
+                        <option label="所有能耗类型" value="">所有能耗类型</option>
+                        @foreach (var item in Model)
+                        {
+                            if (item.PC_ID.Length == 3)
+                            {
+                                if (item.PC_ID == "004" || item.PC_ID == "005" || item.PC_ID == "006") 
+                                {
+                                    var prefix = "所有";
+                                    <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+                                }else{
+                                    var prefix = "所有用";
+                                    <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+                                }
+                            }
+                            else
+                            {
+                                var s = new string('-', item.PC_ID.Length - 3);
+                                <option value="@item.PC_ID">@s@item.PC_Name</option>
+                            }
+                        }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>所属RTU： </li>
+                    <li><select id="queryRTU">
+                    <option value="-1">所有RTU</option>
+                    @foreach (var rtuItem in ViewBag.RTUList)
+                    { 
+                        <option value= '@rtuItem.RTU_No'>@rtuItem.RTU_Name</option>
+                    }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>序列号： </li>
+                    <li><input id="querySerial" name="querySerial" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>是否真实点： </li>
+                    <li>
+                        <div id="realFlagSet">
+                            <input type="radio" id="realAll" name="realFlag" value="-1" checked="checked" /><label for="realAll"> 所有点 </label>
+                            <input type="radio" id="realTrue" name="realFlag" value="1"/><label for="realTrue"> 真实点 </label>
+                            <input type="radio" id="realFalse" name="realFlag" value="0" /><label for="realFalse"> 虚拟点 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>是否统计点： </li>
+                    <li>
+                        <div id="statFlagSet">
+                            <input type="radio" id="statAll" name="statFlag" value="-1" checked="checked" /><label for="statAll"> 所有点 </label>
+                            <input type="radio" id="statTrue" name="statFlag" value="1"/><label for="statTrue"> 统计点 </label>
+                            <input type="radio" id="statFalse" name="statFlag" value="0" /><label for="statFalse"> 非统计点 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" type="button" value="  查  询  " class="btn m-button"/></li>
+         </ul>
+         </form>
+         <fieldset id="resultDiv" class="hidden"><legend>查询结果</legend>
+            <div id="dataDiv">
+            <table>
+                <thead><tr>
+                    <th>测点编号</th>
+                    <th>测点名称</th>
+                    <th>所属对象</th>
+                    <th>最新取值时间</th>
+                    <th>表值</th>
+                    <th>剩余能耗值</th>
+                    <th>所属能耗类型</th>
+                    <th>父测点编号</th>
+                    <th>是否真实点</th>
+                    <th>是否统计点</th>
+                    <th>操作</th>
+                </tr></thead>
+                <tbody id="resultDataDiv"></tbody>
+            </table>
+            <div id="pager"></div>
+            @*<a id="exportExcel" name="exportExcel" class="btn" > 导出Excel </a>*@
+            </div>
+            <div id="noDataDiv">当前查询范围没有数据</div>
+        </fieldset>
+    </div></div>
+</div></div>
+<div id="newValDiv" title="添加测点新的历史值" class="hidden">
+    <fieldset>
+        <label for="timeInput">添加时间：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="timeInput" name="timeInput"/>
+        <p id="newValTip" class="hidden a-center"></p>
+        <label for="newValue">添加值：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="newValue" name="newValue" disabled="disabled"/>
+        <p id="newValErrorTip" class="red a-center hidden"></p>
+    </fieldset>
+</div>
+<input type="hidden" id="selectAnalogId" value="0" />
+<input type="hidden" id="valMinRange" value="" />
+<input type="hidden" id="valMaxRange" value="" />
+
+<input type="hidden" id="objIDs" value="0" />
+<input type="hidden" id="objType" value=""/>
+@*<input type="hidden" id="powerType" value=""/>*@
+<script type="text/javascript">
+    $(function () {
+        $("#realFlagSet").buttonset();
+        $("#statFlagSet").buttonset();
+        $("#timeInput").datetimepicker();
+        $("#timeInput").change(function () {
+            var selectedDateTime = $.trim($(this).val());
+            if (selectedDateTime == "") {
+                return;
+            }
+            $.getJSON('@Url.Action("QueryValRange", "Information")', {
+                analogId: $("#selectAnalogId").val(),
+                inputDateTime: selectedDateTime
+            }, function (data) {
+                if (data == null) {
+                    $("#dataDiv").hide();
+                    $("#newValErrorTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').slideDown("fast");
+                    return;
+                }
+                if ($.isEmptyObject(data)) {
+                    $("#newValErrorTip").html("该时刻已存在值，请重新输入时间").slideDown("fast");
+                } else {
+                    $("#valMinRange").val(data.min);
+                    $("#valMaxRange").val(data.max);
+                    if (data.min != "" || data.max != "") {
+                        var str = "";
+                        if (data.min != "") {
+                            str = "添加值需大于 " + data.min;
+                        }
+                        if (data.max != "") {
+                            if (str != "") {
+                                str += (" 并且小于 " + data.max);
+                            } else {
+                                str = "添加值需小于 " + data.max;
+                            }
+                        }
+                        $("#newValTip").html(str).slideDown("fast");
+                        $("#newValErrorTip").slideUp("fast");
+                    } else {
+                        $("#newValTip").html("该测点没有历史值，请填加新值").slideDown("fast");
+                        $("#newValErrorTip").slideUp("fast");
+                    }
+                    $("#newValue").val("").attr("disabled", false);
+
+                }
+            });
+        });
+        $("#pointID").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#powerType").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        })
+        $("#pointName").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='realFlag']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='statFlag']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#queryRTU").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#querySerial").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#exportExcel").click(function () {
+            var parameters = "?pointID=" + $("#pointID").val()
+                             + "&pointName=" + $("#pointName").val()
+                             + "&objType=" + $("#objType").val()
+                             + "&objIDs=" + $("#objIDs").val()
+                             + "&powerType=" + $("#powerType").val()
+                             + "&realFlag=" + $("input[name='realFlag']:checked").val()
+                             + "&statFlag=" + $("input[name='statFlag']:checked").val();
+            window.open('@Url.Action("GetPointExcel", "Information")' + parameters, "_blank");
+        });
+
+        $("#queryObj").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#buildingSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        selectedObjs = $("#selectedBuilding option:selected");
+                        if (selectedObjs.length == 0) {
+                            selectedObjs = $("#selectedSchoolArea option:selected");
+                            if (selectedObjs.length == 0) {
+                                selectedObjs = $("#selectedSchool option:selected");
+                                if (selectedObjs.length > 0) {
+                                    $("#objType").val(1);
+                                }
+                            } else {
+                                $("#objType").val(2);
+                            }
+                        } else {
+                            $("#objType").val(3);
+                        }
+                        if (selectedObjs.length == 1) {
+                            $("#queryObj").val(selectedObjs.text());
+                            $("#objIDs").val(selectedObjs.val());
+                            $("#resultDiv").slideUp("fast");
+                            $("#dataDiv").hide();
+                            $(this).dialog("close");
+                        } else if (selectedObjs.length > 1) {
+                            $("#dialogErrorTip").text("只能选择单个对象");
+                            $("#dialogErrorTip").slideDown("fast");
+                        } else {
+                            $("#dialogErrorTip").text("查询对象不能为空");
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+
+                        var selectedObjID = $("#objIDs").val();
+                        var selectedObjType = +$("#objType").val();
+                        if (selectedObjID != null && selectedObjID != 0) {
+                            $.getJSON('@Url.Action("PowerTypesOfObj", "Information")', {
+                                objID: selectedObjID,
+                                objType: selectedObjType
+                            }, function (jsonData) {
+                                if (jsonData == null) {
+                                    return;
+                                }
+                                if (jsonData.length == 0) {
+                                    var optionStr = "<option value=\"0\" > 无任何能耗类型 </option>";
+                                    $("#powerType").html(optionStr);
+                                    //                                    $("#powerType").val("0");
+                                    //                                    $("#powerTypeName").val("无");
+                                    //                                    $("#powerTreeDiv ul.em-tree ul li").each(function (index, item) {
+                                    //                                        $(item).hide();
+                                    //                                    });
+                                }
+                                else if (jsonData.length == 1) {
+                                    var powerID = new String(jsonData[0].PowerTypeID);
+                                    var powerName = jsonData[0].PowerTypeName;
+                                    var optionStr = "<option value=\"" + powerID + "\" > ---" + powerName + " </option>"
+                                    $("#powerType").html(optionStr);
+                                }
+                                else {
+                                    var optionStr = "";
+                                    var allOptionStr = "<option value=\"\" > 所有能耗类型 </option>";
+                                    var elecOptionStr = "<option value=\"001\" > 所有用电 </option>";
+                                    var waterOptionStr = "<option value=\"002\" > 所有用水 </option>";
+                                    var gasOptionStr = "<option value=\"003\" > 所有用气 </option>";
+                                    for (i = 0; i < jsonData.length; i++) {
+                                        var powerID = new String(jsonData[i].PowerTypeID);
+                                        var powerIDPrefix = powerID.substr(0, 3);
+                                        var powerName = jsonData[i].PowerTypeName;
+                                        if (powerIDPrefix == "001") {
+                                            elecOptionStr = elecOptionStr + "<option value=\"" + powerID + "\" > ---" + powerName + " </option>";
+                                        }
+                                        else if (powerIDPrefix == "002") {
+                                            waterOptionStr = waterOptionStr + "<option value=\"" + powerID + "\" > --- " + powerName + " </option>";
+                                        } else if (powerIDPrefix == "003") {
+                                            gasOptionStr = gasOptionStr + "<option value=\"" + powerID + "\" > --- " + powerName + " </option>";
+                                        }
+                                    }
+                                    optionStr = allOptionStr + elecOptionStr + waterOptionStr + gasOptionStr;
+                                    $("#powerType").html(optionStr);
+                                }
+                            });
+                        }
+                    },
+                    '清空': function () {
+                        $("#objType").val("");
+                        $("#objIDs").val("");
+                        $("#queryObj").val("");
+                        $("#resultDiv").slideUp("fast");
+                        var powerTypeOptions = $("#powerTypeTemplate").html();
+                        $("#powerType").html(powerTypeOptions);
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+        //        $("#powerName").click(function () {
+        //            $("#treeDialogErrorTip").hide();
+        //            $("#powerTreeDiv").dialog({
+        //                modal: true,
+        //                width: 500,
+        //                resizable: false,
+        //                buttons: {
+        //                    '选择': function () {
+        //                        var tempName = "";
+        //                        var tempIDs = "";
+        //                        var checkedObjs = $("#powerTreeDiv div.checked");
+        //                        checkedObjs.each(function (index, item) {
+        //                            if (tempName == "") {
+        //                                tempName = $(item).next().html();
+        //                            }
+        //                            if (tempIDs == "") {
+        //                                tempIDs = $(item).next().next().val();
+        //                            } else {
+        //                                tempIDs += ("_" + $(item).next().next().val());
+        //                            }
+        //                        });
+        //                        $("#powerType").val(tempIDs);
+        //                        if (checkedObjs.length > 1) {
+        //                            $("#powerName").val(tempName + " ... （" + checkedObjs.length + "）");
+        //                        } else {
+        //                            $("#powerName").val(tempName);
+        //                        }
+        //                        $("#resultDiv").slideUp("fast");
+        //                        $("#dataDiv").hide();
+        //                        $(this).dialog("close");
+        //                    }
+        //                }
+        //            });
+
+        //        });
+
+        $("#queryButton").click(function () {
+            if ($("#resultDiv").is(":hidden")) {
+                global_totalPages = -1;
+                pageClick(1);
+            }
+        })
+
+        var global_totalPages = -1;
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("QueryPointAjax", "Information")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                pointID: $("#pointID").val(),
+                pointName: $("#pointName").val(),
+                objType: $("#objType").val(),
+                objIDs: $("#objIDs").val(),
+                powerType: $("#powerType").val(),
+                realFlag: $("input[name='realFlag']:checked").val(),
+                statFlag: $("input[name='statFlag']:checked").val(),
+                RTU_No: $("#queryRTU").val(),
+                AI_Serial: $("#querySerial").val()
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages = -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                $("#resultDataDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#dataDiv").show();
+            });
+        }
+
+    });
+
+    function addNewValue(pointID) {
+        $("#timeInput").val("");
+        $("#newValue").attr("disabled", true).val("");
+        $("#newValTip").hide();
+        $("#newValErrorTip").hide();
+        $("#selectAnalogId").val(pointID);
+        $("#newValDiv").dialog({
+            modal: true,
+            width: 400,
+            resizable: false,
+            buttons: {
+                '添加': function () {
+                    if (/^-?\d+(\.\d+)?$/.test($("#newValue").val()) == false) {
+                        $("#newValErrorTip").html("添加值必须为数字").slideDown();
+                        return;
+                    }
+                    if (+$("#valMinRange").val() != "" && +$("#newValue").val() <= +$("#valMinRange").val()) {
+                        $("#newValTip").animate({
+                            "color": "red"
+                        }, "slow").animate({
+                            "color": "black"
+                        }, "slow");
+                        return;
+                    }
+                    if (+$("#valMaxRange").val() != "" && +$("#newValue").val() >= +$("#valMaxRange").val()) {
+                        $("#newValTip").animate({
+                            "color": "red"
+                        }, "slow").animate({
+                            "color": "black"
+                        }, "slow");
+                        return;
+                    }
+                    $.getJSON('@Url.Action("AddEnergyHistoryAjax", "Information")', {
+                        analogNo: pointID,
+                        time: $("#timeInput").val(),
+                        value: $("#newValue").val()
+                    }, function (jsonData) {
+                        if (jsonData == null) {
+                            $("#newValErrorTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                            return;
+                        }
+                        if (!jsonData.ifSucceed) {
+                            $("#newValue").val("");
+                            $("#newValErrorTip").html("添加不成功，检查您输入的新值是否符合要求！").slideDown("fast");
+                        } else {
+                            $("#timeInput").val("");
+                            $("#newValue").val("");
+                            $("#newValErrorTip").html("添加成功！ 您可以继续添加。").slideDown("fast");
+                        }
+                    });
+                }
+            }
+        });
+
+    };
+
+    function updateDataValue(pointID) {
+        var r = confirm("更新虚拟测点的历史值可能需要数分钟时间，请耐心等待，这段时间内请不要进行其他操作！");
+        if (r == true) {
+            $("#topDiv").width(document.body.clientWidth);
+            $("#topDiv").height(document.body.clientHeight);
+            var loadingLeft = document.body.clientWidth / 2 ;
+            var loadingTop = document.body.clientHeight / 2;
+            $("#loadingDiv").css({ 'left': loadingLeft, 'top': loadingTop });
+            $("#topDiv").show();
+            $.getJSON('@Url.Action("UpdateHistoryValue", "Information")', {
+                analogNo: pointID
+            }, function (jsonData) {
+                if (jsonData.ifSucceed == true) {
+                    $("#topDiv").hide();
+                    alert("更新数据成功！");
+                } else {
+                    $("#topDiv").hide();
+                    alert("更新数据失败！");
+                }
+            });
+        }
+    }
+
+    function deletePoint(pointID) {
+        $.getJSON('@Url.Action("QueryAMPIsUsedAjax", "Information")', {
+            pointID: pointID
+        }, function (jsonData) {
+            var confirmStr = "";
+            if (jsonData == false) {
+                confirmStr = "删除将同时删除该测点历史数据，确认删除？";
+            } else {
+                confirmStr = "所选删除测点正在被相关对象使用，删除将同时删除该测点历史数据，确认删除？";
+            }
+            if (confirm(confirmStr)) {
+                $.getJSON('@Url.Action("DeleteAMPAjax", "Information")', {
+                    pointID: pointID
+                }, function (jsonData) {
+                    if (jsonData == true) {
+                        alert("删除成功");
+                        $("#resultDiv").slideUp("fast");
+                        $("#dataDiv").hide();
+                    } else {
+                        alert("删除失败，请检查您是否拥有权限或者网络有问题！");
+                    }
+                });
+            }
+        });
+    }
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}">
+    <td>${PNO}</td>
+    <td>${PName}</td>
+    <td>${IName}</td>
+    <td>${Time}</td>
+    <td>${ValStr}</td>
+    <td>${RemValStr}</td>
+    <td>${PowerName}</td>
+    <td>${ParentNoStr}</td>
+    <td>${RealFlagStr}</td>
+    <td>${StatFlagStr}</td>
+    <td><a href='@Url.Action("ModifyPoint", "Information")?p=${PNO}'>修改</a> <a href="javascript:void(0)" onclick="deletePoint('${PNO}')">删除</a> <a href='@Url.Action("QueryHistoryVal", "Information")?analogNo=${PNO}'>查询历史记录</a> <a onclick="addNewValue('${PNO}')" href="javascript:void(0)">录入新值</a>
+    {{if RealFlagStr == "虚拟点"}}
+        <a onclick="updateDataValue('${PNO}')" href="javascript:void(0)">刷新数据</a>
+    {{/if}}
+    </td>
+    </tr>
+</script>
+<script id="powerTypeTemplate" type="text/x-jQuery-tmpl">
+    <option label="所有能耗类型" value="">所有能耗类型</option>
+    @foreach (var item in Model)
+    {
+        if (item.PC_ID.Length == 3)
+        {
+            if (item.PC_ID == "004" || item.PC_ID == "005" || item.PC_ID == "006") 
+            {
+                var prefix = "所有";
+                <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+            }else{
+                var prefix = "所有用";
+                <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+            }
+        }
+        else
+        {
+            var s = new string('-', item.PC_ID.Length - 3);
+            <option value="@item.PC_ID">@s@item.PC_Name</option>
+        }
+    }
+</script>
+
+@Html.Partial("_buildingSelect")
+@Html.Partial("_PowerSelect")

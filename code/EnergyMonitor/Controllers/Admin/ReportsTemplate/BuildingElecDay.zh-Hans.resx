@@ -1,0 +1,945 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="textBox1.Value" xml:space="preserve">
+    <value>日份</value>
+  </data>
+  <data name="textBox2.Value" xml:space="preserve">
+    <value>日耗电量kWh</value>
+  </data>
+  <data name="textBox13.Value" xml:space="preserve">
+    <value>日总耗电量kWh</value>
+  </data>
+  <data name="textBox4.Value" xml:space="preserve">
+    <value>1日</value>
+  </data>
+  <data name="textBox5.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox6.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox8.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox10.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox12.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox14.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox16.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox17.Value" xml:space="preserve">
+    <value>2日</value>
+  </data>
+  <data name="textBox18.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox19.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox20.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox21.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox22.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox23.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox24.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox25.Value" xml:space="preserve">
+    <value>3日</value>
+  </data>
+  <data name="textBox26.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox27.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox28.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox29.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox30.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox31.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox32.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox33.Value" xml:space="preserve">
+    <value>4日</value>
+  </data>
+  <data name="textBox34.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox35.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox36.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox37.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox38.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox39.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox40.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox41.Value" xml:space="preserve">
+    <value>5日</value>
+  </data>
+  <data name="textBox42.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox43.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox44.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox45.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox46.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox47.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox48.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox49.Value" xml:space="preserve">
+    <value>6日</value>
+  </data>
+  <data name="textBox50.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox51.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox52.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox53.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox54.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox55.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox56.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox57.Value" xml:space="preserve">
+    <value>7日</value>
+  </data>
+  <data name="textBox58.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox59.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox60.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox61.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox62.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox63.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox64.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox65.Value" xml:space="preserve">
+    <value>8日</value>
+  </data>
+  <data name="textBox66.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox67.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox68.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox69.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox70.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox71.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox72.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox73.Value" xml:space="preserve">
+    <value>9日</value>
+  </data>
+  <data name="textBox74.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox75.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox76.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox77.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox78.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox79.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox80.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox81.Value" xml:space="preserve">
+    <value>10日</value>
+  </data>
+  <data name="textBox82.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox83.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox84.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox85.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox86.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox87.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox88.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox89.Value" xml:space="preserve">
+    <value>11日</value>
+  </data>
+  <data name="textBox90.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox91.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox92.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox93.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox94.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox95.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox96.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox97.Value" xml:space="preserve">
+    <value>12日</value>
+  </data>
+  <data name="textBox98.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox99.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox100.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox101.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox102.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox103.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox104.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox105.Value" xml:space="preserve">
+    <value>13日</value>
+  </data>
+  <data name="textBox106.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox107.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox108.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox109.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox110.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox111.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox112.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox113.Value" xml:space="preserve">
+    <value>14日</value>
+  </data>
+  <data name="textBox114.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox115.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox116.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox117.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox118.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox119.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox120.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox147.Value" xml:space="preserve">
+    <value>15日</value>
+  </data>
+  <data name="textBox148.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox149.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox150.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox151.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox152.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox153.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox154.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox155.Value" xml:space="preserve">
+    <value>16日</value>
+  </data>
+  <data name="textBox156.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox157.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox158.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox159.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox160.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox161.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox162.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox163.Value" xml:space="preserve">
+    <value>17日</value>
+  </data>
+  <data name="textBox164.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox165.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox166.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox167.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox168.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox169.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox170.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox171.Value" xml:space="preserve">
+    <value>18日</value>
+  </data>
+  <data name="textBox172.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox173.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox174.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox175.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox176.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox177.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox178.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox179.Value" xml:space="preserve">
+    <value>19日</value>
+  </data>
+  <data name="textBox180.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox181.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox182.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox183.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox184.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox185.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox186.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox187.Value" xml:space="preserve">
+    <value>20日</value>
+  </data>
+  <data name="textBox188.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox189.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox190.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox191.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox192.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox193.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox194.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox195.Value" xml:space="preserve">
+    <value>21日</value>
+  </data>
+  <data name="textBox196.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox197.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox198.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox199.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox200.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox201.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox202.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox203.Value" xml:space="preserve">
+    <value>22日</value>
+  </data>
+  <data name="textBox204.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox205.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox206.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox207.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox208.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox209.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox210.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox211.Value" xml:space="preserve">
+    <value>23日</value>
+  </data>
+  <data name="textBox212.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox213.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox214.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox215.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox216.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox217.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox218.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox219.Value" xml:space="preserve">
+    <value>24日</value>
+  </data>
+  <data name="textBox220.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox221.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox222.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox223.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox224.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox225.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox226.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox227.Value" xml:space="preserve">
+    <value>25日</value>
+  </data>
+  <data name="textBox228.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox229.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox230.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox231.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox232.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox233.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox234.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox235.Value" xml:space="preserve">
+    <value>26日</value>
+  </data>
+  <data name="textBox236.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox237.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox238.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox239.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox240.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox241.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox242.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox243.Value" xml:space="preserve">
+    <value>27日</value>
+  </data>
+  <data name="textBox244.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox245.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox246.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox247.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox248.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox249.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox250.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox251.Value" xml:space="preserve">
+    <value>28日</value>
+  </data>
+  <data name="textBox252.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox253.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox254.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox255.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox256.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox257.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox258.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox259.Value" xml:space="preserve">
+    <value>29日</value>
+  </data>
+  <data name="textBox260.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox261.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox262.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox263.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox264.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox265.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox266.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox267.Value" xml:space="preserve">
+    <value>30日</value>
+  </data>
+  <data name="textBox268.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox269.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox270.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox271.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox272.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox273.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox274.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox275.Value" xml:space="preserve">
+    <value>31日</value>
+  </data>
+  <data name="textBox276.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox277.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox278.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox279.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox280.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox281.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox282.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox283.Value" xml:space="preserve">
+    <value>合计</value>
+  </data>
+  <data name="textBox284.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox285.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox286.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox287.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox288.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox289.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox290.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox291.Value" xml:space="preserve">
+    <value>平均</value>
+  </data>
+  <data name="textBox292.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox293.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox294.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox295.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox296.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox297.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox298.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox124.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox126.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox122.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox125.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox127.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox128.Value" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="textBox299.Value" xml:space="preserve">
+    <value>，月份：</value>
+  </data>
+  <data name="textBox300.Value" xml:space="preserve">
+    <value>_______</value>
+  </data>
+</root>

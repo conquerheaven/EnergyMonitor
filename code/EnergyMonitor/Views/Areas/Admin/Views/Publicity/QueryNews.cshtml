@@ -1,0 +1,164 @@
+﻿@using System.ComponentModel;
+@{
+    ViewBag.Title = "信息公示";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <style type="text/css">
+        td{padding-left:10px; padding-right:20px;}
+        #detailContent {margin: 10px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>信息公示</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+            <li class="current"><a>查看公示</a></li>
+            <li><a href="AddNews">添加公示</a></li>
+	    </ul>
+	    <div class="tab-div" style="margin-top:20px;">
+            <div id="newsDiv">
+                <table>
+                    <thead><tr>
+                        <th>编号</th>
+                        <th>标题</th>
+                        <th>创建时间</th>
+                        <th>截止时间</th>
+                        <th>作者</th>
+                        <th>操作</th>
+                    </tr></thead>
+                    <tbody id="newsData"></tbody>
+                </table>
+                <div id="pager"></div>
+            </div>
+            <div id="noNewsDiv">当前没有公示！</div>
+            <div class="clear"></div>
+    </div></div>
+</div></div>
+<div id="detailDia" class="hidden">
+<div id="detailContent"></div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        var global_totalPages = -1;
+
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#newsDiv").hide();
+            $("#noNewsDiv").html(loadingImg).show();
+            $.getJSON('@Url.Action("GetAnnouncementInfoAjax", "Publicity")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#newsDiv").hide();
+                    $("#noNewsDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages == -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noNewsDiv").html("当前没有公示！").show();
+                    $("#newsDiv").hide();
+                    return;
+                }
+                $("#noNewsDiv").hide();
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                for (var i = 0; i < jsonData.data.length; i++) {
+                    jsonData.data[i].CreateTime = transFormat(jsonData.data[i].CreateTime);
+                    jsonData.data[i].DeadLine = transFormat(jsonData.data[i].DeadLine);
+                }
+                $("#newsData").html($("#newsTemplate").tmpl(jsonData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#newsDiv").show();
+            });
+        }
+
+        pageClick(1);
+
+        function transFormat(date) {
+            var start = date.indexOf('(') + 1;
+            var end = date.indexOf(')');
+            var subdate = date.substring(start, end);
+            var d = new Date();
+            d.setTime(subdate);
+            var yyyy = d.getFullYear();
+            var MM = d.getMonth() + 1;
+            var dd = d.getDate();
+            var hh = appendZero(d.getHours());
+            var mm = appendZero(d.getMinutes());
+            return yyyy + "-" + MM + "-" + dd + " " + hh + ":" + mm;
+        }
+
+        function appendZero(tt) {
+            if (tt < 10) return "0" + tt;
+            else return tt;
+        }
+
+    });
+
+    function deleteNews(id) {
+        var confirmMsg = "您确认删除该公示？";
+        if (confirm(confirmMsg)) {
+            $.getJSON('@Url.Action("DeleteAnnouncementInfoByIDAjax", "Publicity")', {
+                ID: id
+            }, function (jsonData) {
+                if (jsonData.ifSuccess == true) {
+                    alert("删除成功！");
+                    $("#" + id).remove();
+                }
+                else {
+                    alert("删除失败，请重试！");
+                }
+            })
+        }
+    }
+
+    function detail(id) {
+        var title = $("#" + id).find(".title").text();
+        var content = $("#" + id).find(".content").text().split('\n');
+        var newsContent = "";
+        for (var i in content) {
+            newsContent += "<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + content[i] + "</p>";
+        }
+        $("#detailContent").html(newsContent);
+        $("#detailDia").dialog({
+            modal: true,
+            width: 500,
+            height: 600,
+            resizable: false,
+            title: title,
+            buttons: {
+                '确定': function() {
+                    $("#detailDia").dialog("close");
+                }
+            }
+        });
+    }
+</script>
+<script id="newsTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}" id="${ID}">
+    <td>${ID}</td>
+    <td class="title">${Title}</td>
+    <td>${CreateTime}</td>
+    <td>${DeadLine}</td>
+    <td>${Author}</td>
+    <td><a href='@Url.Action("ModifyNews", "Publicity")?ID=${ID}'>修改</a> <a href="javascript:void(0)" onclick="deleteNews('${ID}')">删除</a> <a onclick="detail('${ID}')" href="javascript:void(0)">查看详情</a>
+    </td>
+    <td class="content hidden">${Content}</td>
+    </tr>
+</script>

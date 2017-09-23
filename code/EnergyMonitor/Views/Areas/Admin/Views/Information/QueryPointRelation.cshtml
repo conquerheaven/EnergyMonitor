@@ -1,0 +1,137 @@
+﻿@using System.ComponentModel;
+@{
+    ViewBag.Title = "测点关联管理";
+}
+
+@section head
+{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/mktree.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/mktree.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+}
+
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点关联管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li class="current"><a>所属对象列表</a></li>
+            <li><a href="@Url.Action("QueryPointList", "Information")">测点关联列表</a></li>
+            <li><a href="@Url.Action("QueryXPointRelation", "Information")">查询指定测点关联关系</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <div>
+            <ul class="mktree">
+                <li class="liOpen"><span> 复旦大学 </span>
+                <ul>
+                @foreach (var item in ViewBag.schoolList)
+                {
+                    PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(item);
+                    PropertyDescriptor pdID = pdc.Find("dataID", true);
+                    var dataID = pdID.GetValue(item);
+                    PropertyDescriptor pdValue = pdc.Find("dataValue", true);
+                    var dataValue = pdValue.GetValue(item);
+                    <li id="S_@(dataID)"><span>@dataValue [@dataID]</span><ul class="noRender"><li><span><img src="@Url.Content("~/Content/images/loading_small.gif")" alt="Loading"/> 加载中...</span></li></ul></li>
+                }
+                </ul>
+                </li>
+            </ul>
+        </div>
+    </div></div>
+</div></div>
+<script type="text/javascript">
+    $(function () {
+        convertTrees();
+
+        function renderSubTreeHtml(data, clickedObj, ul, type) {
+            if (data != null) {
+                if (type == "S") {
+                    ul.html($("#data1Template").tmpl(data));
+                }else if(type == "A") {
+                    ul.html($("#data2Template").tmpl(data));
+                } else {
+                    ul.html($("#data3Template").tmpl(data));
+                }
+                if (type != "B") {
+                    $(".bullet", ul).toggle(
+                        function () {
+                            $(this).parent().attr("class", "liOpen");
+                        },
+                        function () {
+                            $(this).parent().attr("class", "liClosed");
+                        }
+                    );
+                    $(".bullet", ul).click(function () {
+                        renderSubTree($(this));
+                    });
+                }
+            } else {
+                ul.html('<li class="liBullet"><span class="bullet">&nbsp;</span> 没有数据 </li>');
+            }
+            ul.removeAttr("class");
+        }
+
+        function renderSubTree(clickedObj) {
+            var ul = clickedObj.next().next("ul");
+            if (ul.length == 1 && ul.attr("class") == "noRender") {
+                var strs = clickedObj.parent().attr("id").split("_");
+                var pointType = strs[0];
+                var pointNo = strs[1];
+                if (pointType == "S") {
+                    $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Util")', {
+                        schoolID: pointNo
+                    }, function (jsonData) {
+                        renderSubTreeHtml(jsonData, clickedObj, ul, pointType);
+                    });
+                } else if (pointType == "A") {
+                    $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Util")', {
+                        AreaID: pointNo
+                    }, function (jsonData) {
+                        renderSubTreeHtml(jsonData, clickedObj, ul, pointType);
+                    });
+                } else if (pointType == "B") {
+                    $.getJSON('@Url.Action("GetRoomsByBIDAjax", "Util")', {
+                        BuildingID: pointNo
+                    }, function (jsonData) {
+                        renderSubTreeHtml(jsonData, clickedObj, ul, pointType);
+                    });
+                }
+            }
+        }
+
+        $(".liClosed .bullet").click(function () {
+            renderSubTree($(this));
+        });
+
+
+    });
+</script>
+<script id="data1Template" type="text/x-jQuery-tmpl">
+    <li id="A_${dataID}" class="liClosed">
+    <span class="bullet">&nbsp; </span>
+    <span>${dataValue} [${dataID}]</span>
+        <ul class="noRender">
+        <li class="liBullet">
+        <span class="bullet">&nbsp;</span>
+        <span><img alt="Loading" src="@Url.Content("~/Content/images/loading_small.gif")"> 加载中... </span>
+        </li>
+        </ul>
+    </li>
+</script>
+<script id="data2Template" type="text/x-jQuery-tmpl">
+    <li id="B_${dataID}" class="liClosed">
+    <span class="bullet">&nbsp; </span>
+    <span>${dataValue} [${dataID}]</span>
+        <ul class="noRender">
+        <li class="liBullet">
+        <span class="bullet">&nbsp;</span>
+        <span><img alt="Loading" src="@Url.Content("~/Content/images/loading_small.gif")"> 加载中... </span>
+        </li>
+        </ul>
+    </li>
+</script>
+<script id="data3Template" type="text/x-jQuery-tmpl">
+    <li class="liBullet"><span class="bullet">&nbsp;</span><span>${dataValue} [${dataID}]</span></li>
+</script>

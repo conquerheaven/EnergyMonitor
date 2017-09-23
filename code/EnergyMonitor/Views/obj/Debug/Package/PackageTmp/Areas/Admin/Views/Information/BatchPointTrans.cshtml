@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "批量测点管理";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        fieldset{margin: 20px;}
+        .step-tip, .step-img{ margin:10px;}
+        hr{margin: 20px auto;}
+        .import-upload{ padding:10px; margin: auto 10px;}
+        #error {color:Red;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>批量测点管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+            <li><a href="@Url.Action("BatchPointManagement", "Information")">批量增加真实测点</a></li>		 
+            <li class="current"><a>批量测点迁移</a></li>
+	    </ul>
+        <div class="tab-div">
+        <fieldset><legend>迁移步骤</legend>
+        <div class="step-tip">
+            <p>1、选择要迁移测点源RTU：<select id="queryRTU">
+                    <option value="-1">所有RTU</option>
+                    @foreach (var rtuItem in ViewBag.RTUList)
+                    { 
+                        <option value= '@rtuItem.RTU_No'>@rtuItem.RTU_Name</option>
+                    }
+                    </select>，<a class="highlighted" style="cursor: pointer; text-decoration: underline;">导出</a>该RTU所有测点信息。
+                    <span id="error">*请选择一个源RTU！</span></p>
+            <p>2、在导出的文件中填写迁移的目的RTU、目的序列号和目的名称。</p>
+            <p>3、上传填写好的Excel文件。</p>
+        </div>
+        <hr class="clear" />
+        <form id="myForm" action="@Url.Action("BatchTransferingPoints", "Information")" method="post" enctype="multipart/form-data" >
+        <span class="red">* </span>上传文件： <input id="uploadExcel" name="uploadExcel" type="file" class="import-upload" />
+        <button id="queryButton" type="submit" class="btn m-button" > 上 传 </button>
+        </form>
+        </fieldset>
+    </div></div>
+</div> </div>
+<script type="text/javascript">
+    $(function () {
+        $("#error").hide();
+        var RTU_No = $("#queryRTU").val();
+        $(".highlighted").attr("href","@Url.Action("DownloadPointsAtRTU", "Information")"+"?RTU_No="+RTU_No);
+        
+        $("#queryButton").click(function () {
+            if ($("#uploadExcel").val() == "") {
+                return false;
+            }
+        });
+
+        $(".highlighted").click(function () {
+            var RTU_No = $("#queryRTU").val();
+            if (RTU_No == -1) {
+                $("#error").show();
+                return false;
+            }
+            return true;
+        });
+
+        $("#queryRTU").change(function () {
+            $("#error").hide();
+            var RTU_No = $("#queryRTU").val();
+            $(".highlighted").attr("href","@Url.Action("DownloadPointsAtRTU", "Information")"+"?RTU_No="+RTU_No);
+        });
+    });
+</script>

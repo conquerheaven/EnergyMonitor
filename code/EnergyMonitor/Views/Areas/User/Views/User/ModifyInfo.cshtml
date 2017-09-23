@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "修改信息";
+}
+@section head{
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .contentbox table {margin-left: 20px;}
+        .inputText{height: 25px;}
+        .submitDiv {margin-left: 200px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>修改信息</h2></div>
+    <div class="contentbox">
+    <form id="modifyForm" action="@Url.Action("ModifiedInfo", "User")" method="post" >
+        <table>
+            <tr><td><span class="red">* </span>学号 / 工号：</td><td><input id="userID" name="userID" type="text" class="inputbox inputbox-readonly" value="@Model.USR_ID" readonly="readonly"/></td><td></td></tr>
+            <tr><td><span class="red">* </span>姓名：</td><td><input id="userName" name="userName" type="text" class="inputbox" value="@Model.USR_Name" /></td><td></td></tr>
+            <tr><td><span class="red">* </span>联系邮箱：</td><td><input id="userEmail" name="userEmail" type="text" class="inputbox" value="@Model.USR_Mail"/></td><td></td></tr>
+            <tr><td></td><td><span class="red">修改邮箱需要重新激活新邮箱，仅支持复旦邮箱</span></td><td></td></tr>
+            <tr><td><span class="red">* </span>所属院系：</td>
+            <td>
+            <select id="userDepartment" name="userDepartment">
+                @foreach (var department in @ViewBag.departmentList)
+                {
+                    if (Model.USR_DepartID == department.DI_ID)
+                    {
+                        <option value="@department.DI_ID" selected="selected">@department.DI_Name</option>
+                    }
+                    else
+                    {
+                        <option value="@department.DI_ID">@department.DI_Name</option>
+                    }
+                }
+            </select>
+            </td><td></td></tr>
+            <tr><td colspan="3"><input type="submit" value="  提 交  " class="btn submitDiv" /> </td></tr>
+        </table>
+        <input id="departmentName" name="departmentName" type="hidden" value="@Model.USR_DepartName"/>
+        <input id="oldUserMail" name="oldUserMail" type="hidden" value="@Model.USR_Mail" />
+    </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#userDepartment").change(function(){
+            $("#departmentName").val($("#userDepartment option:selected").html());
+        });
+
+        // 验证是否为复旦邮箱
+        jQuery.validator.addMethod("isFudanMail", function (value, element) {
+            var mailSuffix = /@@fudan.edu.cn$/;
+            return this.optional(element) || (mailSuffix.test(value));
+        }, "请输入复旦邮箱");
+        $("#modifyForm").validate({
+            rules: {
+                userID: {
+                    required: true
+                },
+                userName: {
+                    required: true,
+                    rangelength: [1, 50]
+                },
+                userEmail: {
+                    required: true,
+                    email: true,
+                    isFudanMail: true,
+                    rangelength: [1, 50],
+                    remote: {
+                        url: "@Url.Action("ModifyMailCanBeUsedAjax","User")",
+                        type: "post",
+                        data: {
+                            userEmail: function(){return $("#userEmail").val()},
+                            oldUserMail: $("#oldUserMail").val()
+                        }
+                    }
+                },
+                userDepartment: {
+                    min: 1
+                },
+                userRoom: {
+                    required: true
+                }
+            },
+            messages: {
+                userID: {
+                    required: "学号 / 工号不能为空"
+                },
+                userName: {
+                    required: "姓名不能为空 ",
+                    rangelength: "长度不合法"
+                },
+                userEmail: {
+                    required: "邮箱不能为空 ",
+                    email: "邮箱格式不对",
+                    isFudanMail: "请输入复旦邮箱",
+                    rangelength: "长度不合法",
+                    remote: "邮箱已经存在"
+                },
+                userDepartment: {
+                    min: "所属院系不能为空"
+                },
+                userRoom: {
+                    required: "房间不能为空 "
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (confirm("确认修改？") == true) {
+                    form.submit();
+                }
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+    });
+</script>

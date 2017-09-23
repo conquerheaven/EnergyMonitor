@@ -1,0 +1,39 @@
+        html body{font-family: Arial,Helvetica,sans-serif;  font-size: 13px;}
+        #map{ position:relative;}
+        .info_container {border:1px solid rgb(153, 153,153);}
+        #buildingNameTip {display:none; font-size:12px;height:16px;white-space: nowrap;border: 1px solid #333333; padding: 2px; background-color: #ffffcc; z-index:2;}
+        #left_map { height:400px; width:500px;  }
+        #right_info { height:400px; overflow:hidden;  margin-left:510px; position:absolute; left:0; top:0; }
+        #select_bd { height:400px; width:500px;}
+        #bd_info { height:400px; position:absolute; left:0px; top:0px; margin-left:510px; }
+        #bottom_chart { height:300px; width:100%;}
+        .container_title { line-height: 31px; background-color: rgb(249, 249, 249); overflow: hidden; height: 31px; white-space: nowrap; width: 100%; text-align:left; border-bottom: 1px solid #CCCCCC;}
+        .iw_poi_title { color: #4D4D4D; font-size: 14px; font-weight: bold;  overflow: hidden; padding-left: 11px; white-space: nowrap; margin:0px;}
+        #map { height:368px; }
+        .chart { width:430px; height:267px;}
+        #water_chart { position:absolute; left:0px; top:32px;}
+        #gas_chart{ position:absolute; left:0px; top:32px;}
+        #mapLoading {position:relative; top:30%; left:30%;}
+        .content_text { margin:5px 10px 5px 10px;}
+        #bd_intro {margin: 10px 10px 10px 10px; width:300px; float:left;}
+        #bd_photo { margin: 20px 10px 10px 20px; overflow:auto; float:left; width:250;}
+        #title {width:100%; height:40px; line-height: 40px; border:1px; padding-left:20px; }
+        #title p { font-size:20px; margin:0px; }
+        a { color: #4174D9;  font-size: 12px; font-weight: normal; margin-left: 10px; text-decoration: none;}
+        .second_order { padding-left:20px;}
+        .content_text p{ margin:3px 0px;}
+        #room_info { display:none; }
+        #noDataDiv { display:none;}
+        table { padding:10px;}
+        th {   font-size: 14px; text-shadow: 1px 1px 1px #FFFFFF; }
+        th, td { padding: 2px; text-align: left;}
+        #pager ul.pages { margin:10px 0;}
+        #re_energy_info { float:left; margin-left:20px; line-height:25px;}
+        .level_container { position:relative; margin-top:10px; width:100%;}
+        ul, li {list-style: none outside none; margin: 0; padding: 0;}
+        ul, li { list-style: none outside none;}
+        select {border: 1px solid #CCCCCC; border-radius: 5px 5px 5px 5px; padding: 7px 10px;}
+        h1, h2, h3, h4, h5 { margin: 0; padding: 0;}
+        .hidden {display: none;}
+        .clear { clear: both;}
+        .red { color: #C61B1B;}

@@ -1,0 +1,369 @@
+﻿@{
+    ViewBag.Title = "测点管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("QueryPoint", "Information")">查询测点</a></li>
+		    <li class="current"><a>增加真实测点</a></li>
+            <li><a href="@Url.Action("AddPoint", "Information")">增加虚拟测点</a></li>
+            <li><a href="@Url.Action("ImportPoint", "Information")">导入历史数据</a></li>
+            <li><a href="@Url.Action("UpdateList", "Information")">数据更新列表</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="@Url.Action("AddPointInfo", "Information")" method="post" >
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li><span class="red">* </span>新测点编号： </li>
+                    <li><input id="pointID" name="pointID" type="text" class="inputbox inputbox-readonly" value="@ViewBag.newID" readonly="readonly"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li><span class="red">* </span>测点名称： </li>
+                    <li><input id="pointName" name="pointName" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>所属对象： </li>
+                    <li><input id="queryObj" name="queryObj" type="text" class="inputbox" readonly="readonly"/>
+                    </li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li><span class="red">* </span>所属能耗类型： </li>
+                    <li><select id="powerType" name="powerType">
+                        @foreach (var item in Model)
+                        {
+                            if (item.PC_ID.Length == 3)
+                            {
+                                <option label="@item.PC_Name" disabled="disabled">@item.PC_Name</option>
+                            }
+                            else
+                            {
+                                var s = new string('-', item.PC_ID.Length - 3);
+                                <option value="@item.PC_ID">@s@item.PC_Name</option>
+                            }
+                        }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li><span class="red">* </span>所属RTU： </li>
+                    <li>
+                        <select id="RTU" >
+                        <option value="0">未选择</option>
+                        @foreach (var rtuItem in ViewBag.RTUList)
+                        {
+                            <option value='@rtuItem.RTU_No'>@rtuItem.RTU_Name</option>
+                        }
+                        </select>
+                    </li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>序列号： </li>
+                    <li><input id="AI_Serial" name="AI_Serial" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>测点基数： </li>
+                    <li><input id="AI_Base" name="AI_Base" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>测点系数： </li>
+                    <li><input id="AI_Rate" name="AI_Rate" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>  
+             <li >
+                       <ul>
+                             <li>测点编码：</li>
+                             <li><input id="encoding" name="encoding" type="text" class="inputbox" /></li>
+                             <li></li>
+                       </ul> 
+                       <div class="clear"></div>                                              
+             </li>    
+             <li id="boundPointLI" class="col1-width hidden" >
+                <div style="margin-left:20px;">该所属对象和所属能耗类型已关联的测点如下：</div>
+                <table style="margin-left: 15px;">
+                <thead><tr>
+                    <th>已关联测点编号</th>
+                    <th>已关联测点名称</th>
+                    <th>是否真实点</th>
+                    <th>是否统计点</th>
+                </tr></thead>
+                <tbody id="boundPointDiv"></tbody>
+                </table>
+            </li>
+            <li id="parentPointLI" class="col1-width hidden" >
+                <div style="margin-left:20px;">该所属对象和所属能耗类型情况下将要关联该测点的父测点编号如下：</div>
+                <table style="margin-left: 15px;">
+                    <thead><tr>
+                        <th>父测点编号</th>
+                        <th>父测点名称</th>
+                        <th>所属对象</th>
+                        <th>所属能耗类型</th>
+                        <th>选为父测点</th>
+                    </tr></thead>
+                    <tbody id="parentPointDiv"></tbody>
+                </table>
+            </li>
+            <li>
+                <ul>
+                    <li><span class="red">* </span>是否统计点： </li>
+                    <li>
+                        <div id="statFlagSet">
+                            <input type="radio" id="statTrue" name="statFlag" value="1" checked="checked"/><label for="statTrue"> 统计点 </label>
+                            <input type="radio" id="statFalse" name="statFlag" value="0" /><label for="statFalse"> 非统计点 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li><span class="red">* </span>是否测量对象本身能耗： </li>
+                    <li>
+                        <div id="measureFlagSet">
+                            <input type="radio" id="measureTrue" name="roomID" value="0" checked="checked"/><label for="measureTrue"> 是 </label>
+                            <input type="radio" id="measureFalse" name="roomID" value="11016" /><label for="measureFalse"> 否 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" type="submit" value="  增  加  " class="btn m-button"/></li>
+         </ul>
+         <input type="hidden" id="schoolID" name="schoolID" />
+         <input type="hidden" id="areaID" name="areaID" />
+         <input type="hidden" id="buildingID" name="buildingID" />
+         <input type="hidden" id="roomID" name="roomID" />
+         <input type="hidden" id="objIDs" name="objIDs" value="" />
+         <input type="hidden" id="objType" name="objType" value=""/>
+         <input type="hidden" id="powerName" name="powerName" value=""/>
+         <input type="hidden" id="RTU_No" name="RTU_No" value="" />
+         <input type="hidden" id="realTrue" name="realFlag" value="1"/>
+         </form>
+    </div></div>
+</div></div>
+<script type="text/javascript">
+    $(function () {
+        $("#statFlagSet").buttonset();
+        $("#measureFlagSet").buttonset();
+        $("#myForm").validate({
+            rules: {
+                pointID: {
+                    required: true,
+                    digits: true,
+                    rangelength: [1, 100]
+                },
+                pointName: {
+                    required: true,
+                    rangelength: [1, 100]
+                },
+                queryObj: {
+                    required: false,
+                    rangelength: [1, 100]
+                },
+                powerType: {
+                    required: true
+                }
+            },
+            messages: {
+                pointID: {
+                    required: "测点编号不能为空",
+                    digits: "测点编号必须为整数",
+                    rangelength: "长度不合法"
+                },
+                pointName: {
+                    required: "测点名称不能为空",
+                    rangelength: "长度不合法"
+                },
+                queryObj: {
+                    required: "所属对象不能为空",
+                    rangelength: "长度不合法"
+                },
+                powerType: {
+                    required: "所属能耗类型不能为空"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                var selectedStr = $("#powerType option:selected").html();
+                var powerName = selectedStr.substr($("#powerType").val().length - 3);
+                $("#powerName").val(powerName);
+                var selectedRTU = $("#RTU").val();
+                if (selectedRTU == 0) {
+                    alert("请选择该测点所属的RTU！");
+                    return;
+                }
+                if (confirm("确认提交?")) {
+                    if ($("#parentPointLI").is(":hidden")) {
+                        $("input[name='parentPointId']:checked", "#parentPointDiv").val("0");
+                    }
+                    $("#RTU_No").val($("#RTU").val());
+                    form.submit();
+                }
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        $("#powerType").change(function () {
+            queryBoundAMP();
+            queryParentAMP();
+        });
+        $("#queryObj").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#roomSelectDiv").dialog({
+                modal: true,
+                width: 730,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        $("#schoolID").val($("#selectedSchool").val());
+                        $("#areaID").val($("#selectedSchoolArea").val());
+                        $("#buildingID").val($("#selectedBuilding").val());
+                        $("#roomID").val($("#newRoomID").val());
+                        selectedObjs = $("#newRoomID option:selected");
+                        if (selectedObjs.length == 0) {
+                            $("#roomID").val(0);
+                            selectedObjs = $("#selectedBuilding option:selected");
+                            if (selectedObjs.length == 0) {
+                                $("#buildingID").val(0);
+                                selectedObjs = $("#selectedSchoolArea option:selected");
+                                if (selectedObjs.length == 0) {
+                                    $("#areaID").val(0);
+                                    selectedObjs = $("#selectedSchool option:selected");
+                                }
+                            }
+                        }
+                        if (selectedObjs.length == 1) {
+                            $("#queryObj").val(selectedObjs.text());
+                            $(this).dialog("close");
+                            queryBoundAMP();
+                            queryParentAMP();
+                        } else if (selectedObjs.length > 1) {
+                            $("#dialogErrorTip").html("只能选择单个对象");
+                            $("#dialogErrorTip").slideDown("fast");
+                        } else {
+                            $("#dialogErrorTip").html("所属对象不能为空");
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    }
+                }
+            });
+        });
+
+        function queryParentAMP() {
+            var schoolId = $("#schoolID").val();
+            var areaId = $("#areaID").val();
+            var buildingId = $("#buildingID").val();
+            var roomId = $("#roomID").val();
+            var powerId = $("#powerType").val();
+            if (schoolId != "" && +schoolId > 0 && powerId != "") {
+                $.getJSON('@Url.Action("QueryParentAMP", "Information")', {
+                    "schoolID": schoolId,
+                    "areaID": areaId,
+                    "buildingID": buildingId,
+                    "roomID": roomId,
+                    "powerId": powerId
+                }, function (jsonData) {
+                    if (jsonData != null) {
+                        if (jsonData.totalPages > 0) {
+                            $("#parentPointDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                                alternate: function (item) {
+                                    return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                                }
+                            }));
+                            $(":radio:first", "#parentPointDiv").attr("checked", true);
+                            $("#parentPointLI").slideDown("fast");
+                        } else {
+                            $("#parentPointLI").slideUp("fast");
+                        }
+                    }
+                });
+            } else {
+                $("#parentPointLI").slideUp("fast");
+            }
+        }
+        function queryBoundAMP() {
+            var schoolId = $("#schoolID").val();
+            var areaId = $("#areaID").val();
+            var buildingId = $("#buildingID").val();
+            var roomId = $("#roomID").val();
+            var powerId = $("#powerType").val();
+            if (schoolId != "" && +schoolId > 0 && powerId != "") {
+                $.getJSON('@Url.Action("QueryBoundAMP", "Information")', {
+                    "schoolID": schoolId,
+                    "areaID": areaId,
+                    "buildingID": buildingId,
+                    "roomID": roomId,
+                    "powerId": powerId
+                }, function (jsonData) {
+                    if (jsonData != null) {
+                        if (jsonData.totalPages > 0) {
+                            $("#boundPointDiv").html($("#boundDataTemplate").tmpl(jsonData.data, {
+                                alternate: function (item) {
+                                    return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                                }
+                            }));
+                            $("#boundPointLI").slideDown("fast");
+                        } else {
+                            $("#boundPointLI").slideUp("fast");
+                        }
+                    }
+                });
+            } else {
+                $("#boundPointLI").slideUp("fast");
+            }
+        }
+
+    
+    });
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}">
+    <td>${PNO}</td>
+    <td>${PName}</td>
+    <td>${IName}</td>
+    <td>${PowerName}</td>
+    <td><input type="checkbox" value="${PNO}" name="parentPointId" checked /></td>
+    </tr>
+</script>
+<script id="boundDataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}">
+    <td>${PNO}</td>
+    <td>${PName}</td>
+    <td>{{if RealFlag==1}}真实点{{else}}虚拟点{{/if}}</td>
+    <td>{{if StatFlag==1}}统计点{{else}}非统计点{{/if}}</td>
+    </tr>
+</script>
+@Html.Partial("_RoomSelect1")

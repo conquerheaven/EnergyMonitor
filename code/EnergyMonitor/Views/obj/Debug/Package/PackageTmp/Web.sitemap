@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="~/">
+    <!--User-->
+    <siteMapNode url="~/User/" title="学生平台">
+      <siteMapNode url="~/User/User/PersonalInfo#" title="用户信息">
+        <siteMapNode url="~/User/User/PersonalInfo" title="个人信息"/>
+        <siteMapNode url="~/User/User/ModifyInfo" title="修改信息">
+          <siteMapNode url="~/User/User/ModifiedInfo"/>
+          <siteMapNode url="~/User/User/RedirectPage"/>
+          <siteMapNode url="~/User/User/ActiveMail"/>
+        </siteMapNode>
+      </siteMapNode>
+      <siteMapNode url="~/User/Energy/EnergyBrief#" title="用电查询">
+        <siteMapNode url="~/User/Energy/EnergyBrief" title="当前用电"/>
+        <siteMapNode url="~/User/Energy/EnergyHistory" title="历史用电"/>
+        <siteMapNode url="~/User/Energy/BuyHistory" title="购电历史"/>
+      </siteMapNode>
+    </siteMapNode>
+    <!--Admin-->
+    <siteMapNode url="~/Admin/" title="管理员平台">
+      <siteMapNode url="~/Admin/User/PersonalInfo#" title="个人信息">
+        <siteMapNode url="~/Admin/User/PersonalInfo" title="个人信息"/>
+        <siteMapNode url="~/Admin/User/ModifyInfo" title="修改信息">
+          <siteMapNode url="~/Admin/User/ModifiedInfo"/>
+          <siteMapNode url="~/Admin/User/RedirectPage"/>
+          <siteMapNode url="~/Admin/User/ActiveMail"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/User/MyRight" title="我的权限"/>
+      </siteMapNode>
+      <siteMapNode url="~/Admin/Energy/RealElec#" title="能耗查询">
+        <siteMapNode url="~/Admin/Energy/RealElec" title="最新表值"/>
+        <siteMapNode url="~/Admin/Energy/QueryElec" title="能耗查询"/>
+        <!--<siteMapNode url="~/Admin/Energy/QueryVal" title="电力值查询"/>-->
+        <siteMapNode url="~/Admin/Energy/QueryUniversityEnergy" title="全校能耗"/>
+      </siteMapNode>
+      <siteMapNode url="~/Admin/Statistics/Elec#" title="能耗统计">
+        <siteMapNode url="~/Admin/Statistics/Elec" title="能耗统计"/>
+        <siteMapNode url="~/Admin/Statistics/Compare" title="能耗对比"/>
+        <siteMapNode url="~/Admin/Statistics/BuildingTypeStatistics" title="按建筑类型统计"/>
+      </siteMapNode>
+      <siteMapNode url="~/Admin/Analysis/VCElec#" title="能耗分析">
+        <siteMapNode url="~/Admin/Analysis/VCElec" title="单一对象按分类"/>
+        <siteMapNode url="~/Admin/Analysis/VGCElec" title="单一对象按时间和分类"/>
+        <siteMapNode url="~/Admin/Analysis/HElec" title="多个对象"/>
+        <siteMapNode url="~/Admin/Analysis/HGElec" title="多个对象按时间"/>
+        <siteMapNode url="~/Admin/Analysis/HCElec" title="多个对象按分类"/>
+      </siteMapNode>
+      <siteMapNode url="~/Admin/Report/Elec#" title="报表管理">
+        <siteMapNode url="~/Admin/Report/Elec" title="建筑报表"/>
+        <siteMapNode url="~/Admin/Report/BuildingElecMonth" title="建筑月用电报表"/>
+        <siteMapNode url="~/Admin/Report/BuildingWaterMonth" title="建筑月用水报表"/>
+        <siteMapNode url="~/Admin/Report/BuildingElecDay" title="建筑日用电报表"/>
+        <siteMapNode url="~/Admin/Report/BuildingEnergyMonth" title="建筑能耗总表"/>
+        <siteMapNode url="~/Admin/Report/AreaWaterMonth" title="校园区域月用水报表"/>
+        <siteMapNode url="~/Admin/Report/SetParameters" title="报表参数管理">
+          <siteMapNode url="~/Admin/Report/ModifyParameters"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Report/ThirdPointMonth" title="三级电表报表"/>       
+      </siteMapNode>     
+      <siteMapNode url="~/Admin/Publicity/Elec#" title="能耗公示">
+        <siteMapNode url="~/Admin/Publicity/Elec" title="能耗公示"/>
+        <siteMapNode url="~/Admin/Publicity/QueryNews" title="信息公示">
+          <siteMapNode url="~/Admin/Publicity/AddNews"/>
+          <siteMapNode url="~/Admin/Publicity/ModifyNews"/>
+        </siteMapNode>
+      </siteMapNode>
+      <siteMapNode url="~/Admin/EnergyComptroller/Comptroller#" title="能耗审计">
+        <siteMapNode url="~/Admin/EnergyComptroller/Comptroller" title="能耗审计"/>
+      </siteMapNode>
+      <siteMapNode url="~/Admin/BuildingGuanghua/ReportManagement#" title="光华楼管理">
+        <siteMapNode url="~/Admin/BuildingGuanghua/ReportManagement" title="报表管理"/>
+        <siteMapNode url="~/Admin/BuildingGuanghua/EnergyStatistics" title="能耗统计"/>
+        <siteMapNode url="~/Admin/BuildingGuanghua/HElec" title="能耗分析"/>
+        <siteMapNode url="~/Admin/BuildingGuanghua/HGElec" />
+     
+      </siteMapNode>
+      <siteMapNode url="~/Admin/ExceptionInfo/MachineException#" title="异常检测">
+        <siteMapNode url="~/Admin/ExceptionInfo/MachineException" title="机器故障"/>
+        <siteMapNode url="~/Admin/ExceptionInfo/DiscontinuousValue" title="断值"/>
+        <siteMapNode url="~/Admin/ExceptionInfo/ValueDecline" title="值突降"/>
+        <siteMapNode url="~/Admin/ExceptionInfo/ValueIncrease" title="值突增"/>
+        <siteMapNode url="~/Admin/ExceptionInfo/SetEmailInfo" title="邮箱设置"/>
+        <siteMapNode url="~/Admin/ExceptionInfo/SetMessageInfo" title="短信设置"/>
+      </siteMapNode>
+      <siteMapNode url="~/Admin/Information/QueryPoint#" title="信息维护">
+        <siteMapNode url="~/Admin/Information/QueryPoint" title="测点管理">
+          <siteMapNode url="~/Admin/Information/AddPoint"/>
+          <siteMapNode url="~/Admin/Information/AddPointInfo"/>
+          <siteMapNode url="~/Admin/Information/ModifyPoint"/>
+          <siteMapNode url="~/Admin/Information/ModifyPointInfo"/>
+          <siteMapNode url="~/Admin/Information/QueryHistoryVal"/>
+          <siteMapNode url="~/Admin/Information/ImportPoint"/>
+          <siteMapNode url="~/Admin/Information/ImportingPoint"/>
+          <siteMapNode url="~/Admin/Information/AddRealPoint"/>
+          <siteMapNode url="~/Admin/Information/UpdateList"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/QueryPointList" title="测点关联管理">
+          <!--<siteMapNode url="~/Admin/Information/QueryPointRelation"/>-->
+          <siteMapNode url="~/Admin/Information/QueryXPointRelation"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/BatchPointManagement" title="批量测点管理">
+          <siteMapNode url="~/Admin/Information/BatchPointTrans"/>
+          <siteMapNode url="~/Admin/Information/BatchImportingPoint"/>
+          <siteMapNode url="~/Admin/Information/BatchTransferingPoint"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/ModifyUniversity" title="全校信息管理">
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/QuerySchool" title="校区管理">
+          <siteMapNode url="~/Admin/Information/ModifySchool"/>
+          <siteMapNode url="~/Admin/Information/ModifiedSchool"/>
+          <siteMapNode url="~/Admin/Information/AddSchool"/>
+          <siteMapNode url="~/Admin/Information/AddSchoolInfo"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/QuerySchoolArea" title="区域管理">
+          <siteMapNode url="~/Admin/Information/AddSchoolArea"/>
+          <siteMapNode url="~/Admin/Information/AddSchoolAreaInfo"/>
+          <siteMapNode url="~/Admin/Information/ModifySchoolArea"/>
+          <siteMapNode url="~/Admin/Information/ModifySchoolAreaInfo"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/QueryBuilding" title="楼宇管理">
+          <siteMapNode url="~/Admin/Information/AddBuilding"/>
+          <siteMapNode url="~/Admin/Information/AddBuildingInfo"/>
+          <siteMapNode url="~/Admin/Information/ModifyBuilding"/>
+          <siteMapNode url="~/Admin/Information/ModifyBuildingInfo"/>
+          <siteMapNode url="~/Admin/Information/DetailBuilding"/>
+          <siteMapNode url="~/Admin/Information/BuildingEnergyConsum"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/QueryRoom" title="房间管理">
+          <siteMapNode url="~/Admin/Information/AddRoom"/>
+          <siteMapNode url="~/Admin/Information/AddRoomInfo"/>
+          <siteMapNode url="~/Admin/Information/ModifyRoom"/>
+          <siteMapNode url="~/Admin/Information/ModifyRoomInfo"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/QueryDepart" title="院系管理">
+          <siteMapNode url="~/Admin/Information/AddDepart"/>
+          <siteMapNode url="~/Admin/Information/AddDepartInfo"/>
+          <siteMapNode url="~/Admin/Information/ModifyDepart"/>
+          <siteMapNode url="~/Admin/Information/ModifyDepartInfo"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/AddThirdPointVal" title="三级电表管理">
+        </siteMapNode>
+        <siteMapNode url="~/Admin/Information/QueryPower" title="能耗类型管理">
+        </siteMapNode>
+        
+        <!--<siteMapNode url="~/Admin/Information/QueryAnalogInfo" title="模拟量管理">
+          <siteMapNode url="~/Admin/Information/AddAnalogInfo"/>
+          <siteMapNode url="~/Admin/Information/AddAnalogInfoData"/>
+          <siteMapNode url="~/Admin/Information/ModifyAnalogInfo"/>
+          <siteMapNode url="~/Admin/Information/ModifyAnalogInfoData"/>
+        </siteMapNode>-->
+      </siteMapNode>
+      <siteMapNode url="~/Admin/System/QueryUsers#" title="系统管理">
+        <siteMapNode url="~/Admin/System/QueryUsers" title="用户管理"/>
+        <siteMapNode url="~/Admin/System/QueryRole" title="角色权限管理">
+          <siteMapNode url="~/Admin/System/AddRole"/>
+          <siteMapNode url="~/Admin/System/AddRoleInfo"/>
+          <siteMapNode url="~/Admin/System/ModifyRole"/>
+          <siteMapNode url="~/Admin/System/ModifyRoleInfo"/>
+        </siteMapNode>
+        <siteMapNode url="~/Admin/System/BadState" title="系统运行状态">
+          <!--<siteMapNode url="~/Admin/System/BadState"/>-->
+          <siteMapNode url="~/Admin/System/AllState"/>
+          <siteMapNode url="~/Admin/System/DiagramState"/>
+        </siteMapNode>
+      </siteMapNode>
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

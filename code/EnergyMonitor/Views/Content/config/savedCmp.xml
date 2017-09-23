@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<items>
+  <item>
+    <title>光华楼_立人生物楼_史带楼_李达三楼</title>
+    <value>218_225_306_307</value>
+    <queryType>3</queryType>
+  </item>
+  <item>
+    <title>1号楼_2号楼</title>
+    <value>1_2</value>
+    <queryType>3</queryType>
+  </item>
+  <item>
+    <title>3号楼_4号楼</title>
+    <value>3_4</value>
+    <queryType>3</queryType>
+  </item>
+</items>

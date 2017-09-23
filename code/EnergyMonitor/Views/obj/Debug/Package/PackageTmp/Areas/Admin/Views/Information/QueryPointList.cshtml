@@ -1,0 +1,358 @@
+﻿@using System.ComponentModel;
+@{
+    ViewBag.Title = "测点关联管理";
+}
+@section head
+{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/mktree.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/mktree.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <style type="text/css">
+        .tip
+        {
+            margin-left: 20px;
+        }
+        hr
+        {
+            clear: both;
+            margin: 20px 0;
+            border: 1px #EAEAEA solid;
+        }
+        .real
+        {
+            color: Green;
+        }
+        .vrtl
+        {
+            color: Green;
+        }
+        .pointList
+        {
+            float: left;
+            width: 45%;
+        }
+        .ruleList
+        {
+            float: right;
+            width: 52%;
+        }
+        .modifyRule
+        {
+            padding-left: 20px;
+            font-size: small;
+            color: #FF0000;
+            text-decoration: underline;
+        }
+        button
+        {
+            margin-top: 30px;
+            float: right;
+            margin-right: 50px;
+        }
+    </style>
+}
+<div class="contentcontainer">
+    <div class="headings altheading">
+        <h2>
+            测点关联管理</h2>
+    </div>
+    <div class="contentbox">
+        <div id="tabs">
+            <ul class="tab-ul">
+                <!--<li><a href="@Url.Action("QueryPointRelation", "Information")">所属对象列表</a></li>-->
+                <li class="current"><a>测点关联列表</a></li>
+                <li><a href="@Url.Action("QueryXPointRelation", "Information")">查询指定测点关联关系</a></li>
+            </ul>
+            <div class="tab-div">
+                <div class="tip">
+                    <div>
+                        测点前的勾选表示该测点的统计量加入到父测点的统计中；公式前的勾选表示该公式被应用，您可以通过勾选或取消勾选控制公式的使用。</div>
+                </div>
+                <hr />
+                <div>
+                    <div class="pointList">
+                        <ul class="mktree">
+                            <li class="liOpen"><span>所有测点 </span>
+                                <ul>
+                                    @foreach (var item in ViewBag.schoolPointList)
+                                    {
+                                        PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(item);
+                                        PropertyDescriptor pdID = pdc.Find("pointID", true);
+                                        var dataID = pdID.GetValue(item);
+                                        PropertyDescriptor pdName = pdc.Find("pointName", true);
+                                        var dataName = pdName.GetValue(item);
+                                        PropertyDescriptor pdCptFlag = pdc.Find("pointCptFlag", true);
+                                        var dataCptFlag = pdCptFlag.GetValue(item);
+                                        PropertyDescriptor pdLevel = pdc.Find("pointLevel", true);
+                                        var dataLevel = pdLevel.GetValue(item);
+                                        <li id="@dataLevel@("_")@dataID">
+                                            @if (dataCptFlag == 1)
+                                            { <span class="real"> @dataName [@dataID] </span> }
+                                            else
+                                            { <span class="vrtl">@dataName [@dataID] </span> }
+                                            <ul class="noRender">
+                                                <li><span>
+                                                    <img src="@Url.Content("~/Content/images/loading_small.gif")" alt="Loading"/>
+                                                    加载中...</span></li></ul>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ruleList">
+                        <ul class="mktree">
+                            <li class="liOpen"><span>所有公式 </span>
+                                <ul id="rules">
+                                    
+                                </ul>
+                            </li>
+                        </ul>
+                        <button class="addRule btn m-button">
+                            添加新公式</button>
+                    </div>
+                </div>
+                <hr style="border: white" />
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        convertTrees();
+
+        $(".liClosed .bullet").click(function () {
+            renderSubTree($(this));
+        });
+
+        $.getJSON('@Url.Action("GetBuildingRule", "Information")', {
+        },function(jsonData){
+            refreshRule(jsonData.ruleList);
+        });
+
+        $(".addRule").click(function () {
+            $("#operateRuleErrorTip").text("");
+            $("#operateRuleSucceed").text("");
+            $("#operateRuleTable").children().last().children().remove();
+            addLineClick();
+            $(".selectBuilding").show();
+            $("#buildingID").val("");
+            $("#objIDs").val("");
+            $("#operateBtn").val("添加公式");
+            $("#operateRuleDiv").dialog({
+                modal: true,
+                width: 710,
+                resizable: false,
+                title: "添加公式"
+            });
+            $("#searchID").val("");
+            $("#resultDiv").hide();
+            $("#dataDiv").hide();
+        });
+
+        $("#ref").click(function(){
+            $("#operateRuleDiv").dialog("close");
+            $.getJSON('@Url.Action("GetBuildingRule", "Information")', {
+            },function(jsonData){
+                refreshRule(jsonData.ruleList);
+            });
+        });
+
+        function refreshRule(ruleList){
+            $("#rules").html("<li class='liBullet'><span class='bullet'>&nbsp;&nbsp;</span><span><img src='@Url.Content("~/Content/images/loading_small.gif")' alt='Loading'/>加载中...</span></li>");
+
+            var content = "";
+            for(var i = 0; i < ruleList.length; i++){
+                content += "<li class='liClosed' id='"+ruleList[i].buildingID+"'><span class='bullet'>&nbsp;&nbsp;</span><span>";
+                if (ruleList[i].HJFlag == 1)
+                    content += "<input class='rule' type='checkbox' checked='checked' />";
+                else
+                    content += "<input class='rule' type='checkbox' />"
+                content += ruleList[i].buildingName+"["+ruleList[i].OperateRule+"]</span><a style='cursor:pointer;' class='modRule');'><span class='modifyRule' >修改</span>";
+                content += "<input type='hidden' value='"+ruleList[i].buildingID+"_"+ruleList[i].OperateRule+"_"+ruleList[i].buildingName+"' /></a><ul>";
+                for(var j = 0; j < ruleList[i].pointList.length; j++){
+                    content += "<li class='liBullet'><span class='bullet'>&nbsp;&nbsp;</span><span>"+ruleList[i].pointList[j].pointName+"["+ruleList[i].pointList[j].pointNo+"]</span> </li> ";
+                }
+                content += "</ul></li>";
+            }
+        
+            $("#rules").html(content);
+
+            $(".liOpen .bullet, .liClosed .bullet", $("#rules")).toggle(
+                function () {
+                    $(this).parent().attr("class", "liOpen");
+                },
+                function () {
+                    $(this).parent().attr("class", "liClosed");
+                }
+            );
+
+            $(".rule").change(function () {
+                var flag = 0;
+                var bid = $(this).parent().parent().attr("id");
+                if ($(this).attr("checked")) {
+                    flag = 1;
+                } else {
+                    flag = 0;
+                }
+                $.getJSON('@Url.Action("ModifyBuildingHJFlag", "Information")', {
+                    buildingID: bid, hJFlag: flag
+                }, function (jsonData) {
+                    if(jsonData.ifSuccess==true){
+                        if(flag==1)
+                            alert("成功启用公式！");
+                        else
+                            alert("成功取消公式！");
+                    }
+                    else{
+                        if(flag==1)
+                            alert("启用公式失败！");
+                        else
+                            alert("取消公式失败！");
+                    }
+                });
+            });
+            
+            $(".modRule").click(function(){
+                var params = $(this).children().last().val().split('_');
+                modifyRule(params[0],params[1],params[2]);
+            });
+        }
+
+    });
+
+    function renderSubTreeHtml(data, clickedObj, ul) {
+            if (data.ifSucceed == true &&data.data.length>0) {
+                ul.html($("#dataTemplate").tmpl(data.data));
+                $(".liOpen .bullet, .liClosed .bullet", ul).toggle(
+                    function () {
+                        $(this).parent().attr("class", "liOpen");
+                    },
+                    function () {
+                        $(this).parent().attr("class", "liClosed");
+                    }
+                );
+                $(".liOpen .bullet, .liClosed .bullet", ul).click(function () {
+                    renderSubTree($(this));
+                });
+            } else {
+                ul.html('<li class="liBullet"><span class="bullet">&nbsp;</span> 没有数据 </li>');
+            }
+            ul.removeAttr("class");
+        }
+
+        function renderSubTree(clickedObj) {
+            var ul = clickedObj.next().next("ul");
+            if (ul.length == 1 && ul.attr("class") == "noRender") {
+                var strs = clickedObj.parent().attr("id").split("_");
+                var dataLevel = strs[0];
+                var dataID = strs[1];
+                $.getJSON('@Url.Action("GetMeasurePointByParentNoAjax", "Information")', {
+                    ParentNo: dataID, Level: dataLevel
+                }, function (jsonData) {
+                    renderSubTreeHtml(jsonData, clickedObj, ul);
+                });
+            }
+        }
+
+    function addLineClick(){
+        var last = 1;
+        if($("#operateRuleTable").find("tr").length!=0)
+            last = parseInt($("#operateRuleTable").find("tr").last().find(".plus").attr("name"))+1;
+        $("#operateRuleTable").append(
+        "<tr class='row"+last+"'>"+
+            "<td><label style='float:left'><input name='"+last+"' type='radio' class='plus' checked='checked'/>+</label><label style='float:left'><input name='"+last+"' type='radio' class='minus'/>-</label></td>"+
+            "<td><input id='queryPoint' type='text' class='inputbox' name='buildID' value=''/></td>"+
+            "<td><img class='addLine' alt='add' height='20px' style='float:left; margin-left:10px; cursor:pointer' src='@Url.Content("~/Content/images/add_line.jpg")'/><img class='delLine' alt='delete' height='20px'  style='float:left; margin-left:10px; cursor:pointer' src='@Url.Content("~/Content/images/del_line.jpg")'/></td>"+
+        "</tr>");
+       
+        $("#operateRuleTable").children().last().children().last().children().last().children(".addLine").click(addLineClick);
+        $("#operateRuleTable").children().last().children().last().children().last().children(".delLine").click(function(){
+            if($("#operateRuleTable").find("tr").length!=1){
+                $(this).parent("td").parent("tr").remove();
+            }
+        });
+    }
+
+    function modifyRule(bid, rule, name) {
+        $("#operateRuleErrorTip").text("");
+        $("#operateRuleSucceed").text("");
+        $("#operateRuleTable").children().last().children().remove();
+        $(".selectBuilding").hide();
+        $("#buildingID").val(name);
+        $("#objIDs").val(bid);
+        $("#operateBtn").val("修改公式");
+        var ids = rule.split(/[+-]/);
+        var ptr = 0;
+        for(var i in ids){
+            if(i!="0"){
+            if(rule[ptr]=='+'){
+                addLineClick();
+                $("#operateRuleTable").find("tr").last().find(".plus").attr("checked","checked");
+                $("#operateRuleTable").find("tr").last().find(".inputbox").val(ids[i]);
+            }
+            else if(rule[ptr]=='-'){
+                addLineClick();
+                $("#operateRuleTable").find("tr").last().find(".minus").attr("checked","checked");
+                $("#operateRuleTable").find("tr").last().find(".inputbox").val(ids[i]);
+            }
+            ptr += (ids[i].length+1);
+            }
+        }
+        $("#operateRuleDiv").dialog({
+            modal: true,
+            width: 710,
+            resizable: false,
+            title: "修改公式"
+        });
+        $("#searchID").val("");
+        $("#resultDiv").hide();
+        $("#dataDiv").hide();
+    }
+
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    {{if pointLevel<4 || pointID !=0}}
+    {{if pointCptFlag!=1}}
+    <li id="${pointLevel}_${pointID}" class="liClosed">
+    <span class="bullet">&nbsp;</span>
+    <span class="vrtl">
+    {{if pointIsCount==1}}
+    <input type="checkbox" disabled="true" checked />
+    {{else}}
+    <input type="checkbox" disabled="true" />
+    {{/if}}
+    ${pointName} [${pointID}] 
+    </span>
+        <ul class="noRender">
+        <li class="liBullet">
+        <span class="bullet">&nbsp;</span>
+        <span><img alt="Loading" src="@Url.Content("~/Content/images/loading_small.gif")"> 加载中... </span>
+        </li>
+        </ul>
+    </li>
+    {{else}}
+    <li class="liBullet">
+    <span class="bullet">&nbsp;</span>
+    <span class="real">
+    {{if pointIsCount==1}}
+    <input type="checkbox" disabled="true" checked>
+    {{else}}
+    <input type="checkbox" disabled="true">
+    {{/if}}
+    ${pointName} [${pointID}] 
+    </span>
+    </li>
+    {{/if}}
+    {{/if}}
+</script>
+@Html.Partial("_RuleOperate")

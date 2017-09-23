@@ -1,0 +1,1057 @@
+﻿@{
+    ViewBag.Title = "测点管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery_ui_timepicker_addon.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/mktree.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/Visifire.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/util.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/mktree.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        .pointer {cursor: pointer;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点管理</h2></div>
+@if (Model != null) 
+{
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+            <li><a href="@Url.Action("QueryPoint", "Information")">查询测点</a></li>
+            <li><a href="@Url.Action("AddRealPoint", "Information")">增加真实测点</a></li>
+		    <li><a href="@Url.Action("AddPoint", "Information")">增加虚拟测点</a></li>
+            <li><a href="@Url.Action("ImportPoint", "Information")">导入历史数据</a></li>
+            <li><a href="@Url.Action("UpdateList", "Information")">数据更新列表</a></li>
+            <li class="current"><a>测点历史值</a></li>
+        </ul>
+        <div class="tab-div">
+        <form id="myForm" action="#" method="post" >
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li>测点编号：</li>
+                    <li><input id="pointID" name="pointID" type="text" class="inputbox inputbox-readonly" value="@Model.AMP_AnalogNo" readonly="readonly"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>测点名称：</li>
+                    <li><input id="pointName" name="pointName" type="text" class="inputbox inputbox-readonly" value="@Model.AMP_Name" readonly="readonly"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li><span class="red">* </span>起始时间：</li>
+                    <li><input id="startTime" name="startTime" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li><span class="red">* </span>结束时间：</li>
+                    <li><input id="endTime" name="endTime" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>显示方式：</li>
+                    <li>
+                        <div id="displayType">
+                            <input type="radio" id="column" name="displayRadio" value="column" checked="checked" /><label for="column"> 柱状图 </label>
+                            <input type="radio" id="line" name="displayRadio" value="line" /><label for="line"> 折线图 </label>
+                            <input type="radio" id="list" name="displayRadio" value="list" /><label for="list"> 一览表 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>粒度：</li>
+                    <li>
+                        <div id="displayGrain">
+                            <input type="radio" id="orig" name="grainRadio" value="orig" checked="checked" /><label for="orig"> 原始 </label>
+                            <input type="radio" id="hour" name="grainRadio" value="hour" /><label for="hour"> 按小时 </label>
+                            <input type="radio" id="day" name="grainRadio" value="day" /><label for="day"> 按天 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <input id="queryButton"  type="submit" value=" 查 询 " class="btn m-button"/>&nbsp;&nbsp;&nbsp;
+                <input id="addButton" type="button" value=" 添加新值 " class="btn"/>
+                <input id="modifyButton" type="button" value=" 修改该时间段内的历史值" class="btn"/>
+                <input id="deleteAllButton" type="button" value=" 批量删除 " class="btn" />
+            </li>
+        </ul>
+        </form>
+
+        <fieldset id="resultDiv" class="hidden">
+            <legend>查询结果</legend>
+            <div id="dataDiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>获取时间</th>
+                            <th>历史值</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultDataDiv">
+                    </tbody>
+                </table>
+                <div id="pager"></div>
+            </div>
+            <div id="chartDataDiv" class="hidden">
+                <div id="chartDataDiv1" class="left"></div>
+                <div id="chartDataDiv2" class="right"></div>
+            </div>
+            <div id="noDataDiv">当前查询范围没有数据</div>
+        </fieldset>
+        <fieldset id="relationDiv">
+            <legend>父测点与子侧点</legend>
+            <div id="relationDataDiv">
+                <ul class="mktree" id="relationDataTree">
+                </ul>
+            </div>
+            <div id="noRelationDataDiv">当前查询范围没有数据</div>
+        </fieldset>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="selectAnalogId" value="@Model.AMP_AnalogNo" />
+}
+</div>
+<div id="newValDiv" title="添加该测点新的历史值" class="hidden">
+    <fieldset>
+        <label for="timeInput">添加时间：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="timeInput" name="timeInput"/>
+        <p id="newValTip" class="hidden a-center"></p>
+        <label for="newValue">添加值：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="newValue" name="newValue" disabled="disabled"/>
+        <p id="newValErrorTip" class="red a-center hidden"></p>
+    </fieldset>
+</div>
+
+<div id="modifyValByTimePeriod" title="修改该时间段内的所有历史值" class="hidden">
+    <fieldset>
+        <label for="increaseValue">您可以给该时间段内的所有历史值增加或减小一定数值（负数代表减少）</label>
+        <label for="timeStart"><span class="red">* </span>起始时间：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="timeStart" name="timeStart"/>
+        <p id="timeStartTip" class="hidden a-center"></p>
+        <label for="timeEnd"><span class="red">* </span>结束时间：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="timeEnd" name="timeEnd"/>
+        <p id="timeEndTip" class="hidden a-center"></p>
+        <label for="increaseValue">数值：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="increaseValue" name="increaseValue"/>
+        <p id="increaseValueTip" class="hidden a-center"></p>
+    </fieldset>
+</div>
+<div id="modifyValDiv" title="修改该测点指定时刻的历史值" class="hidden">
+    <p id="modifyValTip" class="a-center hidden"></p>
+    <label for="modifyValInput">修改值为：</label>
+    <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="modifyValInput" name="newValInput"/>
+    <p id="modifyValErrorTip" class="red a-center hidden"></p>
+</div>
+
+<div id="deleteAllDiv" title="批量删除" class="hidden">
+    <fieldset>
+        <label for="timeStartDel"><span class="red">* </span>起始时间：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="timeStartDel" name="timeStartDel"/>
+        <p id="timeStartDelTip" class="hidden a-center"></p>
+        <label for="timeEndDel"><span class="red">* </span>结束时间：</label>
+        <input type="text" class="inputbox ui-widget-content ui-corner-all" value="" id="timeEndDel" name="timeEndDel"/>
+        <p id="timeEndDelTip" class="hidden a-center"></p>
+    </fieldset>
+</div>
+
+<input type="hidden" id="valMinRange" value="" />
+<input type="hidden" id="valMaxRange" value="" />
+
+<script type="text/javascript">
+    $(function () {
+        var global_totalPages = -1;
+        $("#startTime").datetimepicker();
+        $("#endTime").datetimepicker();
+        $("#timeInput").datetimepicker();
+        $("#timeStart").datetimepicker();
+        $("#timeEnd").datetimepicker();
+        $("#timeStartDel").datetimepicker();
+        $("#timeEndDel").datetimepicker();
+        $("#displayType").buttonset();
+        $("#displayGrain").buttonset();
+        $("#deleteAllButton").buttonset();
+        $("#timeInput").change(function () {
+            var selectedDateTime = $.trim($(this).val());
+            if (selectedDateTime == "") {
+                return;
+            }
+            $.getJSON('@Url.Action("QueryValRange", "Information")', {
+                analogId: $("#selectAnalogId").val(),
+                inputDateTime: selectedDateTime
+            }, function (data) {
+                if (data == null) {
+                    $("#dataDiv").hide();
+                    $("#newValErrorTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').slideDown("fast");
+                    return;
+                }
+                if ($.isEmptyObject(data)) {
+                    $("#newValErrorTip").html("该时刻已存在值，请重新输入时间").slideDown("fast");
+                } else {
+                    $("#valMinRange").val(data.min);
+                    $("#valMaxRange").val(data.max);
+                    if (data.min != "" || data.max != "") {
+                        var str = "";
+                        if (data.min != "") {
+                            str = "添加值需大于 " + data.min;
+                        }
+                        if (data.max != "") {
+                            if (str != "") {
+                                str += (" 并且小于 " + data.max);
+                            } else {
+                                str = "添加值需小于 " + data.max;
+                            }
+                        }
+                        $("#newValTip").html(str).slideDown("fast");
+                        $("#newValErrorTip").slideUp("fast");
+                    } else {
+                        $("#newValTip").html("该测点没有历史值，请填加新值").slideDown("fast");
+                        $("#newValErrorTip").slideUp("fast");
+                    }
+                    $("#newValue").val("").attr("disabled", false);
+                }
+            });
+        });
+        $("#startTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#chartDataDiv").hide();
+            $("#noDataDiv").hide();
+        });
+        $("#endTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#chartDataDiv").hide();
+        });
+        $("input[name='displayRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#chartDataDiv").hide();
+            $("#noDataDiv").hide();
+        });
+        $("input[name='grainRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            $("#chartDataDiv").hide();
+            $("#noDataDiv").hide();
+        });
+        $("#myForm").validate({
+            rules: {
+                startTime: {
+                    required: true
+                },
+                endTime: {
+                    required: true
+                }
+            },
+            messages: {
+                startTime: {
+                    required: "起始时间不能为空"
+                },
+                endTime: {
+                    required: "结束时间不能为空"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (Date.parse($.trim($("#startTime").val().replace(/-/g, "/")) + ":00") > Date.parse($.trim($("#endTime").val().replace(/-/g, "/")) + ":00")) {
+                    $("#endTime").parent().next().html('<label class="error" for="startTime" generated="true">结束时间不能大于开始时间</label>');
+                    return false;
+                }
+                var displayType = $("input[name='displayRadio']:checked").val();
+                var displayGrain = $("input[name='grainRadio']:checked").val();
+                if (displayType == "list") {
+                    global_totalPages = -1;
+                    pageClick(1);
+                }
+                else {
+                    query(displayType, displayGrain);
+                }
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        function pageClick(pageIndex) {
+            var grain = $("input[name='grainRadio']:checked").val();
+            var gra;
+            if(grain == "orig")
+                gra = 0;
+            else if(grain == "hour")
+                gra = 1;
+            else
+                gra = 2;
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("QueryEnergyHistoryAjax", "Information")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                analogNo: $("#pointID").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val(),
+                granularity: gra
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages == -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("当前查询范围没有数据");
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").show();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#resultDataDiv").html("");
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                $("#dataTemplate").tmpl(jsonData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                    }
+                }).appendTo("#resultDataDiv");
+                $("#dataDiv").show();
+            });
+        }
+
+        var statisChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "StatisticsChart", 700, 500, "White");
+        var processChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "ProcessedChart", 700, 500, "White");
+        function query(type, grain) {
+        $("#chartDataDiv1").children().remove();
+        $("#chartDataDiv2").children().remove();
+            var gra;
+            if(grain == "orig")
+                gra = 0;
+            else if(grain == "hour")
+                gra = 1;
+            else
+                gra = 2;
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#dataDiv").hide();
+            $("#chartDataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("QueryAllEnergyHistoryAjax", "Information")', {
+                analogNo: $("#pointID").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val(),
+                granularity: gra
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (jsonData.data.length == 0) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    return;
+                }
+                    
+                var xmlStr;
+                var xmlStr2;
+                if (type == "column") {
+                    xmlStr = util_templateToChartXml("columnChartTemplate", jsonData);
+                }
+                else {
+                    xmlStr = util_templateToChartXml("lineChartTemplate", jsonData);
+                }
+                statisChart.setDataXml(xmlStr);
+                $("#dataDiv").hide();
+                $("#noDataDiv").hide();
+                $("#chartDataDiv").show();
+                statisChart.render("chartDataDiv1");
+
+                if(gra==1||gra==2){
+                    if (type == "column") {
+                        xmlStr2 = util_templateToChartXml("columnChartProcessTemplate", jsonData);
+                    }
+                    else {
+                        xmlStr2 = util_templateToChartXml("lineChartProcessTemplate", jsonData);
+                    }
+                    processChart.setDataXml(xmlStr2);
+                    processChart.render("chartDataDiv2");
+                }
+            });
+
+        }
+        /*
+        $("#timeStart").click(function () {
+        $("#timeStartTip").hide();
+        }
+
+        $("#timeEnd").click(function () {
+        $("#timeEndTip").hide();
+        }
+
+        $("#increaseValue").click(function () {
+        $("#increaseValueTip").hide();
+        }
+        */
+
+        $("#modifyButton").click(function () {
+            /*
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            if (startTime == "") {
+            alert("请选择起始时间！");
+            return;
+            }
+            if (endTime == "") {
+            alert("请选择结束时间");
+            return;
+            }
+            if (Date.parse($.trim($("#startTime").val().replace(/-/g, "/")) + ":00") > Date.parse($.trim($("#endTime").val().replace(/-/g, "/")) + ":00")) {
+            alert("起始时间不能晚于结束时间。")
+            return;
+            }
+            */
+            $("#timeStart").val("");
+            $("#timeStartTip").hide();
+            $("#timeEnd").val("");
+            $("#timeEndTip").hide();
+            $("#increaseValue").val("");
+            $("#increaseValueTip").hide();
+            $("#modifyValByTimePeriod").dialog({
+                modal: true,
+                width: 500,
+                resizable: false,
+                buttons: {
+                    '修改': function () {
+                        if (/^\s*$/.test($("#timeStart").val()) == true) {
+                            $("#timeStartTip").html("起始时间不能为空").slideDown();
+                            return;
+                        }
+                        if (/^\s*$/.test($("#timeEnd").val()) == true) {
+                            $("#timeEndTip").html("结束时间不能为空").slideDown();
+                            return;
+                        }
+                        if (/^-?\d+(\.\d+)?$/.test($("#increaseValue").val()) == false) {
+                            $("#increaseValueTip").html("添加值必须为数字").slideDown();
+                            return;
+                        }
+                        if (Date.parse($.trim($("#timeStart").val().replace(/-/g, "/")) + ":00") > Date.parse($.trim($("#timeEnd").val().replace(/-/g, "/")) + ":00")) {
+                            $("#timeEndTip").html("起始时间不能晚于结束时间").slideDown();
+                            return;
+                        }
+                        $(".ui-dialog-buttonpane button:contains('修改')").button('disable');
+                        $("#timeStartTip").slideUp();
+                        $("#timeEndTip").slideUp();
+                        $("#increaseValueTip").slideUp();
+                        $("#increaseValueTip").html('修改操作进行中，请稍候... ...').show();
+                        $.getJSON('@Url.Action("ModifyAnalogHistoryByTimePeriod","Information")', {
+                            analogNo: $("#pointID").val(),
+                            startTime: $("#timeStart").val(),
+                            endTime: $("#timeEnd").val(),
+                            value: $("#increaseValue").val()
+                        }, function (jsonData) {
+                            if (jsonData == null) {
+                                $("#increaseValueTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                                return;
+                            }
+                            if (!jsonData.ifSucceed) {
+                                $("#increaseValueTip").html("该测点在查询范围内没有数据").slideDown("fast");
+                                $(".ui-dialog-buttonpane button:contains('修改')").button('enable');
+                            } else {
+                                $("#modifyValByTimePeriod").dialog("close");
+                                alert("修改成功！");
+                                refresh();
+                            }
+                        })
+                    }
+                }
+            });
+        });
+
+        $("#deleteAllButton").click(function () {
+            /*
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            if (startTime == "") {
+            alert("请选择起始时间！");
+            return;
+            }
+            if (endTime == "") {
+            alert("请选择结束时间");
+            return;
+            }
+            if (Date.parse($.trim($("#startTime").val().replace(/-/g, "/")) + ":00") > Date.parse($.trim($("#endTime").val().replace(/-/g, "/")) + ":00")) {
+            alert("起始时间不能晚于结束时间。")
+            return;
+            }
+            */
+            $("#timeStartDel").val("");
+            $("#timeStartDelTip").hide();
+            $("#timeEndDel").val("");
+            $("#timeEndDelTip").hide();
+            $("#deleteAllDiv").dialog({
+                modal: true,
+                width: 500,
+                resizable: false,
+                buttons: {
+                    '删除': function () {
+                        if (/^\s*$/.test($("#timeStartDel").val()) == true) {
+                            $("#timeStartDelTip").html("起始时间不能为空").slideDown();
+                            return;
+                        }
+                        if (/^\s*$/.test($("#timeEndDel").val()) == true) {
+                            $("#timeEndDelTip").html("结束时间不能为空").slideDown();
+                            return;
+                        }
+                        if (Date.parse($.trim($("#timeStartDel").val().replace(/-/g, "/")) + ":00") > Date.parse($.trim($("#timeEndDel").val().replace(/-/g, "/")) + ":00")) {
+                            $("#timeEndDelTip").html("起始时间不能晚于结束时间").slideDown();
+                            return;
+                        }
+                        $(".ui-dialog-buttonpane button:contains('删除')").button('disable');
+                        $("#timeStartDelTip").slideUp();
+                        $("#timeEndDelTip").slideUp();
+                        $("#timeEndDelTip").html('修改操作进行中，请稍候。。。。。').show();
+                        $.getJSON('@Url.Action("AICountByTimePeriod","Information")', {
+                            analogNo: $("#pointID").val(),
+                            startTime: $("#timeStartDel").val(),
+                            endTime: $("#timeEndDel").val()
+                        }, function (jsonData) {
+                            if (jsonData == null) {
+                                $("#timeEndDelTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                                return;
+                            }
+                            if (jsonData.AICount == 0) {
+                                $("#timeEndDelTip").html("您查询的时间范围内没有历史值").slideDown("fast");
+                                $(".ui-dialog-buttonpane button:contains('删除')").button('enable');
+                                return;
+                            } else {
+                                var confirmMsg = "您确认将" + $("#timeStartDel").val() + "到" + $("#timeEndDel").val() + "之间的" + jsonData.AICount + "个历史值全部删除？";
+                                if (confirm(confirmMsg)) {
+                                    $.getJSON('@Url.Action("DeleteAnalogHistoryByTimePeriod","Information")', {
+                                        analogNo: $("#pointID").val(),
+                                        startTime: $("#timeStartDel").val(),
+                                        endTime: $("#timeEndDel").val()
+                                    }, function (jsonData) {
+                                        if (jsonData == null) {
+                                            $("#timeEndDelTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                                            return;
+                                        }
+                                        if (jsonData.ifSucceed) {
+                                            $("#deleteAllDiv").dialog("close");
+                                            alert("删除成功！");
+                                            refresh();
+                                        } else {
+                                            $("#timeEndDelTip").html("删除失败").slideDown("fast");
+                                            $(".ui-dialog-buttonpane button:contains('删除')").button('enable');
+                                        }
+                                    })
+                                }
+                            }
+
+                        })
+                    }
+                }
+            });
+
+        });
+
+        $("#addButton").click(function () {
+            var pointID = $("#selectAnalogId").val();
+            $("#timeInput").val("");
+            $("#newValue").attr("disabled", true).val("");
+            $("#newValTip").hide();
+            $("#newValErrorTip").hide();
+            $("#newValDiv").dialog({
+                modal: true,
+                width: 500,
+                resizable: false,
+                buttons: {
+                    '添加': function () {
+                        if (/^-?\d+(\.\d+)?$/.test($("#newValue").val()) == false) {
+                            $("#newValErrorTip").html("添加值必须为数字").slideDown();
+                            return;
+                        }
+                        if (+$("#valMinRange").val() != "" && +$("#newValue").val() <= +$("#valMinRange").val()) {
+                            $("#newValTip").animate({
+                                "color": "red"
+                            }, "slow").animate({
+                                "color": "black"
+                            }, "slow");
+                            return;
+                        }
+                        if (+$("#valMaxRange").val() != "" && +$("#newValue").val() >= +$("#valMaxRange").val()) {
+                            $("#newValTip").animate({
+                                "color": "red"
+                            }, "slow").animate({
+                                "color": "black"
+                            }, "slow");
+                            return;
+                        }
+                        $(".ui-dialog-buttonpane button:contains('添加')").button('disable');
+                        $("#newValErrorTip").slideUp();
+                        $.getJSON('@Url.Action("AddEnergyHistoryAjax", "Information")', {
+                            analogNo: pointID,
+                            time: $("#timeInput").val(),
+                            value: $("#newValue").val()
+                        }, function (jsonData) {
+                            if (jsonData == null) {
+                                $("#newValErrorTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                                return;
+                            }
+                            if (!jsonData.ifSucceed) {
+                                $("#newValue").val("");
+                                $("#newValErrorTip").html("添加不成功，检查您输入的新值是否符合要求！").slideDown("fast");
+                                $(".ui-dialog-buttonpane button:contains('添加')").button('enable');
+                            } else {
+                                $("#timeInput").val("");
+                                $("#newValue").val("");
+                                $("#newValErrorTip").html("添加成功！ 您可以继续添加。").slideDown("fast");
+                                $(".ui-dialog-buttonpane button:contains('添加')").button('enable');
+                                refresh();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        function refresh() {
+            if ($("#resultDiv").is(":visible")) {
+                var displayType = $("input[name='displayRadio']:checked").val();
+                var displayGrain = $("input[name='grainRadio']:checked").val();
+                if (displayType == "list") {
+                    global_totalPages = -1;
+                    pageClick(1);
+                }
+                else {
+                    query(displayType, displayGrain);
+                }
+            }
+        }
+        var pointID = $("#selectAnalogId").val();
+        $.getJSON('@Url.Action("GetParentPointByAnalogNo", "Information")', {
+            AnalogNo: pointID
+        }, function (jsonData) {
+            setRelationDataDiv(jsonData.pointList);
+        });
+    });
+
+    function setRelationDataDiv(pointList) {
+        $("#noRelationDataDiv").show();
+        $("#relationDataDiv").hide();
+        if(pointList.length==0){
+            return;
+        }
+        var current = "relationDataTree";
+        var next;
+        $("#"+current).children().remove();
+
+        for (var i = pointList.length-1; i > 0; i--) {
+            next = pointList[i].pointID;
+            $("#" + current).append("<li id='"+pointList[i].pointLevel+"_"+pointList[i].pointID+"' class='liOpen' ><span class='bullet'>&nbsp; </span>"+
+                "<span>" + pointList[i].pointName + " [" + pointList[i].pointID + "]" + " </span><ul id='" + next + "'></ul></li>");
+            if(i!=pointList.length-1){
+                if(pointList[i].pointIsCount==1)
+                    $("#" + current+" .bullet").append("<input type='checkbox' disabled='true' checked />");
+                else
+                    $("#" + current+" .bullet").append("<input type='checkbox' disabled='true' />");
+            }
+            current = next;
+        }
+        if (pointList[0].pointCptFlag == 1){
+            $("#" + current).append("<li id='"+pointList[0].pointLevel+"_"+pointList[0].pointID+"' class='liBullet'><span class='bullet'>&nbsp; </span><span id='"+pointList[0].pointID+"' class='child pointer' style='color:red;'>" + pointList[0].pointName + " [" + pointList[0].pointID + "]" + " </span></li>");
+        }
+        else {
+            $("#" + current).append("<li id='"+pointList[0].pointLevel+"_"+pointList[0].pointID+"' class='liClosed'><span class='bullet'>&nbsp; </span><span id='"+pointList[0].pointID+"' class='child pointer' style='color:red;'>" + pointList[0].pointName + " [" + pointList[0].pointID + "]" + " </span>"+
+                "<ul class='noRender'><li class='liBullet'><span class='bullet'>&nbsp;</span><span><img src='@Url.Content("~/Content/images/loading_small.gif")' alt='Loading'/> 加载中...</span></li></ul></li>");
+        }
+        if(pointList.length-1!=0){
+            if(pointList[0].pointIsCount==1)
+                $("#" + current+" .bullet").append("<input type='checkbox' disabled='true' checked />");
+            else
+                $("#" + current+" .bullet").append("<input type='checkbox' disabled='true' />");
+        }
+        $(".liOpen .bullet, .liClosed .bullet").toggle(
+                function () {
+                    $(this).parent().attr("class", "liOpen");
+                },
+                function () {
+                    $(this).parent().attr("class", "liClosed");
+                }
+            );
+        $(".liClosed .bullet").click(function () {
+            renderSubTree($(this));
+        });
+        $(".child").click(function(){
+            showChildChart($(this));
+        });
+        $("#noRelationDataDiv").hide();
+        $("#relationDataDiv").show();
+    }
+
+    function renderSubTree(clickedObj) {
+        var ul = clickedObj.next().next("ul");
+        if (ul.length == 1 && ul.attr("class") == "noRender") {
+            var strs = clickedObj.parent().attr("id").split("_");
+            var dataLevel = strs[0];
+            var dataID = strs[1];
+            $.getJSON('@Url.Action("GetMeasurePointByParentNoAjax", "Information")', {
+                ParentNo: dataID, Level: dataLevel
+            }, function (jsonData) {
+                renderSubTreeHtml(jsonData, clickedObj, ul);
+            });
+        }
+    }
+
+    function renderSubTreeHtml(data, clickedObj, ul) {
+        if (data.ifSucceed == true &&data.data.length>0) {
+            ul.html($("#relationDataTemplate").tmpl(data.data));
+            $(".liOpen .bullet, .liClosed .bullet", ul).toggle(
+                function () {
+                    $(this).parent().attr("class", "liOpen");
+                },
+                function () {
+                    $(this).parent().attr("class", "liClosed");
+                }
+            );
+            $(".liOpen .bullet, .liClosed .bullet", ul).click(function () {
+                renderSubTree($(this));
+            });
+            $(".child").click(function(){
+                showChildChart($(this));
+            });
+        } else {
+            ul.html('<li class="liBullet"><span class="bullet">&nbsp;</span> 没有数据 </li>');
+        }
+        ul.removeAttr("class");
+    }
+
+
+    function modifyVal(updateTimeLongVal) {
+        $.getJSON('@Url.Action("QueryValRangeAlt", "Information")', {
+            analogId: $("#selectAnalogId").val(),
+            inputDateTimeLong: updateTimeLongVal
+        }, function (data) {
+            if (data == null) {
+                $("#dataDiv").hide();
+                $("#modifyValErrorTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').slideDown("fast");
+                return;
+            }
+            if ($.isEmptyObject(data)) {
+                $("#modifyValErrorTip").html("该时刻已存在值，请重新输入时间").slideDown("fast");
+            } else {
+                $("#valMinRange").val(data.min);
+                $("#valMaxRange").val(data.max);
+                var str = "";
+                if (data.min != "") {
+                    str = "添加值需大于 " + data.min;
+                }
+                if (data.max != "") {
+                    if (str != "") {
+                        str += (" 并且小于 " + data.max);
+                    } else {
+                        str = "添加值需小于 " + data.max;
+                    }
+                }
+                $("#modifyValTip").html(str).show();
+                $("#modifyValErrorTip").hide();
+                $("#modifyValInput").val("");
+
+                $("#modifyValDiv").dialog({
+                    modal: true,
+                    width: 400,
+                    resizable: false,
+                    buttons: {
+                        '修改': function () {
+                            var dialogObj = $(this);
+                            if (/^-?\d+(\.\d+)?$/.test($("#modifyValInput").val()) == false) {
+                                $("#modifyValErrorTip").html("添加值必须为数字").slideDown();
+                                return;
+                            }
+                            if (+$("#valMinRange").val() != "" && +$("#modifyValInput").val() <= +$("#valMinRange").val()) {
+                                $("#modifyValTip").animate({
+                                    "color": "red"
+                                }, "slow").animate({
+                                    "color": "black"
+                                }, "slow");
+                                return;
+                            }
+                            if (+$("#valMaxRange").val() != "" && +$("#modifyValInput").val() >= +$("#valMaxRange").val()) {
+                                $("#modifyValTip").animate({
+                                    "color": "red"
+                                }, "slow").animate({
+                                    "color": "black"
+                                }, "slow");
+                                return;
+                            }
+                            $.getJSON('@Url.Action("ModifyAnalogHistory", "Information")', {
+                                analogNo: $("#selectAnalogId").val(),
+                                timeLongVal: updateTimeLongVal,
+                                value: $("#modifyValInput").val()
+                            }, function (jsonData) {
+                                if (jsonData == null) {
+                                    $("#modifyValErrorTip").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                                    return;
+                                }
+                                if (!jsonData.isSucceed) {
+                                    $("#modifyValInput").val("");
+                                    $("#modifyValErrorTip").html("修改失败，检查您输入的新值是否符合要求！").slideDown("fast");
+                                } else {
+                                    alert("修改成功！请重新查询");
+                                    $("#resultDiv").slideUp("fast");
+                                    $("#dataDiv").hide();
+                                    dialogObj.dialog("close");
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function showChildChart(clickedObj){
+        var name = clickedObj.html().split(" ");
+        var id = clickedObj.attr("id");
+        $("#pointID").val(id);
+        $("#pointName").val(name[0]);
+        if($("#resultDiv").is(":visible")){
+            $("#myForm").submit();
+        }
+    }
+
+    function deleteVal(timeLongVal) {
+        if (confirm("确认删除？")) {
+            $.getJSON('@Url.Action("DeleteAnalogHistory", "Information")', {
+                "analogNo": $("#selectAnalogId").val(),
+                "timeLongVal": timeLongVal
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    alert("删除失败，没有权限或登录超时，尝试重新登录！");
+                    return;
+                }
+                if (!jsonData.isSucceed) {
+                    alert("删除失败，尝试刷新后重新操作！");
+                } else {
+                    alert("删除成功！请重新查询！");
+                    $("#resultDiv").slideUp("fast");
+                    $("#dataDiv").hide();
+                }
+            });
+        }
+    }
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}"><td>${Time}</td><td>${ValStr}</td>
+    <td><a onclick="modifyVal('${RealTimeLong}')" href="javascript:void(0)">修改</a> 
+    <a onclick="deleteVal('${RealTimeLong}')" href="javascript:void(0)">删除</a></td></tr>
+</script>
+<script id="columnChartTemplate" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+            <vc:Title Text="测点历史值" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+        <vc:Chart.AxesX>
+            <vc:Axis Title="时间"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis StartFromZero="False" Title="表值"/>
+        </vc:Chart.AxesY>
+        <vc:Chart.Series>
+        <vc:DataSeries RenderAs="Column">
+            <vc:DataSeries.DataPoints>
+                {{each data}}
+                    <vc:DataPoint AxisXLabel="${Time}" YValue="${ValStr}"/>
+                {{/each}}
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+<script id="columnChartProcessTemplate" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+            <vc:Title Text="测点历史变化" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+        <vc:Chart.AxesX>
+            <vc:Axis Title="时间"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis StartFromZero="False" Title="表值"/>
+        </vc:Chart.AxesY>
+        <vc:Chart.Series>
+        <vc:DataSeries RenderAs="Column">
+            <vc:DataSeries.DataPoints>
+                {{each processedData}}
+                    <vc:DataPoint AxisXLabel="${Time}" YValue="${ValStr}"/>
+                {{/each}}
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+<script id="lineChartTemplate" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+            <vc:Title Text="测点历史值" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+        <vc:Chart.AxesX>
+            <vc:Axis Title="时间"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis StartFromZero="False" Title="表值"/>
+        </vc:Chart.AxesY>
+        <vc:Chart.Series>
+        <vc:DataSeries RenderAs="Line">
+            <vc:DataSeries.DataPoints>
+                {{each data }}
+                    <vc:DataPoint AxisXLabel="${Time}" YValue="${ValStr}"/>
+                {{/each}}
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+<script id="lineChartProcessTemplate" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+            <vc:Title Text="测点历史变化" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+        <vc:Chart.AxesX>
+            <vc:Axis Title="时间"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis StartFromZero="False" Title="表值"/>
+        </vc:Chart.AxesY>
+        <vc:Chart.Series>
+        <vc:DataSeries RenderAs="Line">
+            <vc:DataSeries.DataPoints>
+                {{each processedData }}
+                    <vc:DataPoint AxisXLabel="${Time}" YValue="${ValStr}"/>
+                {{/each}}
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+<script id="chartTemplate2" type="text/x-jQuery-tmpl">
+<vc:chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" width="700" height="500" borderthickness="0" theme="Theme1" toolbarenabled="True">         
+<vc:chart.titles>             
+    <vc:title text="测点历史值" padding="0,0,0,5"></vc:title>         
+</vc:chart.titles>         
+<vc:chart.axesx>             
+    <vc:axis title="时间"></vc:axis>         
+</vc:chart.axesx>         
+<vc:chart.axesy>             
+    <vc:axis title="表值"></vc:axis>         
+</vc:chart.axesy>         
+<vc:chart.series>         
+    <vc:dataseries renderas="Column">             
+        <vc:dataseries.datapoints>        
+            <vc:datapoint axisxlabel="2013-01-06 00:02" yvalue="259612.1"></vc:datapoint> 
+            <vc:datapoint axisxlabel="2013-01-06 00:07" yvalue="259613.0"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 00:12" yvalue="259613.9"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 00:17" yvalue="259614.8"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 00:22" yvalue="259615.8"></vc:datapoint>                        
+            <vc:datapoint axisxlabel="2013-01-06 00:27" yvalue="259616.6"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 00:34" yvalue="259617.9"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 00:42" yvalue="259619.4"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 00:49" yvalue="259621.0"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 00:54" yvalue="259622.1"></vc:datapoint>                        
+            <vc:datapoint axisxlabel="2013-01-06 00:59" yvalue="259622.9"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:04" yvalue="259623.7"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:09" yvalue="259624.6"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:14" yvalue="259625.5"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:19" yvalue="259626.5"></vc:datapoint>                        
+            <vc:datapoint axisxlabel="2013-01-06 01:24" yvalue="259627.4"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:29" yvalue="259628.3"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:34" yvalue="259629.1"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:38" yvalue="259630.2"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:43" yvalue="259631.2"></vc:datapoint>                        
+            <vc:datapoint axisxlabel="2013-01-06 01:48" yvalue="259632.0"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:53" yvalue="259632.9"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 01:58" yvalue="259633.8"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:03" yvalue="259634.9"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:08" yvalue="259636.0"></vc:datapoint>                        
+            <vc:datapoint axisxlabel="2013-01-06 02:13" yvalue="259637.1"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:18" yvalue="259638.0"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:23" yvalue="259638.8"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:28" yvalue="259639.7"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:33" yvalue="259640.7"></vc:datapoint>                        
+            <vc:datapoint axisxlabel="2013-01-06 02:37" yvalue="259641.5"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:42" yvalue="259642.4"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:47" yvalue="259643.4"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:54" yvalue="259644.8"></vc:datapoint>                                      
+            <vc:datapoint axisxlabel="2013-01-06 02:59" yvalue="259645.7"></vc:datapoint>                        
+        </vc:dataseries.datapoints>         
+    </vc:dataseries>         
+</vc:chart.series>     
+</vc:chart>
+</script>
+<script id="relationDataTemplate" type="text/x-jQuery-tmpl">
+    {{if pointCptFlag!=1}}
+    <li id="${pointLevel}_${pointID}" class="liClosed">
+    <span class="bullet">&nbsp; 
+    {{if pointIsCount==1}}
+    <input type="checkbox" disabled="true" checked />
+    {{else}}
+    <input type="checkbox" disabled="true" />
+    {{/if}}
+    </span>
+    <span id="${pointID}" class="child pointer">${pointName} [${pointID}]</span>
+        <ul class="noRender">
+        <li class="liBullet">
+        <span class="bullet">&nbsp;</span>
+        <span><img alt="Loading" src="@Url.Content("~/Content/images/loading_small.gif")"> 加载中... </span>
+        </li>
+        </ul>
+    </li>
+    {{else}}
+    <li id="${pointLevel}_${pointID}" class="liBullet">
+    <span class="bullet">&nbsp; 
+    {{if pointIsCount==1}}
+    <input type="checkbox" disabled="true" checked />
+    {{else}}
+    <input type="checkbox" disabled="true" />
+    {{/if}}
+    </span>
+    <span id="${pointID}" class="child pointer">${pointName} [${pointID}]</span>
+    </li>
+    {{/if}}
+</script>

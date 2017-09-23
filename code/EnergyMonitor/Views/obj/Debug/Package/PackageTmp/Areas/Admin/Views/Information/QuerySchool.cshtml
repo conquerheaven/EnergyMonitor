@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "校区管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <style type="text/css">
+        #resultDiv #dataDiv table{min-width: 600px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>校区管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li class="current"><a>查询校区</a></li>
+		    <li><a href="@Url.Action("AddSchool", "Information")">增加校区</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="#" method="post" >
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li>校区名称：</li>
+                    <li><input id="schoolName" name="schoolName" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>校区代码：</li>
+                    <li><input id="schoolCode" name="schoolCode" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" name="" type="button" value="  查  询  " class="btn m-button"/></li>
+         </ul>
+        </form>
+
+        <fieldset id="resultDiv" class="hidden"><legend>查询结果</legend>
+            <div id="dataDiv">
+            <table>
+                <thead><tr>
+                    <th>校区名称</th>
+                    <th>校区代码</th>
+                    <th>校区地址</th>
+                    <th>校区备注</th>
+                    <th>建筑面积（平方米）</th>
+                    <th>占地面积（亩）</th>
+                    <th>修改</th>
+                    <th>删除</th>
+                </tr></thead>
+                <tbody id="resultDataDiv">
+                </tbody>
+            </table>
+            <div id="pager"></div>
+            @*<input id="exportExcel" name="exportExcel" type="button" value=" 导出Excel " class="btn" />*@
+            </div>
+            <div id="noDataDiv">当前查询范围没有数据</div>
+        </fieldset>
+    </div>
+    </div>
+
+</div></div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#schoolCode").change(function () {
+            $("#resultDiv").slideUp("fast");
+        });
+        $("#schoolName").change(function () {
+            $("#resultDiv").slideUp("fast");
+        });
+
+        $("#exportExcel").click(function () {
+            var parameters = "?schoolCode=" + $("#schoolCode").val()
+                             + "&schoolName=" + $("#schoolName").val();
+            window.open('@Url.Action("GetSchoolExcel","Information")' + parameters, "_self");
+        });
+
+        $("#queryButton").click(function () {
+            if ($("#resultDiv").is(":hidden")) {
+                global_totalPages = -1;
+                pageClick(1);
+            }
+        })
+
+        var global_totalPages = -1;
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />')
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("QuerySchoolAjax", "Information")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                schoolCode: $("#schoolCode").val(),
+                schoolName: $("#schoolName").val()
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages = -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                $("#resultDataDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#dataDiv").show();
+            });
+        }
+    });
+
+    function deleteSchool(schoolID) {
+        $.getJSON('@Url.Action("QuerySchoolAreaCountAjax", "Information")', {
+            schoolID: schoolID
+        }, function (jsonData) {
+            if (jsonData == 0) {
+                if (confirm("确认删除?")) {
+                    $.getJSON('@Url.Action("DeleteSchoolAjax", "Information")', {
+                        schoolID: schoolID
+                    }, function (jsonData) {
+                        if (jsonData == true) {
+                            alert("删除成功");
+                            $("#resultDiv").slideUp("fast");
+                        } else {
+                            alert("删除失败，请检查您是否拥有权限或者网络有问题！");
+                        }
+                    });
+                }
+            } else {
+                alert("所选删除校区包含" + jsonData + "个区域数据，不能删除，请先删除其拥有的区域数据再删除该校区！");
+            }
+        });
+    }
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}"><td>${SI_Name}</td><td>${SI_Code}</td><td>${SI_Address}</td><td>${SI_Remark}</td><td>${SI_BuildingArea}</td><td>${SI_GroudArea}</td>
+    <td><a href='@Url.Action("ModifySchool", "Information")?s=${SI_ID}'>修改</a></td>
+    <td><a href='#' onclick="deleteSchool('${SI_ID}')">删除</a></td>
+    </tr>
+</script>

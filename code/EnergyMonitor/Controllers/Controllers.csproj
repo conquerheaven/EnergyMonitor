@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{923C3B8F-B737-4B60-9E90-41D876B6F17D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EnergyMonitor.Controllers</RootNamespace>
+    <AssemblyName>Controllers</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_MSIL\System.Web.Mvc\v4.0_3.0.0.0__31bf3856ad364e35\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Reporting, Version=5.1.11.713, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Admin\AnalysisController.cs" />
+    <Compile Include="Admin\BuildingGuanghuaController.cs" />
+    <Compile Include="Admin\EnergyComptrollerController.cs" />
+    <Compile Include="Admin\ExceptionInfoController.cs" />
+    <Compile Include="Admin\Filters\AuthenticationFilter.cs" />
+    <Compile Include="Admin\GlobalController.cs" />
+    <Compile Include="Admin\PublicityController.cs" />
+    <Compile Include="Admin\ReportController.cs" />
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixA1.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixA1.Designer.cs">
+      <DependentUpon>BuildingAppendixA1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixA2.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixA2.Designer.cs">
+      <DependentUpon>BuildingAppendixA2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixA3.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixA3.Designer.cs">
+      <DependentUpon>BuildingAppendixA3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB1.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB1.Designer.cs">
+      <DependentUpon>BuildingAppendixB1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB2.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB2.Designer.cs">
+      <DependentUpon>BuildingAppendixB2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB3.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB3.Designer.cs">
+      <DependentUpon>BuildingAppendixB3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB4.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB4.Designer.cs">
+      <DependentUpon>BuildingAppendixB4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB5.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB5.Designer.cs">
+      <DependentUpon>BuildingAppendixB5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB6.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB6.Designer.cs">
+      <DependentUpon>BuildingAppendixB6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB7.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB7.Designer.cs">
+      <DependentUpon>BuildingAppendixB7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB8.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingAppendixB8.Designer.cs">
+      <DependentUpon>BuildingAppendixB8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingDetailReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingDetailReport.Designer.cs">
+      <DependentUpon>BuildingDetailReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingElecMonth.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingElecMonth.Designer.cs">
+      <DependentUpon>BuildingElecMonth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingEnergyMonth.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingEnergyMonth.Designer.cs">
+      <DependentUpon>BuildingEnergyMonth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\ReportManagement.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\ReportManagement.Designer.cs">
+      <DependentUpon>ReportManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingWaterMonth.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingWaterMonth.Designer.cs">
+      <DependentUpon>BuildingWaterMonth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingElecDay.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\BuildingElecDay.Designer.cs">
+      <DependentUpon>BuildingElecDay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\AreaWaterMonth.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\AreaWaterMonth.Designer.cs">
+      <DependentUpon>AreaWaterMonth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\ThirdPointMonth.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Admin\ReportsTemplate\ThirdPointMonth.Designer.cs">
+      <DependentUpon>ThirdPointMonth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\UtilController.cs" />
+    <Compile Include="Admin\StatisticsController.cs" />
+    <Compile Include="Admin\SystemController.cs" />
+    <Compile Include="Admin\InformationController.cs" />
+    <Compile Include="Admin\EnergyController.cs" />
+    <Compile Include="Admin\Filters\AdminFilter.cs" />
+    <Compile Include="Admin\HomeController.cs" />
+    <Compile Include="Admin\SharedController.cs" />
+    <Compile Include="Admin\UserController.cs" />
+    <Compile Include="Common\HomesController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+    <Compile Include="User\HomeController.cs" />
+    <Compile Include="User\EnergyController.cs" />
+    <Compile Include="Utils\HttpPostedFileBaseExtensions.cs" />
+    <Compile Include="Utils\Filters\GlobalizationFilter.cs" />
+    <Compile Include="User\SharedController.cs" />
+    <Compile Include="User\UserAreaRegistration.cs" />
+    <Compile Include="User\UserController.cs" />
+    <Compile Include="User\Filters\UserFilter.cs" />
+    <Compile Include="Utils\ExcelControllerExtensions.cs" />
+    <Compile Include="Utils\ExcelResult.cs" />
+    <Compile Include="Utils\HtmlHelperExtensions.cs" />
+    <Compile Include="Utils\Pager.cs" />
+    <Compile Include="Utils\ResourcesControllerExtensions.cs" />
+    <Compile Include="Utils\Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{96DB1077-7D69-454C-9832-A47CFAD7321F}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>EnergyMonitor.Controllers.Properties</CustomToolNamespace>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixA1.resx">
+      <DependentUpon>BuildingAppendixA1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixA2.resx">
+      <DependentUpon>BuildingAppendixA2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixA3.resx">
+      <DependentUpon>BuildingAppendixA3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixB1.resx">
+      <DependentUpon>BuildingAppendixB1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixB2.resx">
+      <DependentUpon>BuildingAppendixB2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixB3.resx">
+      <DependentUpon>BuildingAppendixB3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixB4.resx">
+      <DependentUpon>BuildingAppendixB4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixB5.resx">
+      <DependentUpon>BuildingAppendixB5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixB6.resx">
+      <DependentUpon>BuildingAppendixB6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixB7.resx">
+      <DependentUpon>BuildingAppendixB7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingAppendixB8.resx">
+      <DependentUpon>BuildingAppendixB8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingDetailReport.resx">
+      <DependentUpon>BuildingDetailReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingDetailReport.zh-Hans.resx">
+      <DependentUpon>BuildingDetailReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingElecMonth.resx">
+      <DependentUpon>BuildingElecMonth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingElecMonth.zh-Hans.resx">
+      <DependentUpon>BuildingElecMonth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingEnergyMonth.resx">
+      <DependentUpon>BuildingEnergyMonth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\ReportManagement.resx">
+      <DependentUpon>ReportManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingWaterMonth.resx">
+      <DependentUpon>BuildingWaterMonth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingElecDay.resx">
+      <DependentUpon>BuildingElecDay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\BuildingElecDay.zh-Hans.resx">
+      <DependentUpon>BuildingElecDay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\AreaWaterMonth.resx">
+      <DependentUpon>AreaWaterMonth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ReportsTemplate\ThirdPointMonth.resx">
+      <DependentUpon>ThirdPointMonth.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

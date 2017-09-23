@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "能耗公示";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .span-tip{ border:1px black solid;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>能耗公示</h2></div>
+    <div class="contentbox">
+    <form id="myForm" action="#" method="post">
+    <ul class="em-form-ul">
+        <li>
+            <ul>
+                <li><span class="red">* </span>选择一个建筑： </li>
+                <li><input id="queryObj" name="queryObj" type="text" class="inputbox" readonly="readonly" value=""/></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li><span class="red">* </span>能耗分类： </li>
+                <li><input id="powerTypeName" name="powerTypeName" type="text" class="inputbox" readonly="readonly" value="电..."/></li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <ul>
+                <li><div id="dateTypeSet">
+                    <input type="radio" id="currentMonth" name="dateType" value="1" checked="checked" /><label for="currentMonth"> 当月 </label>
+                    <input type="radio" id="customDate" name="dateType" value="0" /><label for="customDate"> 自定义时间 </label>
+                </div></li>
+            </ul>
+            <ul>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li id="dateSelect" class="hidden">
+            <ul>
+                <li><span class="red">* </span>起始日期：</li>
+                <li><input id="startTime" name="startTime" type="text" class="inputbox" readonly="readonly" /></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li><span class="red">* </span>结束日期：</li>
+                <li><input id="endTime" name="endTime" type="text" class="inputbox" readonly="readonly" /></li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li><input id="queryButton" name="" type="submit" value="  生成公示  " class="btn m-button"/></li>
+     </ul>
+     </form>
+     
+     <fieldset id="resultDiv" class="hidden"><legend>公示结果</legend>
+        <h3></h3>
+     </fieldset>
+</div></div>
+<input type="hidden" id="buildingId" name="buildingId" value="0" />
+<input type="hidden" id="powerType" value=""/>
+
+<script type="text/javascript">
+    $(function () {
+
+        $("#dateTypeSet").buttonset();
+        $("#startTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#endTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#currentMonth").click(function () {
+            $("#dateSelect").slideUp("fast");
+            $("#resultDiv").slideUp("fast");
+        });
+        $("#customDate").click(function () {
+            $("#dateSelect").slideDown("fast");
+            $("#resultDiv").slideUp("fast");
+        });
+        $("#startTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+        });
+        $("#endTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+        });
+
+        $("#queryObj").click(function () {
+            $("#buildingSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var selectedObjs = $("#selectedBuilding option:selected");
+                        if (selectedObjs.length == 1) {
+                            var buildingFullName = $("#selectedSchool option:selected").html() + ">"
+                                           + $("#selectedSchoolArea option:selected").html() + ">"
+                                           + $("#selectedBuilding option:selected").html();
+                            $("#queryObj").val(buildingFullName);
+                            $("#buildingId").val($("#selectedBuilding").val());
+                            $("#resultDiv").slideUp("fast");
+                            $(this).dialog("close");
+                        } else {
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    }
+                }
+            });
+        });
+        $("#powerTypeName").click(function () {
+            $("#powerTreeDiv").dialog({
+                modal: true,
+                width: 500,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var tempName = "";
+                        var tempIDs = "";
+                        var selectedIndex = $("#powerTreeDiv").tabs('option', 'selected');
+                        var checkedObjs = $("#powerTreeDiv > .em-tree:eq(" + selectedIndex + ") div.checked");
+                        if (checkedObjs.length > 0) {
+                            checkedObjs.each(function (index, item) {
+                                if (tempName == "") {
+                                    tempName = $(item).next().html();
+                                }
+                                if (tempIDs == "") {
+                                    tempIDs = $(item).next().next().val();
+                                } else {
+                                    tempIDs += ("_" + $(item).next().next().val());
+                                }
+                            });
+                            $("#powerType").val(tempIDs);
+                            if (checkedObjs.length > 1) {
+                                $("#powerTypeName").val(tempName + " ... （" + checkedObjs.length + "）");
+                            } else {
+                                $("#powerTypeName").val(tempName);
+                            }
+
+                        } else {
+                            $("#treeDialogErrorTip").slideDown("fast");
+                            return;
+                        }
+                        $("#resultDiv").slideUp("fast");
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+        $("#myForm").validate({
+            rules: {
+                queryObj: {
+                    required: true
+                },
+                startTime: {
+                    required: function () { return $("#dateSelect").is(":visible"); }
+                },
+                endTime: {
+                    required: function () { return $("#dateSelect").is(":visible"); }
+                }
+            },
+            messages: {
+                queryObj: {
+                    required: "查询对象不能为空"
+                },
+                startTime: {
+                    required: "开始时间不能为空"
+                },
+                endTime: {
+                    required: "结束时间不能为空"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (Date.parse($("#startTime").val().replace(/-/g, "/")) > Date.parse($("#endTime").val().replace(/-/g, "/"))) {
+                    $("#endTime").parent().next().html('<label class="error" for="endTime" generated="true">结束时间不能大于开始时间</label>');
+                    return false;
+                }
+                if (!$("#resultDiv").is(":visible")) {
+                    var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />')
+                    $("#resultDiv > h3").html(loadingImg);
+                    $("#resultDiv").slideDown("fast");
+                    $.getJSON('@Url.Action("GetQueryElecAjax", "Publicity")', {
+                        dateType: $("input[name='dateType']:checked").val(),
+                        buildingId: $("#buildingId").val(),
+                        powerType: $("#powerType").val(),
+                        startTime: $("#startTime").val(),
+                        endTime: $("#endTime").val()
+                    }, function (jsonData) {
+                        if (jsonData != null) {
+                            if (+jsonData.sum < 0) {
+                                $("#resultDiv > h3").html("没有查询到数据，请重新查询!");
+                                return;
+                            }
+                            var htmlStr = "建筑【" + $("#queryObj").val() + "】";
+                            if ($("input[name='dateType']:checked").val() == 1) {
+                                htmlStr += "【当月】"
+                            } else {
+                                htmlStr += "从【" + $("#startTime").val() + "】到【" + $("#endTime").val() + "】";
+                            }
+                            htmlStr += "共【" + jsonData.days + "】天";
+                            if ($.trim($("#powerTypeName").val()) != "") {
+                                htmlStr += "用【" + $("#powerTypeName").val() + "】";
+                            } else {
+                                htmlStr += "用能";
+                            }
+                            if (jsonData.average != null) {
+                                htmlStr += "总值为【" + jsonData.sum + "】，单位建筑面积用【" + jsonData.average + "】" + "<br>";
+                                if (jsonData.list.length > 1) {
+                                    for (var i = 0; i < jsonData.list.length; i++) {
+                                        if (jsonData.list[i].powerTypeSum >= 0)
+                                        {
+                                            htmlStr += "【" + jsonData.list[i].powerTypeName + "】" + "总值为【" + jsonData.list[i].powerTypeSum + "】，单位建筑面积用【" + jsonData.list[i].average + "】" + "<br>";
+                                        }
+                                    }
+                                }
+                            } else {
+                                htmlStr += "总值为【" + jsonData.sum  + "】" + "<br>";
+                                if (jsonData.list.length > 1) {
+                                    for (var i = 0; i < jsonData.list.length; i++) {
+                                        if (jsonData.list[i].powerTypeSum >= 0)
+                                        {
+                                            htmlStr += "【" + jsonData.list[i].powerTypeName + "】" + "总值为【" + jsonData.list[i].powerTypeSum + "】" + "<br>";
+                                        }
+                                    }
+                                }
+                            }
+                            $("#resultDiv > h3").html(htmlStr);
+                        } else {
+                            $("#resultDiv > h3").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)');
+                        }
+
+                    });
+                }
+                return false;
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        $("#powerType").val(globalPowerFn_getElecStr());
+    });
+</script>
+@Html.Partial("_BuildingSelect")
+@Html.Partial("_PowerSelect")

@@ -1,0 +1,196 @@
+﻿@{
+    ViewBag.Title = "异常检测";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/Visifire.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/util.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        #analysisDiv div ul li{ margin-left:30px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>异常检测</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+	    <ul class="tab-ul">  
+		    <li><a href="@Url.Action("MachineException", "ExceptionInfo")">机器故障</a></li>  
+		    <li class="current"><a >断值</a></li>  
+		    <li><a href="@Url.Action("ValueDecline", "ExceptionInfo")">值突降</a></li>
+            <li><a href="@Url.Action("ValueIncrease", "ExceptionInfo")">值突增</a></li>
+            <li><a href="@Url.Action("SetEmailInfo", "ExceptionInfo")">邮箱设置</a></li>  
+            <li><a href="@Url.Action("SetMessageInfo", "ExceptionInfo")">短信设置</a></li>        
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="#" method="post">
+        <ul class="em-form-ul">
+               <li>
+                <ul>
+                    <li>是否分页显示：</li>
+                    <li>
+                        <div id="ifPageSet">
+                            <input type="radio" id="posPage" name="pageRadio" value="posPage" checked="checked" /><label for="posPage"> 分页 </label>
+                            <input type="radio" id="negPage" name="pageRadio" value="negPage" /><label for="negPage"> 不分页 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                 </ul>
+                 <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" name="" type="submit" value="  查  询  " class="btn m-button"/></li>                       
+         </ul>
+         </form>
+
+         <fieldset id="resultDiv" class="hidden left"><legend>检测结果</legend>
+            <div id="dataDiv">
+            <table id="dataTable" class="hidden" >
+                <thead>
+                    <tr>
+                        <th>测点编号</th>
+                        <th>测点名称</th>
+                        <th>异常产生日期</th>
+                        <th >异常类型</th>                       
+                    </tr>
+                </thead>
+                <tbody id="resultDataDiv">
+                </tbody>
+            </table>
+            <div id="chartDiv" class="hidden"></div>
+            <div id="pager"></div>           
+            </div>
+            <div id="noDataDiv">当前查询范围没有数据</div>
+         </fieldset>         
+         <div class="clear"></div>
+        </div>
+    </div>
+
+</div></div>
+
+<input type="hidden" id="objIDs" value="0" />
+<input type="hidden" id="objType" value="0"/>
+@*<input type="hidden" id="powerType" value=""/>*@
+
+<script type="text/javascript">
+    $(function () {   
+        $("#ifPageSet").buttonset();          
+        $("input[name='pageRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#analysisDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        
+        $("#myForm").validate({
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {              
+                if (!$("#resultDiv").is(":visible")) {
+                    var ifpage = $("input[name='pageRadio']:checked").val();
+                    if (ifpage == "posPage") {
+                        global_totalPages = -1;
+                        global_sum = -1;
+                        pageClick(1);
+                       // analyze();
+                    }
+                    else {
+                        query();
+                        //analyze();
+                    }
+                }
+                return false;
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });      
+
+        
+
+        var statisChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "StatisticsChart", 600, 400, "White");
+
+        var global_totalPages = -1;
+        var global_queryEndTime = null;
+        var global_sum = -1;       
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#dataDiv").hide();
+            $("#pager").show();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("GetDiscontinuousValueListAjax", "ExceptionInfo")', {               
+                 currentPage: pageIndex,
+                 totalPages: global_totalPages                     
+               }, function (jsonData) {
+                    if (jsonData == null) {
+                        $("#dataDiv").hide();
+                        $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                        return;
+                    }
+                    if (global_totalPages == -1) {
+                        global_totalPages = jsonData.totalPages;
+                        global_sum = jsonData.totalSum;
+                    }
+                    if (global_totalPages < 1) {
+                        $("#noDataDiv").html("当前查询范围没有数据").show();
+                        $("#dataDiv").hide();
+                        return;
+                    }
+                    $("#noDataDiv").hide();
+                    $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });                  
+                    $("#resultDataDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                        alternate: function (item) {
+                            return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                        }
+                    }));
+                    $("#dataTable").show();
+                    $("#chartDiv").hide();
+                    $("#dataDiv").show();
+                });         
+        }
+
+        function query() {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />')
+            $("#dataDiv").hide();
+            $("#pager").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            var renderType = $("input[name='renderRadio']:checked").val();
+            $.getJSON('@Url.Action("GetDiscontinuousValueListAjaxNoPage", "ExceptionInfo")', {                                                   
+               }, function (jsonData) {
+                    if (jsonData == null) {
+                        $("#dataDiv").hide();
+                        $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                        return;
+                    }
+                    if (jsonData.count == 0) {
+                        $("#noDataDiv").html("当前查询范围没有数据").show();
+                        $("#dataDiv").hide();
+                        return;
+                    }
+                    $("#noDataDiv").hide();                   
+                   $("#resultDataDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                        alternate: function (item) {
+                            return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                        }
+                    }));
+                    $("#dataTable").show();
+                    $("#chartDiv").hide();
+                    $("#dataDiv").show();
+                });            
+        } 
+    });
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+	<tr class="${$item.alternate($data)}"><td>${AnalogNo}</td><td>${AnalogName }</td><td>${NewTimeBlock}</td><td>${ExceptionName}</td></tr>
+</script>

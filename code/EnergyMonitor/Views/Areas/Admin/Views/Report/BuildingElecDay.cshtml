@@ -1,0 +1,148 @@
+﻿@{
+    ViewBag.Title = "建筑日用电报表";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .report-warpper{ width:800px; margin-left: 20px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>建筑日用电报表</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("Elec", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑报表</a></li>
+		    <li><a href="@Url.Action("BuildingElecMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑月用电报表</a></li>
+		    <li><a href="@Url.Action("BuildingWaterMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑月用水报表</a></li>
+		    <li class="current"><a>建筑日用电报表</a></li>
+            <li><a href="@Url.Action("BuildingEnergyMonth", "Report", new { b = Model, bn = ViewBag.buildingName })">建筑能耗总表</a></li>
+            <li><a href="@Url.Action("AreaWaterMonth", "Report")">校园区域月用水报表</a></li>
+            <li><a href="@Url.Action("ThirdPointMonth", "Report")">三级电表报表</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <ul class="em-form-ul">
+            <li>
+                <form action="@Url.Action("BuildingElecDay", "Report")" method="get">
+                <ul>
+                    <li><span class="red">* </span>选择一个建筑： </li>
+                    <li><input id="queryObj" name="bn" type="text" class="inputbox" readonly="readonly" value="@ViewBag.buildingName"/>
+                    <input type="hidden" id="buildingId" name="b" value="@Model" /></li>
+                    <li id="buildingError" class="hidden red">请选择一个建筑</li>
+                </ul>
+                <ul style=" width:105px;">
+                    <li><span class="red">* </span>选择年份： </li>
+                    <li><select name="y">
+                    @if (ViewBag.year == null)
+                    {
+                        <option value="" selected="selected">今年</option>
+                    }
+                    else
+                    {
+                        <option value="">今年</option>
+                    }
+                    @for (int i = 2008; i <= DateTime.Now.Year; i++)
+                    {
+                        if (ViewBag.year != null && ViewBag.year == i)
+                        {
+                            <option value="@i" selected="selected">@i</option>
+                        }
+                        else
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <ul style=" width:105px;">
+                    <li><span class="red">* </span>选择月份： </li>
+                    <li><select name="m">
+                    @if (ViewBag.month == null)
+                    {
+                        <option value="" selected="selected">当月</option>
+                    }
+                    else
+                    {
+                        <option value="">当月</option>
+                    }
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        if (ViewBag.month != null && ViewBag.month == i)
+                        {
+                            <option value="@i" selected="selected">@i</option>
+                        }
+                        else
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    }
+                    </select></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li style="visibility:hidden;">.</li>
+                    <li><button id="queryButton" type="submit" class="btn" >  查看报表  </button></li>
+                    <li></li>
+                </ul>
+                </form>
+                <div class="clear"></div>
+            </li>
+         </ul>
+            @if (Model != null)
+            {
+                <div class="report-warpper">
+                @Html.Partial("ReportsWarpper/BuildingElecDay")
+                </div>
+            }
+        </div></div>
+</div></div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#queryButton").click(function () {
+            if (+$("#buildingId").val() <= 0) {
+                $("#buildingError").slideDown("fast");
+                return false;
+            }
+        });
+        $("#queryObj").click(function () {
+            $("#buildingSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var selectedObjs = $("#selectedBuilding option:selected");
+                        if (selectedObjs.length == 1) {
+                            var buildingFullName = $("#selectedSchool option:selected").html() + ">"
+                                           + $("#selectedSchoolArea option:selected").html() + ">"
+                                           + $("#selectedBuilding option:selected").html();
+                            $("#queryObj").val(buildingFullName);
+                            $("#buildingId").val($("#selectedBuilding").val());
+                            $("#buildingError").slideUp("fast");
+                            $(this).dialog("close");
+                        } else {
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    },
+                    '清除': function () {
+                        $("#queryObj").val("");
+                        $("#buildingId").val("");
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+@Html.Partial("_BuildingSelect")

@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="textBox12.Value" xml:space="preserve">
+    <value>以前是否进行过能源审计? (如果是，给出审计日期){IIf(Fields.BDI_AauditFlag=0 OR Fields.BDI_AauditDate is null,"否","是，日期："+Fields.BDI_AauditDate)}</value>
+  </data>
+  <data name="textBox11.Value" xml:space="preserve">
+    <value>以前是否实施过节能改造? (如果是，注明改造项目) {IIf(Fields.BDI_TransforFlag=0 OR Fields.BDI_TransforContent is null,"否","是，改造项目："+Fields.BDI_TransforContent)}</value>
+  </data>
+  <data name="textBox18.Value" xml:space="preserve">
+    <value>外墙材料：{Fields.BDI_KindsOut}
+是否保温：{Fields.BDI_WarmKeep}
+</value>
+  </data>
+  <data name="textBox19.Value" xml:space="preserve">
+    <value>外窗类型：{Fields.BDI_WinOut}
+有无遮阳：{Fields.BDI_Visor}</value>
+  </data>
+  <data name="textBox21.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_AirSys="集中式全空气系统"," √ ","___")}集中式全空气系统</value>
+  </data>
+  <data name="textBox26.Value" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBox22.Value" xml:space="preserve">
+    <value>空调设定温度：供冷{Fields.BDI_TemCool} ℃，供热{Fields.BDI_TemHot} ℃，特殊区域：供冷{Fields.BDI_TemSepcialCool} ℃，供热{Fields.BDI_TemSepcialHot} ℃</value>
+  </data>
+  <data name="textBox23.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_AirSys="风机盘管＋新风系统"," √ ","___")}风机盘管＋新风系统</value>
+  </data>
+  <data name="textBox25.Value" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBox27.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_AirSys="分体式空调或VRV的局部式机组系统"," √ ","___")}分体式空调或VRV的局部式机组系统</value>
+  </data>
+  <data name="textBox28.Value" xml:space="preserve">
+    <value />
+  </data>
+  <data name="textBox33.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_DevCool="水冷式机组（离心式、螺杆式等）"," √ ","___")}水冷式机组（离心式、螺杆式等）</value>
+  </data>
+  <data name="textBox35.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_DevHot="空气源热泵机组"," √ ","___")}空气源热泵机组
+{IIf(Fields.BDI_DevHot="水源热泵机组","√ ","___")}水源热泵机组
+{IIf(Fields.BDI_DevHot="地源（土壤源）热泵机组","√ ","___")}地源（土壤源）热泵机组
+{IIf(Fields.BDI_DevHot="水环热泵机组","√ ","___")}水环热泵机组</value>
+  </data>
+  <data name="textBox32.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_AirSplit="分体式空调或VRV的局部式机组"," √ ","___")}分体式空调或VRV的局部式机组</value>
+  </data>
+  <data name="textBox38.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_BoilerPower="电锅炉"," √ ","___")}电锅炉</value>
+  </data>
+  <data name="textBox40.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_Boiler="燃油锅炉"," √ ","___")}燃油锅炉
+{IIf(Fields.BDI_Boiler="燃气锅炉","√ ","___")}电锅炉</value>
+  </data>
+  <data name="textBox42.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_SteamOrWater="市政蒸汽或热水"," √ ","___")}市政蒸汽或热水</value>
+  </data>
+  <data name="textBox44.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_PowerHot="热电联产机组"," √ ","___")}热电联产机组</value>
+  </data>
+  <data name="textBox46.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_DevOther=""," √ ","___")}其他（请注明）：{IsNull(Fields.BDI_DevOther,"___")}</value>
+  </data>
+  <data name="textBox58.Value" xml:space="preserve">
+    <value>{IIf(Fields.BDI_LiBr="直燃型溴化锂吸收式机组"," √ ","___")}直燃型溴化锂吸收式机组
+{IIf(Fields.BDI_LiBr="蒸汽型溴化锂吸收式机组","√ ","___")}蒸汽型溴化锂吸收式机组
+{IIf(Fields.BDI_LiBr="热水型溴化锂吸收式机组","√ ","___")}热水型溴化锂吸收式机组</value>
+  </data>
+  <data name="$this.DocumentName" xml:space="preserve">
+    <value>建筑详细报表</value>
+  </data>
+</root>

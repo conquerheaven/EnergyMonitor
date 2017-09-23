@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "购电历史";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <style type="text/css">
+        .em-form-div {}
+        .em-form-div div { margin: 0px;}
+        .em-form-div div div{ margin-top: 5px;}
+        .em-form-div div.width { margin: 10px; width:350px;}
+        .em-form-div .div-margin {margin-left: 300px;}
+        fieldset{padding-left: 20px;}
+        #detailResultDiv table{margin-top: 20px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>购电历史</h2></div>
+    <div class="contentbox">
+        <form id="myForm" action="#" method="post">
+        <div class="em-form-div">
+        <div>
+            <div class="left width">
+                <div><span class="red">* </span>起始日期： </div>
+                <div><input id="startTime" name="startTime" type="text" class="inputbox" readonly="readonly" /></div>
+                <div></div>
+            </div>
+            <div class="left width">
+                <div><span class="red">* </span>结束日期： </div>
+                <div><input id="endTime" name="endTime" type="text" class="inputbox" readonly="readonly" /></div>
+                <div></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div>
+            <div class="left width">
+                <div>房间信息：</div>
+                <div>
+                    <select id="roomID" name="roomID">
+                        <option value='-1'>--请选择房间--</option>
+                        @foreach (var room in Model){
+                            <option value="@room.RIID" selected="selected">@room.urFullName</option>
+                        }
+                    </select>
+                </div>
+                <div></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="div-margin"><input id="queryButton" name="" type="submit" value="  查  询  " class="btn"/></div>
+        </div>
+        </form>
+
+        <fieldset id="resultDiv" class="hidden"><legend>查询结果</legend>
+            <div id="dataDiv">
+            <table>
+                <thead><tr>
+                        <th>所属房间</th>
+                        <th>购电者</th>
+                        <th>购电金额</th>
+                        <th>购电值（度）</th>
+                        <th>购电类型</th>
+                        <th>购电时间</th>
+                </tr></thead>
+                <tbody id="resultDataDiv">
+                </tbody>
+            </table>
+            <div id="pager"></div>
+            </div>
+            <div id="noDataDiv">当前查询范围没有数据</div>
+        </fieldset>
+</div></div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#startTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#endTime").datepicker({ changeMonth: true, changeYear: true });
+
+        $("#startTime").change(function () {
+            $("#detailResultDiv").slideUp("fast");
+            $("#resultDiv").slideUp("fast");
+        });
+        $("#endTime").change(function () {
+            $("#detailResultDiv").slideUp("fast");
+            $("#resultDiv").slideUp("fast");
+        });
+        $("#roomID").change(function () {
+            $("#detailResultDiv").slideUp("fast");
+            $("#resultDiv").slideUp("fast");
+        });
+
+        $("#myForm").validate({
+            rules: {
+                startTime: {
+                    required: true
+                },
+                endTime: {
+                    required: true
+                },
+                roomID: {
+                    min: 0
+                }
+            },
+            messages: {
+
+                startTime: {
+                    required: "开始时间不能为空"
+                },
+                endTime: {
+                    required: "结束时间不能为空"
+                },
+                roomID: {
+                    min: "没有指定房间"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (Date.parse($("#startTime").val().replace(/-/g, "/")) > Date.parse($("#endTime").val().replace(/-/g, "/"))) {
+                    $("#endTime").parent().next().html('<label class="error" for="endTime" generated="true">结束时间不能大于开始时间</label>');
+                    return false;
+                }
+                if ($("#resultDiv").is(":hidden")) {
+                    global_totalPages = -1;
+                    pageClick(1);
+                }
+                return false;
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        var global_totalPages = -1;
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />')
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("QueryBuyHistoryAjax", "Energy")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                roomID: $("#roomID").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val()
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#noDataDiv").html("当前查询范围没有数据");
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").show();
+                    return;
+                }
+                if (global_totalPages = -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                $("#noDataDiv").hide();
+                $("#resultDataDiv").html("");
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                $("#dataTemplate").tmpl(jsonData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                    }
+                }).appendTo("#resultDataDiv");
+                $("#dataDiv").show();
+            });
+
+        }
+    });
+    
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}">
+        <td>${RoomName}</td>
+        <td>${Buyer}</td>
+        <td>${BuyMoneyStr}</td>
+        <td>${BuyValStr}</td>
+        <td>${OperType}</td>
+        <td>${BuyDateStr}</td></tr>
+</script>

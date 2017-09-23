@@ -1,0 +1,86 @@
+﻿
+<link href="@Url.Content("~/Content/css/PointSelect.css")" rel="stylesheet" type="text/css" />
+<div id="pointSelectDiv" class="pointSelectDiv hidden" title="请选择对象（支持查询同级别单个或多个对象）">
+    <ul class="objSelectUl">
+        <li style="display:block;">
+            <h4>选择校区</h4>
+            <div class="divSelectPoint1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="schoolAreaDiv">
+            <h4>选择区域</h4>
+            <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="buildingDiv">
+            <h4>选择楼宇</h4>
+            <div id="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+            </select></div>
+        </li>
+    </ul>
+    <ul class="clear"></ul>
+    <ul class="pointSelectUl">
+        <li id="pointSelect">
+            <h4>选择测点</h4>
+            <p>&nbsp测点编号&nbsp&nbsp&nbsp测点能耗类型&nbsp &nbsp &nbsp &nbsp最新取值时间&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp测点名称</p>
+            <select id="selectedPoint" name="selectedPoint" multiple="multiple">
+            </select>
+        </li>
+    </ul>
+    <div id="dialogErrorTip" class="clear a-center red hidden">查询对象不能为空</div>
+    <div id="dialogErrorTip2" class="clear a-center red hidden">只能选择测点</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Util")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html("");
+                $("#selectedBuilding").html("");
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                $("#divSchoolArea").attr("class", "divSelectPoint2");
+                $("#schoolAreaDiv").fadeIn("fast");
+                $("#buildingDiv").fadeOut("fast");
+            });
+            $.getJSON('@Url.Action("GetPointsBySchoolAjax", "Util")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedPoint").html("");
+                if (jsonData != null) {
+                    $("#pointTemplate").tmpl(jsonData).appendTo("#selectedPoint");
+                }
+            });
+        });
+        $("#selectedSchoolArea").change(function () {
+            $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Util")', { areaID: this.value }, function (jsonData) {
+                $("#selectedBuilding").html("");
+                $("#buildingTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+                $("#divSchoolArea").attr("class", "divSelectPoint1");
+                $("#divBuilding").attr("class", "divSelectPoint4");
+                $("#buildingDiv").fadeIn("fast");
+            });
+            $("#selectedPoint").html("");
+        });
+        $("#selectedBuilding").change(function () {
+            $.getJSON('@Url.Action("GetPointsByBuildingAjax", "Util")', { buildingID: this.value }, function (jsonData) {
+                $("#selectedPoint").html("");
+                if (jsonData != null) {
+                    $("#pointTemplate").tmpl(jsonData).appendTo("#selectedPoint");
+                }
+            });
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "Util")', null, function (jsonData) {
+            $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+    });
+</script>
+<script id="roomTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}" title="${dataValue}">${dataValue}</option>
+</script>
+<script id="buildingTemplate" type="text/x-jQuery-tmpl">
+       {{if HJFlag == 0}} 
+       <option value="${dataID}" title="${dataValue}">${dataValue}</option>
+       {{else}}
+       <option value="${dataID}" title="${dataValue}" class="red">${dataValue}</option>
+      {{/if}}
+</script>
+<script id="pointTemplate" type="text/x-jQuery-tmpl">
+    <option value="${analogNo}" title="${analogName}">${analogNo} &nbsp &nbsp &nbsp ${powerType} &nbsp &nbsp &nbsp  ${updateTime} &nbsp &nbsp &nbsp ${analogName}</option>
+</script>

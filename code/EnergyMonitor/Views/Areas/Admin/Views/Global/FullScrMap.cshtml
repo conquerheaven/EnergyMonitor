@@ -1,0 +1,662 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>复旦大学绿色校园建筑节能监管平台GIS系统</title>
+@*<link href="/Content/css/layout.css" rel="stylesheet" type="text/css" />*@
+<!-- Theme Start -->
+@*<link href="/Content/themes/green/styles.css" rel="stylesheet" type="text/css" />*@
+<!-- Theme End -->
+<script src="/Scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<script src="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/" type="text/javascript"></script>
+<script src="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/js/esri/nls/jsapi_en-us.js"></script>
+<link href="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/js/dojo/dijit/themes/tundra/tundra.css" rel="stylesheet" type="text/css" />
+<link href="/Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script src="/Scripts/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/Scripts/Visifire.js" type="text/javascript"></script>
+<script src="/Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+<script src="/Scripts/util.js" type="text/javascript"></script>
+<link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+<script src="/Scripts/arcgismap.js" type="text/javascript"></script>
+    <style type="text/css">
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; color:#4C4C4C; font:12px arial,宋体,sans-serif;}
+        #wrapper { height: 100%; position:relative;}
+        #map{ border:1px solid #BFBFBF; background-color:White; width:auto; height: 100%; overflow:hidden;  position:relative; margin-right:310px;  }
+        #mainWindow {width: 100%; height: 100%; margin: 0px;}
+        #sidebar {width:100%; background-color:whitesmoke; float:right; height:100%;}
+        #sidebar>div { overflow:auto; height: 100%;}
+        #buildingNameTip {display:none; font-size:12px;height:16px;white-space: nowrap;border: 1px solid #333333; padding: 2px; background-color: #ffffcc; z-index:1; position:absolute;}
+        #fullscreenIcon { float:right; width: 40px; height: 20px; background-color:Silver;  border-color:Black; text-align:center; z-index: 2; position: absolute; bottom: auto; right: 10px; top: 10px; left: auto; cursor:pointer;}
+        #mapLoading {position:relative; top:40%; left:40%;}
+        #infoWindowContent {display:none;}
+        #detailLink {width: 100px; position:absolute; right:0px; top:0px;}
+        #campusTab {position:absolute; width:250px; left:10px; right:10px; z-index:3}
+        #campusTab h2 {float:left; width:50px; height:26px; line-height: 26px; font-size:10px; font-weight:normal; text-align:center; color:#00007F; cursor: pointer;}
+        #toolsbar {background: url("/Content/images/nav_bj.gif") repeat-x scroll 0 0 transparent; height: 32px; position:relative; white-space: nowrap; z-index:3;  }
+        #tab_left { float:left; width: 400px; margin-left: 20px;}
+        #tool_right { float:right; width: 500px;}
+        .tool_container {  background: url("/Content/images/nav_bj.gif") repeat-x scroll 0 0 transparent;  }
+        .tool_container .span_l { margin: 4px 3px 0 0; position:relative; }
+        .tool_container .span_r { cursor: pointer; line-height: 25px; margin-left: 1px; overflow:hidden; padding:0 5px;}
+        .tool_container .span_r a {text-decoration:none; color:Black;}
+        .tool_container .span_l, .tool_container .span_r {float:left; height:24px; }
+        .tool_container .full_icon .span_r {padding-left: 21px;}
+        .tool_container .full_icon b { background-position: -45px -158px; top:7px;}
+        .tool_container b { background: url("/Content/images/tools_img.png") no-repeat scroll 0 -158px transparent; height:12px; width:12px; overflow: hidden; position:absolute; top:6px; left: 5px; }
+        .tool_container .span_over, .tool_container .span_focus{ color: #4C73C2; }
+        .tool_container .span_over, .tool_container .span_focus, .tool_container .span_over .span_r, .tool_container .span_focus .span_r { background: url("/Content/images/tools_img.png") no-repeat scroll 0 0 transparent;}
+        .tool_container .span_over .span_r {background-position: right 0;}
+        .tool_container .return_full_icon .span_r { padding-left: 21px;}
+        .tool_container .return_full_icon b { background-position: -15px -208px; top: 7px; }
+        .tool_container .search_icon .span_r { padding-left: 22px;}
+        .tool_container .search_icon b { background-position: 0 -158px; width:13px; }
+        .campus_on { font-weight:bold;}
+        #map_right_panel { position:absolute; right:0px; top:0px; width:309px; z-index:10; background: none repeat scroll 0 0 #FFFFFF; height: 100%;}
+        #shad div { position: absolute;}
+        .mapinfo_but { height: 55px; overflow: hidden; position: absolute; right: 309px; top: 100px; width: 18px; z-index: 20;}
+        .mapinfo_but_con { background: url("/Content/images/mapinfo.png") repeat scroll 0 0 transparent;  cursor: pointer;   height: 55px;  width: 42px;}
+        .mapinfo_but_span { background: url("/Content/images/mapinfo.png") no-repeat scroll -10px -22px transparent; display: block;height: 10px; margin: 22px 0 0 10px; overflow: hidden; width: 5px;}
+        .mapinfo_but_on .mapinfo_but_span { background-position: -21px -22px;}
+        .mapinfo_but_open .mapinfo_but_span { background-position: -29px -22px;}
+        #building_list {height: 500px; margin-top:5px; padding:0px;}
+        .iw_poi_title {color: #4D4D4D; font-size: 14px; font-weight: bold;  overflow: hidden; padding-left: 11px; white-space: nowrap; width: 230px; margin: 0px; }
+        .iw_poi_title a { font-size: 12px; font-weight: normal; margin-left:10px; color: #4174D9; text-decoration:none; }
+        .tstext { float: left;    margin: 5px;}
+        .tools_search_input { border: 1px solid #CCCCCC; height: 18px;line-height: 18px; width: 119px;}
+        table.result { width:100%; }
+        .black { color:#000000; font-size: 12px;}
+        table { border: 0 none;}
+        .result td { font-size: 12px; line-height: 160%; padding: 2px 0 3px 3px;  vertical-align: top;}
+        .result td:hover { background: none repeat scroll 0 0 #F0F0F0;  cursor: pointer;}
+        .result a { color:#0000CC; outline: medium none; text-decoration:none;}
+        .result td .n_p_lineheight { line-height: 100%;  padding: 3px 0 1px; margin: 2px 0px;}
+        .map_info_con { color: #333333; line-height: 18px;  padding: 10px; }
+        .go_back_clear { background: none repeat scroll 0 0 #E5EEFF;  color: #4174D9;  height: 30px;  line-height: 30px;  padding: 0 10px;}
+        .go_back_clear span {  color: #4D4D4D;  float: right;}
+        .go_back_clear a { color: #4174D9;  text-decoration: none;}
+        #building_list div a {line-height: 25px; margin: 0px 3px; text-decoration: none; width:100%;}
+        #building_list div .detail_link {  margin-left:10px; color: #4174D9; display:none; }
+        /*select div*/
+        #roomSelectDiv ul, #roomSelectDiv li {list-style: none outside none; margin: 9px; padding: 0;}
+        select {border: 1px solid #CCCCCC; border-radius: 5px 5px 5px 5px; padding: 7px 10px;}
+        h1, h2, h3, h4, h5 { margin: 0; padding: 0;}
+        .hidden {display: none;}
+        .clear { clear: both;}
+        .red { color: #C61B1B;}
+        #roomSelectDiv select{font-family: Verdana,Arial,sans-serif;   font-size: 13px;}
+    </style>
+</head>
+<body id="homepage">
+    <div id="mainWindow" class="tundra">
+        <div id="toolsbar">
+            <div class="tool_container" id="tab_left">
+            @if( @Model == 0){
+                <div class="campus_on span_l"><span class="span_r"><a href="@Url.Action("FullScrMap", "Global", new { campusID = 0 })">邯郸校区</a></span></div>
+            }
+            else{
+                <div class="span_l"><span class="span_r"><a href="@Url.Action("FullScrMap", "Global", new { campusID = 0 })">邯郸校区</a></span></div>
+            }
+            @if( @Model == 1){
+                <div class="campus_on span_l"><span class="span_r"><a href="@Url.Action("FullScrMap", "Global", new { campusID = 1 })">江湾校区</a></span></div>
+            }
+            else{
+                <div class="span_l"><span class="span_r"><a href="@Url.Action("FullScrMap", "Global", new { campusID = 1 })">江湾校区</a></span></div>
+            }
+            @if( @Model == 2){
+                <div class="campus_on span_l"><span class="span_r"><a href="@Url.Action("FullScrMap", "Global", new { campusID = 2 })">枫林校区</a></span></div>
+            }
+            else{
+                <div class="span_l"><span class="span_r"><a href="@Url.Action("FullScrMap", "Global", new { campusID = 2 })">枫林校区</a></span></div>
+            }
+            @if( @Model == 3){
+                <div class="campus_on span_l"><span class="span_r"><a href="@Url.Action("FullScrMap", "Global", new { campusID = 3 })">张江校区</a></span></div>
+            }
+            else{
+                <div class="span_l"><span class="span_r"><a href="@Url.Action("FullScrMap", "Global", new { campusID = 3 })">张江校区</a></span></div>
+            }
+            </div>
+            <div class="tool_container" id="tool_right">
+                <div class="tstext">
+                    <input type="text" class="tools_search_input" id="ToolPoiSearch" maxlength="256" onkeydown="fudanMap.searchSubmitKeyClick($('#ToolPoiSearch').val(), event);"/>
+                </div>
+                <div id="tool_bdsearch" class="span_l search_icon" title="查找或搜索建筑" onclick="fudanMap.searchBuilding($('#ToolPoiSearch').val());">
+                    <span class="span_r"><b></b>搜索建筑</span>
+                </div>
+                <div id="tool_compare" class="span_l search_icon" title="能耗对比" onclick="MultiBdCompare();">
+                    <span class="span_r" style=" padding:0 5px;">能耗对比</span>
+                </div>
+                <div id="saved_tool_compare" class="span_l search_icon" title="已保存对比条目" onclick="savedCompare();">
+                    <span class="span_r" style=" padding:0 5px;">已保存对比条目</span>
+                </div>
+                <div id="tool_welcomepage" class="span_l return_full_icon" style=" margin-left: 10px;"  >
+                    <span class="span_r" style=" padding:0 5px;"><a href="@Url.Action("Welcome", "Home")">系统首页</a></span>
+                </div>
+            </div>
+        </div>    
+    <div id="wrapper" >
+        <div id="map">
+            <div id="mapLoading"><img src=@Url.Content("~/Content/images/loading_mid.gif") /></div>
+            <div id="buildingNameTip">
+            </div>
+        </div>
+        <div id="map_right_panel">
+            <div id="sidebar">
+            <div>
+                <div id = "tabs" style=" margin-top:5px;  border: 0px;">
+                    <ul>
+                        <li><a href="#building_list"><span>建筑列表</span></a></li>
+                        <li><a href="#building_search_res"><span>搜索结果</span></a></li>
+                    </ul>
+                    <div id = "building_list">
+                        @if (ViewBag.allBuildingInfo != null)
+                        { 
+                            foreach (var areas in ViewBag.allBuildingInfo)
+                             { 
+                                 <h3><a href="#" style= "color: #4D4D4D; font-size: 14px; font-weight: bold;  overflow: hidden;">@areas.AreaName</a></h3>
+                                <div>
+                                 @foreach (var bd in areas.buildingInfo)
+                                {
+                                    <div>
+                                        <a href="javascript:void(0);" class="building_link" buildingid="@bd.BDI_ID" onclick="fudanMap.highlightBuilding('@bd.BDI_ID');">@bd.BDI_Name</a>
+                                        <a class="detail_link" href="@Url.Action("BuildingDetail", new { campusID = Model, buildingID = bd.BDI_ID})" onclick="" target="_blank">详情</a>
+                                    </div>
+                                 }
+                                </div>
+                             }
+                        }
+                    </div>
+                    <div id = "building_search_res" class="map_info_con" style=" padding: 10px; overflow:auto;">
+                        <div class="go_back_clear">
+                            <span></span>
+                        </div>
+                        <table id="search_table" class="result black" cellpadding="0" cellspacing="5px">
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div id="shad">
+            <div title="收起右栏" class="mapinfo_but mapinfo_but_close" id="MapInfoTab" style="top: 372px; right: 309px;">
+                <div class="mapinfo_but_con"><div class="mapinfo_but_div"><span class="mapinfo_but_span"></span></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="infoWindowContent" >
+        <fieldset>
+            <legend>
+                请选择查询能耗类别和时间范围
+            </legend>
+            <form  name="chartForm">
+                查询能耗类别：
+                <input name="typeRadio" type="radio" value="1" checked="checked" onclick="chartUpdate(this.form)"/> 电
+                <input name="typeRadio" type="radio" value="2" onclick="chartUpdate(this.form)"/>水
+                <input name="typeRadio" type="radio" value="3" onclick="chartUpdate(this.form)"/>煤气
+                <br />
+                <div style="">
+                    查询时间范围：
+                    <input name="gradingRadio" type="radio" value="3" onclick="chartUpdate(this.form)" /> 最近24小时
+                    <input name="gradingRadio" type="radio" value="2" onclick="chartUpdate(this.form)" checked="checked"/> 最近十天
+                    <input name="gradingRadio" type="radio" value="1" onclick="chartUpdate(this.form)" /> 最近十月
+                </div>
+            </form>
+        </fieldset>
+        <p>当年已用<span class="energyUsedTitle">用电量（度）</span>：<span id="energyUsedSpan"></span>&nbsp&nbsp&nbsp  剩余可用<span class="energyUsedTitle">用电量（度）</span>: <span id="energyRemainSpan"></span> </p>
+        <div id="chartContainer" style=" width:380px; height:210"></div>
+    </div>
+    <img style=" display:none;" src="http://218.193.130.178/arcgis_js_api/library/2.4/arcgis/js/esri/dijit/images/tundra.infowindow.png" alt="infowindowpng"/>
+    <div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择对象（使用鼠标拖动或Ctrl键或Shift键进行多选）">
+        <div>
+            <ul>
+                <li style="display: block;">
+                    <h4>选择校区</h4>
+                    <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="schoolAreaDiv">
+                    <h4>选择区域</h4>
+                    <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+                    </select></div>
+                </li>
+                <li id="buildingDiv">
+                    <h4>选择楼宇</h4>
+                    <div id="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+                    </select></div>
+                </li>
+@*                <li id="newRoomDiv">
+                    <h4>选择房间</h4>
+                    <div id="divNewRoom">
+                    <select id="newRoomID" name="newRoomID" multiple="multiple">
+                    </select>
+                    </div>
+                </li>*@
+            </ul>
+        </div>
+            <div class=" ui-widget-content ui-helper-clearfix clear" style=" margin:10px 0px; border:0px;">
+                <div class="ui-dialog-buttonset" style=" text-align:center;">
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="addToCompare()">
+                        <span class="ui-button-text">加入对比</span>
+                    </button>
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="quitFromCompare()">
+                        <span class="ui-button-text">退出对比</span>
+                    </button>
+                </div>
+            </div>
+            <div style="width:100%; height:auto; clear:both;">
+                <select multiple="multiple" name="" id="addedBD" style=" width:100%">
+                </select>
+            </div>
+            <div id="dialogErrorTip1" class="clear a-center red hidden">查询对象不能为空。</div>
+            <div id="dialogErrorTip2" class="clear a-center red hidden">只能查询同一级别的测点的能耗对比。</div>
+            <div id="dialogErrorTip3" class="clear a-center red hidden">不能添加重复的测点，请重新选择。</div>
+            <div id="dialogErrorTip4" class="clear a-center red hidden">加入对比的测点数目不能超过5个。</div>
+        </div>
+        <div id="savedItemsDiv" class="hidden" title="请选择一条对比条目">
+            <select id="savedItemsSelect" multiple="multiple" style="width:100%">
+            </select>
+            <div id="savedDialogErrorTip1" class="clear a-center red hidden">请选择一个对象</div>
+            <div id="savedDialogErrorTip2" class="clear a-center red hidden">不能选择多个对象</div>
+    </div>
+</div>
+<script type="text/javascript">
+    var fudanMap;
+    var selectDiv;
+    dojo.addOnLoad(function () {
+        fudanMap = new FudanMap('@Url.Content("~")', "@Model");
+        fudanMap.init("@Model");
+        fudanMap.showInfoOnClick();
+        $("#building_list div").hover(function () { $(this).children(".detail_link").show(); }, function () { $(this).children(".detail_link").hide(); });
+        //selectRoomDiv
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Global")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html("");
+                $("#selectedBuilding").html("");
+                $("#newRoomID").html("");
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                $("#divSchoolArea").attr("class", "divSelectRoom2");
+                $("#schoolAreaDiv").fadeIn("fast");
+                $("#buildingDiv").fadeOut("fast");
+                $("#newRoomDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedSchoolArea").change(function () {
+            $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Global")', { areaID: this.value }, function (jsonData) {
+                $("#selectedBuilding").html("");
+                $("#newRoomID").html("");
+                $("#roomTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+                $("#divSchoolArea").attr("class", "divSelectRoom1");
+                //                $("#divBuilding").attr("class", "divSelectRoom2");
+                $("#buildingDiv").fadeIn("fast");
+                $("#newRoomDiv").fadeOut("fast");
+            });
+        });
+        //        $("#selectedBuilding").change(function () {
+        //            $.getJSON('@Url.Action("GetRoomsByBIDAjax", "Global")', { buildingID: this.value }, function (jsonData) {
+        //                $("#newRoomID").html("");
+        //                $("#roomTemplate").tmpl(jsonData).appendTo("#newRoomID");
+        //                $("#divBuilding").attr("class", "divSelectRoom1");
+        //                $("#divNewRoom").attr("class", "divSelectRoom4");
+        //                $("#newRoomDiv").fadeIn("fast");
+        //            });
+        //        });
+        $("#newRoomID").change(function () {
+            $("#divNewRoom").attr("class", "divSelectRoom divSelectRoom3");
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "Global")', null, function (jsonData) {
+            $("#roomTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+        selectDiv = $("#roomSelectDiv").html();
+    });
+    function chartUpdate(obj) {
+        fudanMap.chartUpdate(obj);
+    }
+    function MultiBdCompare() {
+        $("#roomSelectDiv").dialog({
+            modal: true,
+            width: 550,
+            resizable: false,
+            buttons: {
+                "保存": function () {
+                    if (selectedItems.length == 0) {
+                        $("#dialogErrorTip1").slideDown();
+                        return;
+                    }
+                    var idsStr = selectedItems[0];
+                    var titleStr = selectedName[0];
+                    for (var i = 1; i < selectedItems.length; i++) {
+                        idsStr = idsStr + "_" + selectedItems[i];
+                        titleStr = titleStr + "_" + selectedName[i];
+                    }
+                    $.getJSON('@Url.Action("AddSavedCmpItemsAjax", "Global")', { title: titleStr, value: idsStr, queryType: currentCompareType });
+                    $(this).dialog("close");
+                },
+                '确认': function () {
+                    if (selectedItems.length == 0) {
+                        $("#dialogErrorTip1").slideDown();
+                        return;
+                    }
+                    var idsStr = selectedItems[0];
+                    for (var i = 1; i < selectedItems.length; i++) {
+                        idsStr = idsStr + "_" + selectedItems[i];
+                    }
+                    window.open('@Url.Action("EnergyCompare", "Global")' + '?IDs=' + idsStr + '&queryType=' + currentCompareType);
+                    $(this).dialog("close");
+                }
+            },
+            close: function (event, ui) {
+                selectedItems = [];
+                selectedName = [];
+                currentCompareType = 0;
+                $("#selectedSchool").val([]);
+                $("#selectedSchoolArea").val([]);
+                $("#selectedBuilding").val([]);
+                $("#newRoomID").val([]);
+                $("#schoolAreaDiv").hide();
+                $("#buildingDiv").hide();
+                $("#newRoomDiv").hide();
+                $("#addedBD option").each(function () { $(this).remove(); });
+            }
+        });
+
+    }
+
+    function savedCompare() {
+        $.getJSON('@Url.Action("GetSavedCmpItemsAjax", "Global")', {}, function (jsonData) {
+            $("#savedItemsSelect").empty();
+            $("#savedCmpItemsTmpl").tmpl(jsonData).appendTo("#savedItemsSelect");
+
+        });
+        $("#savedItemsDiv").dialog({
+            modal: true,
+            width: 400,
+            resizable: false,
+            buttons: {
+                '确认': function () {
+                    var selected = $("#savedItemsSelect option:selected");
+                    if (selected.length == 0) {
+                        $("#savedDialogErrorTip2").hide();
+                        $("#savedDialogErrorTip1").slideDown();
+                        return;
+                    }
+                    if (selected.length > 1) {
+                        $("#savedDialogErrorTip1").hide();
+                        $("#savedDialogErrorTip2").slideDown();
+                        return;
+                    }
+                    var ids = selected.attr("value");
+                    var queryType = selected.attr("queryType");
+                    window.open('@Url.Action("EnergyCompare", "Global")' + '?IDs=' + ids + '&queryType=' + queryType);
+                    $(this).dialog("close");
+                },
+                '删除': function () {
+                    var selected = $("#savedItemsSelect option:selected");
+                    if (selected.length == 0) {
+                        $("#savedDialogErrorTip2").hide();
+                        $("#savedDialogErrorTip1").slideDown();
+                        return;
+                    }
+                    selected.each(function (index, obj) {
+                        $.getJSON('@Url.Action("RemoveSavedCmpItemAjax","Global")', { title: obj.text });
+                    })
+                    $(this).dialog("close");
+                }
+            }
+        })
+    }
+
+    var selectedItems = new Array();
+    var selectedName = new Array();
+    var currentCompareType = 0;
+    function addToCompare() {
+        var selected = $("#selectedSchool option:selected");
+        $("#dialogErrorTip1").hide();
+        $("#dialogErrorTip2").hide();
+        $("#dialogErrorTip3").hide();
+        $("#dialogErrorTip4").hide();
+        if (selected.length != 0) {
+            selected = $("#selectedSchoolArea option:selected");
+            if (selected.length != 0) {
+                selected = $("#selectedBuilding option:selected");
+                if (selected.length != 0) {
+                    selected = $("#newRoomID option:selected");
+                    if (selected.length != 0) {
+                        if (selectedItems.length + selected.length > 5) {
+                            $("#dialogErrorTip4").slideDown("fast");
+                            return;
+                        }
+                        selected.each(function (index, obj) {
+                            compareType = 4;
+                            for (var i = 0; i < selectedItems.length; i++) {
+                                if (selectedItems[i] == obj.value) {
+                                    $("#dialogErrorTip3").slideDown("fast");
+                                    return;
+                                }
+                            }
+                            if (currentCompareType != 0 && compareType == currentCompareType) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                selectedName.push(obj.text);
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+
+                            }
+                            if (currentCompareType == 0) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + $("#selectedBuilding option:selected").text() + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                                currentCompareType = compareType;
+                            }
+                            if (currentCompareType != 0 && compareType != currentCompareType) {
+
+                                $("#dialogErrorTip2").slideDown("normal");
+                            }
+                        });
+                    }
+                    else {
+                        selected = $("#selectedBuilding option:selected");
+                        if (selectedItems.length + selected.length > 5) {
+                            $("#dialogErrorTip4").slideDown("fast");
+                            return;
+                        }
+                        selected.each(function (index, obj) {
+                            compareType = 3;
+                            for (var i = 0; i < selectedItems.length; i++) {
+                                if (selectedItems[i] == obj.value) {
+                                    $("#dialogErrorTip3").slideDown("fast");
+                                    return;
+                                }
+                            }
+                            if (currentCompareType != 0 && compareType == currentCompareType) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                            }
+                            if (currentCompareType == 0) {
+                                var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + $("#selectedSchoolArea option:selected").text() + ">>" + obj.text;
+                                $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                                selectedItems.push(obj.value);
+                                selectedName.push(obj.text);
+                                currentCompareType = compareType;
+                            }
+                            if (currentCompareType != 0 && compareType != currentCompareType) {
+                                $("#dialogErrorTip2").slideDown("normal");
+                            }
+                        });
+                    }
+                }
+                else {
+                    selected = $("#selectedSchoolArea option:selected");
+                    if (selectedItems.length + selected.length > 5) {
+                        $("#dialogErrorTip4").slideDown("fast");
+                        return;
+                    }
+                    selected.each(function (index, obj) {
+                        compareType = 2;
+                        for (var i = 0; i < selectedItems.length; i++) {
+                            if (selectedItems[i] == obj.value) {
+                                $("#dialogErrorTip3").slideDown("fast");
+                                return;
+                            }
+                        }
+                        if (currentCompareType != 0 && compareType == currentCompareType) {
+                            var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                        }
+                        if (currentCompareType == 0) {
+                            var bdNameStr = $("#selectedSchool option:selected").text() + ">>" + ">>" + obj.text;
+                            $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                            selectedItems.push(obj.value);
+                            selectedName.push(obj.text);
+                            currentCompareType = compareType;
+                        }
+                        if (currentCompareType != 0 && compareType != currentCompareType) {
+                            $("#dialogErrorTip2").slideDown("normal");
+                        }
+                    });
+                }
+            }
+            else {
+                selected = $("#selectedSchool option:selected");
+                if (selectedItems.length + selected.length > 5) {
+                    $("#dialogErrorTip4").slideDown("fast");
+                    return;
+                }
+                selected.each(function (index, obj) {
+                    compareType = 1;
+                    for (var i = 0; i < selectedItems.length; i++) {
+                        if (selectedItems[i] == obj.value) {
+                            $("#dialogErrorTip3").slideDown("fast");
+                            return;
+                        }
+                    }
+                    if (currentCompareType != 0 && compareType == currentCompareType) {
+                        var bdNameStr = obj.text;
+                        $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                        selectedItems.push(obj.value);
+                        selectedName.push(obj.text);
+                    }
+                    if (currentCompareType == 0) {
+                        var bdNameStr = obj.text;
+                        $("#addedBD").append("<option value=\"" + obj.value + "\">" + bdNameStr + "</option>");
+                        selectedItems.push(obj.value);
+                        selectedName.push(obj.text);
+                        currentCompareType = compareType;
+                    }
+                    if (currentCompareType != 0 && compareType != currentCompareType) {
+                        $("#dialogErrorTip2").slideDown("normal");
+                    }
+                });
+            }
+        }
+    }
+
+    function quitFromCompare() {
+        $("#addedBD option:selected").each(function (index, obj) {
+            for (var i = 0; i < selectedItems.length; i++) {
+                if (selectedItems[i] == obj.value) {
+                    selectedItems.splice(i, 1);
+                    selectedName.splice(i, 1);
+                }
+            }
+        }
+            )
+        $("#addedBD option:selected").remove();
+        var remainOptions = $("#addedBD option");
+        if (remainOptions.length == 0) {
+            currentCompareType = 0;
+        }
+    }
+</script>
+
+
+<script type="text/x-jquery-tmpl" id="searchResultTemplate">
+        <tr class="">
+            <td>
+                <div style="overflow:hidden; clear:both;" onclick="fudanMap.highlightBuilding('${BuildingID}');">
+                    <a >${BuildingName}</a> 
+                    <a href="/Admin/Global/BuildingDetail?campusID=${CampusID}&buildingID=${BuildingID}" style=" margin-left:10px; color: #4174D9; " onclick="" target="_blank">详情</a>
+                    <p class="n_p_lineheight">所属区域： ${AreaName}</p>
+                </div>
+            </td>
+        </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="buildingListTemplate">
+    <li>
+        <p class="building_list_title_p ui-widget-header" style="background-color:Blue; width:100%; cursor:pointer; margin: 2px; ">${AreaName}</p>
+        <div class="building_list_detail" style="width:240px; margin-left:10px; line-height:14px;  display:none">
+            <table style="table-layout:fixed; word-wrap:break-word;">
+                <tbody>
+                {{each(i, b) Buildings}}
+                    {{if i%4==0}}
+                        <tr>
+                            <td style="width:50px; height:5px; padding: 2px; overflow:hidden; "><a class="building_link" href="javascript:void(0);" buildingid="${BDI_ID}">${BDI_Name}</a></td>
+                    {{else i%4==3}}
+                            <td style="width:50px; height:5px; padding: 2px; overflow:hidden; "><a class="building_link" href="javascript:void(0);" buildingid="${BDI_ID}">${BDI_Name}</a></td>
+                        </tr>
+                    {{else (i+1)==b.length}}
+                            <td style="width:50px; height:5px; padding: 2px; overflow:hidden; "><a class="building_link" href="javascript:void(0);" buildingid="${BDI_ID}">${BDI_Name}</a></td>
+                        </tr>
+                    {{else}}
+                            <td style="width:50px; height:5px; padding: 2px; overflow:hidden; "><a class="building_link" href="javascript:void(0);" buildingid="${BDI_ID}">${BDI_Name}</a></td>
+                    {{/if}}
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </li>
+</script>
+
+<script type="text/x-jquery-tmpl" id="bdaccordionTemp">
+    <h3><a href="#" style= "color: #4D4D4D; font-size: 14px; font-weight: bold;  overflow: hidden;">${AreaName}</a></h3>
+    <div>
+        {{each(i, b) Buildings}}
+            <a href="javascript:void(0);" class="building_link" buildingid="${BDI_ID}" onclick="fudanMap.highlightBuilding('${BDI_ID}');">${BDI_Name}</a><br/>
+        {{/each}}
+    </div>
+</script>
+
+<script type="text/x-jquery-tmpl" id="chartTemplate">
+    <vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+            ZoomingEnabled="True" AnimationEnabled="true" Width="370" Height="200" Theme="Theme1" 
+            BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="False" ShadowEnabled="True">
+        <vc:Chart.Titles>
+            <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+        <vc:Chart.AxesX>
+            <vc:Axis Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+
+        <vc:Chart.Series>
+            <vc:DataSeries RenderAs="${renderType}">
+                <vc:DataSeries.DataPoints>
+                    {{each queryList}}
+                        <vc:DataPoint AxisXLabel="${TimeBlock}" YValue="${StatisVal}"/>
+                    {{/each}}
+                </vc:DataSeries.DataPoints>
+            </vc:DataSeries>
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+<script id="roomTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>
+<script id="savedCmpItemsTmpl" type="text/x-jQuery-tmpl">
+    <option value="${value}" queryType="${queryType}">${title}</option>
+</script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EnergyMonitor" Class="EnergyMonitorDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=10.131.200.70;Initial Catalog=EnergyMonitor;Persist Security Info=True;User ID=sa" SettingsObjectName="EnergyMonitor.Properties.Settings" SettingsPropertyName="EnergyMonitorConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.RoomInfo" Member="RoomInfos">
+    <Type Name="RoomInfo">
+      <Column Name="RI_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RI_RoomCode" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RI_Floor" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RI_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="RI_LogOperator" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RI_CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="RI_UpdateOperator" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RI_UpdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SchoolInfo" Member="SchoolInfos">
+    <Type Name="SchoolInfo">
+      <Column Name="SI_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SI_Code" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="SI_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="SI_Address" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="SI_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="SI_LogOperator" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SI_CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SI_UpdateOperator" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SI_UpdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SI_BuildingArea" Type="System.Int32" CanBeNull="true" />
+      <Column Name="SI_GroudArea" Type="System.Int32" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SchoolAreaInfo" Member="SchoolAreaInfos">
+    <Type Name="SchoolAreaInfo">
+      <Column Name="SAI_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SAI_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="SAI_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DepartmentInfo" Member="DepartmentInfos">
+    <Type Name="DepartmentInfo">
+      <Column Name="DI_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DI_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="DI_LinkMan" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="DI_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserRoom" Member="UserRooms">
+    <Type Name="UserRoom">
+      <Column Name="USR_ID" Type="System.String" DbType="VarChar(500) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RI_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnalogHistory" Member="AnalogHistories">
+    <Type Name="AnalogHistory">
+      <Column Name="AH_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AH_Time" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AH_Value" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User">
+      <Column Name="USR_ID" Type="System.String" DbType="VarChar(500) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="USR_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="USR_Mail" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="USR_MailActiveCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="USR_DepartID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="USR_DepartName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="USR_RoleID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="USR_LastLoginIP" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="USR_LastLoginTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="USR_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="USR_Status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Role" Member="Roles">
+    <Type Name="Role">
+      <Column Name="RL_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RL_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="RL_Status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnalogHistoryMonth" Member="AnalogHistoryMonths">
+    <Type Name="AnalogHistoryMonth">
+      <Column Name="AHM_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AHM_MTime" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AHM_Value" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnalogHistoryDay" Member="AnalogHistoryDays">
+    <Type Name="AnalogHistoryDay">
+      <Column Name="AHD_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AHD_HTime" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AHD_Value" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PowerClass" Member="PowerClasses">
+    <Type Name="PowerClass">
+      <Column Name="PC_ID" Type="System.String" DbType="VarChar(500) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PC_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="PC_Type" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="PC_LocalCode" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="PC_Unit" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="PC_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[Function]" Member="Functions">
+    <Type Name="Function">
+      <Column Name="FN_ID" Type="System.String" DbType="VarChar(500) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FN_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="FN_Description" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="FN_LinkLocation" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="FN_Status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RoleFunction" Member="RoleFunctions">
+    <Type Name="RoleFunction">
+      <Column Name="RF_FunID" Type="System.String" DbType="VarChar(500) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RF_RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BuyHistory" Member="BuyHistories">
+    <Type Name="BuyHistory">
+      <Column Name="BH_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BH_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BH_Buyer" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BH_Moneyqty" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="BH_Buyqty" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="BH_OperType" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="BH_Buydate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WaterPumpDetail" Member="WaterPumpDetails">
+    <Type Name="WaterPumpDetail">
+      <Column Name="WPD_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WPD_WaterPumCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="WPD_Type" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="WPD_Num" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WPD_Flow" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="WPD_Lifting" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="WPD_Power" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="WPD_YearRuntime" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WindMachDetail" Member="WindMachDetails">
+    <Type Name="WindMachDetail">
+      <Column Name="WMD_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WMD_WindMachCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="WMD_Type" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="WMD_Num" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="WMD_windAmount" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="WMD_Intensity" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="WMD_Power" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="WMD_YearRuntime" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.KitchenEquipDetail" Member="KitchenEquipDetails">
+    <Type Name="KitchenEquipDetail">
+      <Column Name="KED_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="KED_KitchenEquipCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="KED_Type" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="KED_Num" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="KED_FuelType" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="KED_Consumption" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="KED_Power" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="KED_YearRuntime" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BuildingAppendix" Member="BuildingAppendixes">
+    <Type Name="BuildingAppendix">
+      <Column Name="BA_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BA_AppendixNo" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="BA_Name" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BA_Type" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BA_Num" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BA_ManufacturerAndModel" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BA_CoolingCapacity" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_HeatingCapacity" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_Power" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_PowerSource" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_WorkPerDay" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_WorkPerYear" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_AirVolume" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_WindPressure" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_DayWorkStart" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BA_DayWorkEnd" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BA_AverageLoadRate" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_CoolingWater" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_Flow" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_Lifting" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_CoolingPower" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_HeatingPower" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_FuelConsumption" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_CoolingWaterCapacity" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BA_BoilerEfficiency" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LightDetail" Member="LightDetails">
+    <Type Name="LightDetail">
+      <Column Name="LD_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LD_LightCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="LD_Region" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="LD_Area" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LD_Type" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="LD_Num" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LD_Power" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LD_Dgree" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="LD_Start" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="LD_End" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="LD_Mode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ElevatorDetail" Member="ElevatorDetails">
+    <Type Name="ElevatorDetail">
+      <Column Name="ED_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ED_ElevatorCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="ED_SerialNum" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="ED_Type" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="ED_FactoryModel" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="ED_Power" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ED_Start" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="ED_End" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="ED_Mode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OfficeEquipDetail" Member="OfficeEquipDetails">
+    <Type Name="OfficeEquipDetail">
+      <Column Name="OED_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OED_OfficeEquipCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="OED_Type" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="OED_Num" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OED_FixedPower" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="OED_YearPower" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="OED_Start" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="OED_End" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BuildingDetailInfo" Member="BuildingDetailInfos">
+    <Type Name="BuildingDetailInfo">
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BDI_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="BDI_Code" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Introduction" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="BDI_Address" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Academy" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Telephone" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_LinkMan" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_LinkManPhone" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_StatMan" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_StatManPhone" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_RunPerWeek" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BDI_WeekStart" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_WeekEnd" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_RunPreMonth" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BDI_MonthStart" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_MonthEnd" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_RunPerYear" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BDI_YearStart" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_YearEnd" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Holiday" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Date" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Direction" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Users" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BDI_Height" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_FloorUp" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BDI_FloorDn" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BDI_FloorHeight" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_Area" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_AreaAir" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_AreaHot" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_AreaSpe" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_AauditFlag" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="BDI_AauditDate" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_TransforFlag" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="BDI_TransforContent" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_ElectricCompName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_GasCompName" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_AreaRatio" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_Type" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_TypeOther" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Structure" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_StructureOther" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_KindsOut" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_KindsOutOther" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_WarmKeep" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_WarmKeepOther" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_WinOut" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_WinOutOther" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_VisorFlag" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="BDI_Visor" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Glass" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_GlassOther" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Win" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_WinOther" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_TemCool" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_TemHot" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_TemSepcialCool" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_TemSepcialHot" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_AirSys" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_DevCool" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_DevHot" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_LiBr" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_BoilerPower" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_AirSplit" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Boiler" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_PowerHot" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_SteamOrWater" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_DevOther" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_LightCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_LightIn" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_LightOut" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_LightOutPower" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_LightOutWorkHours" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="BDI_ElevatorCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_WaterPumpCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_WindMachCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_KitchenEquipCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_OfficeEquipCode" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_ImageUrl" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_LogOperator" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="BDI_UpOperator" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="BDI_UpdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Workstation" Member="Workstations">
+    <Type Name="Workstation">
+      <Column Name="WS_No" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="WS_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="WS_HostName" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="WS_Type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="WS_State" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RTU" Member="RTUs">
+    <Type Name="RTU">
+      <Column Name="RTU_No" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RTU_Name" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="RTU_Info" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="RTU_MaxAI" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="RTU_MaxDI" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="RTU_State" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="RTU_WSNO" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="RTU_ChanSerial" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="RTU_Serial" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="RTU_StaNo" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InstrumentInfo" Member="InstrumentInfos">
+    <Type Name="InstrumentInfo">
+      <Column Name="InI_No" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RTU_No" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="InI_Serial" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="InI_Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InI_Memo" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="InI_Type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StateReal" Member="StateReals">
+    <Type Name="StateReal">
+      <Column Name="SR_Type" Type="System.String" DbType="VarChar(500) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SR_No" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SR_Time" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SR_Status" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="SR_PositionX" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SR_PositionY" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SystemProfile" Member="SystemProfiles">
+    <Type Name="SystemProfile">
+      <Column Name="SP_ID" Type="System.String" DbType="VarChar(500) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SP_Value" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="SP_Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SP_Description" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="SP_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[Log]" Member="Logs">
+    <Type Name="Log">
+      <Column Name="LOG_ID" AutoSync="Never" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LOG_UserID" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="LOG_FuctionID" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="LOG_actionType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LOG_actionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LOG_actionDesc" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UniversityInfo" Member="UniversityInfos">
+    <Type Name="UniversityInfo">
+      <Column Name="StudentCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Area" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BuildingBriefInfo" Member="BuildingBriefInfos">
+    <Type Name="BuildingBriefInfo">
+      <Column Name="BDI_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BDI_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="SAI_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BDI_Flag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="BDI_HJFlag" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="BDI_OperateRule" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BuildingEnergyConsum" Member="BuildingEnergyConsums">
+    <Type Name="BuildingEnergyConsum">
+      <Column Name="BEC_BID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BEC_Year" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BEC_PowerType" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BEC_Consum" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnalogInfo" Member="AnalogInfos">
+    <Type Name="AnalogInfo">
+      <Column Name="RTU_No" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_No" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AI_Serial" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AI_LogicalLow" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AI_LogicalUp" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Decimal" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Cptflag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Base" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Rate" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AI_LockVal" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AI_LockFlag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Timespace" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Unit" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="AI_State" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Level" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SetEmail" Member="SetEmail">
+    <Type Name="SetEmail">
+      <Column Name="SE_EmailNo" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SE_Email" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ElecDistributionInfo" Member="ElecDistributionInfo">
+    <Type Name="ElecDistributionInfo">
+      <Column Name="ED_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BD_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ED_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="ED_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ElecTSInfo" Member="ElecTSInfo">
+    <Type Name="ElecTSInfo">
+      <Column Name="TS_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ED_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TS_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="TS_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BuildingGuanghua" Member="BuildingGuanghua">
+    <Type Name="BuildingGuanghua">
+      <Column Name="BG_No" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BD_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ED_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TS_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CntrNo" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="BG_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExceptionInfo" Member="ExceptionInfo">
+    <Type Name="ExceptionInfo">
+      <Column Name="EI_ExceptionNo" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EI_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EI_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="EI_Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EI_ExceptionType" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="EI_ExceptionName" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="EI_HistoryValue" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="EI_CurrentValue" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BuildingTypes" Member="BuildingTypes">
+    <Type Name="BuildingTypes">
+      <Column Name="BT_ID" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="BT_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="BT_Remark" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnalogMeasurePoint" Member="AnalogMeasurePoint">
+    <Type Name="AnalogMeasurePoint">
+      <Column Name="AMP_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AMP_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_CptFlag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Statistic" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Val" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_ValRem" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AMP_Unit" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_SchooldID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_SAreaID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_BuildingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_RoomID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_DepartID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_PowerType" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_PowerName" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Timespan" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_ParentNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_OperationRule" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="AMP_OperationParameter" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AMP_State" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Encoding" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.setMessages" Member="setMessages">
+    <Type Name="setMessages">
+      <Column Name="SE_MessageID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SE_Value" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UpdateInfo" Member="UpdateInfos">
+    <Type Name="UpdateInfo">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AI_No" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Name" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="Start_Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="End_Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Parent_No" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="State" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnnouncementInfo" Member="AnnouncementInfos">
+    <Type Name="AnnouncementInfo">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Content" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="CreateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DeadLine" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Author" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Remark" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

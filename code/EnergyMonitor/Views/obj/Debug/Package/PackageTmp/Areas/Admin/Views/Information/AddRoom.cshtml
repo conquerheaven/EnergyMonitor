@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "房间管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>房间管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("QueryRoom", "Information")">查询房间</a></li>
+		    <li class="current"><a>增加房间</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="@Url.Action("AddRoomInfo", "Information")" method="post" >
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li><span class="red">* </span>房间号：</li>
+                    <li><input id="roomCode" name="roomCode" type="text" class="inputbox" /></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li><span class="red">* </span>所属楼宇：</li>
+                    <li><input id="buildingName" name="buildingName" type="text" class="inputbox" readonly="readonly"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>楼层：</li>
+                    <li><input id="floor" name="floor" type="text" class="inputbox" /></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>备注：</li>
+                    <li><input id="remark" name="remark" type="text" class="inputbox" /></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" name="" type="submit" value="  增  加  " class="btn m-button"/></li>
+         </ul>
+         <input id="buildingID" name="buildingID" type="hidden" value="-1" />
+        </form>
+    </div></div>
+</div></div>
+
+<div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择房间">
+    <ul>
+        <li style="display: block;">
+            <h4>选择校区</h4>
+            <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="schoolAreaDiv">
+            <h4>选择分校区</h4>
+            <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="buildingDiv">
+            <h4>选择楼宇</h4>
+            <div id="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+            </select></div>
+        </li>
+    </ul>
+    <div id="dialogErrorTip" class="clear a-center red hidden">请选择一个楼宇</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#buildingName").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#roomSelectDiv").dialog({
+                modal: true,
+                width: 540,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var selectedObjs = $("#selectedBuilding option:selected");
+                        if (selectedObjs.length == 1) {
+                            $("#buildingID").val($("#selectedBuilding").val());
+                            $("#buildingName").val(selectedObjs.text());
+                            $("#resultDiv").slideUp("fast");
+                            $(this).dialog("close");
+                            $("#roomCode").removeData("previousValue");
+                        } else {
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    }
+                }
+            });
+        });
+        $("#myForm").validate({
+            rules: {
+                roomCode: {
+                    required: true,
+                    rangelength: [1, 100],
+                    remote: {
+                        url: "@Url.Action("QueryRoomNotExistAjax", "Information")",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            roomName: function(){return $("#roomCode").val()},
+                            buildingID: function(){return $("#buildingID").val()}
+                        }
+                    }
+                },
+                buildingName: {
+                    required: true,
+                    rangelength: [1, 100]
+                },
+                floor: {
+                    digits: true,
+                    min: 1
+                },
+                remark: {
+                    rangelength: [0, 100]
+                }
+            },
+            messages: {
+                roomCode: {
+                    required: "房间号不能为空",
+                    rangelength: "长度不合法",
+                    remote: "该房间号已经存在"
+                },
+                buildingName: {
+                    required: "所属楼宇不能为空",
+                    rangelength: "长度不合法"
+                },
+                floor: {
+                    digits: "楼层只能为整数",
+                    min: "楼层至少为1"
+                },
+                remark: {
+                    rangelength: "长度不合法"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (confirm("确认提交?")) {
+                    form.submit();
+                }
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Util")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html("");
+                $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                $("#divSchoolArea").attr("class", "divSelectRoom4");
+                $("#schoolAreaDiv").fadeIn("fast");
+                $("#buildingDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedSchoolArea").change(function () {
+            $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Util")', { areaID: this.value }, function (jsonData) {
+                $("#selectedBuilding").html("");
+                $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+                $("#divSchoolArea").attr("class", "divSelectRoom1");
+                $("#divBuilding").attr("class", "divSelectRoom4");
+                $("#buildingDiv").fadeIn("fast");
+            });
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "Util")', null, function (jsonData) {
+            $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+    });
+</script>
+<script id="roomDataTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>

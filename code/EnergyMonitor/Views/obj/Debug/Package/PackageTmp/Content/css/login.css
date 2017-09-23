@@ -1,0 +1,18 @@
+body {background: url("../images/loginbg.png") no-repeat scroll 0 0 transparent;}
+
+	#logincontainer {background: url("../images/loginBox.png") no-repeat scroll 0 0 transparent;width: 752px;  margin: auto;top: 100px;height: 446px; position: relative;border: medium none;}
+		
+	#loginbox {border-radius: 20px; -moz-border-radius: 20px; background-color:Gray; border-bottom: 1px solid #fff;}
+	#loginheader {  color:#000000;   font-family: "ËÎÌו";font-size:30px;font-weight:bolder;text-align: center; padding: 15px 0; background: url(../images/img/bg_login_header2.png) repeat-x bottom; border-bottom: 1px solid #424242; border-top-left-radius: 20px; border-top-right-radius: 20px; -moz-border-radius-topright: 20px; -moz-border-radius-topleft: 20px;}
+		
+	#innerlogin {width: 260px; margin: 0 auto; text-align: center; padding: 15px 20px 30px 20px;}
+	.logininput {height: 48px; left: 323px;position: relative;top: 146px;width: 344px;}
+	.loginpass {height: 48px; left: 323px;position: relative;top: 166px;width: 344px;}
+	#innerlogin p {color: #ddd; font-weight: 700; text-shadow: 1px 1px 1px #222;}
+	.submit {left: 245px;position: relative;top: 228px;}
+	.lgerror{left: 0px;position: relative; top: 285px;font-size:16px;}
+	.linkNoAccount {left: 330px;position: relative;top: 182px;}	
+	.linkToMap {left: 358px;position: relative;top: 183px;}	
+				
+	#innerlogin p a {background: #ccc url(../images/img/bg_forgotten_password.png) repeat-x top; text-shadow: 1px 1px 1px #fff; color: #666; font-size: 11px; padding: 4px 10px; border-radius: 5px; -moz-border-radius: 5px; text-decoration: none;}
+	#innerlogin p a:hover {background: #ccc url(../images/img/bg_forgotten_password.png) 0 -25px; color: #333;}

@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>复旦大学绿色校园能耗监管平台 - 登录</title>
+<link href="@Url.Content("~/Content/css/layout.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/css/login.css")" rel="stylesheet" type="text/css" />
+<!-- Theme Start -->
+<link href="@Url.Content("~/Content/themes/green/styles.css")" rel="stylesheet" type="text/css" />
+<!-- Theme End -->
+
+</head>
+<body>
+	<div id="logincontainer">    	
+            	<form action="@Url.Action("Login2", "Homes")" method="post">               
+                           <ul>
+                            <li>
+                                  <input type="text" class="logininput" id="userID" name="userID" />
+                            </li>
+                            <li>
+                                  <input type="password" class="loginpass" id="password" name="password" />
+                            </li>  
+                            <li><a class ="linkNoAccount noAccount" href="@Url.Action("Register", "User", new { area = "User" })" title="没有账号?"></a>
+                            <a class = "linkToMap linkMap" href="@Url.Action("Map", "Global", new { area = "Admin" })" title="去往地图展示页面?"></a></li>                               
+                            <li>
+                                    <input  type="submit" class="submit  loginbtn" id="loginbn" value=""/>                                 
+                            </li>
+                              <li>
+                                   <div class="lgerror" style="margin: 10px;"><span style="color:Red">@ViewBag.loginError</span></div>                             
+                            </li>                                             
+                            </ul>
+                </form>        
+    </div>
+    <script type="text/javascript">
+        document.getElementById("submitBtn").onclick = function () {
+            if (document.getElementById("userID").value == "") {
+                alert("学号 / 工号 不能为空！");
+                return false;
+            }
+            if (document.getElementById("password").value == "") {
+                alert("密码 不能为空！");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

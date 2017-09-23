@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = "房间管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <style type="text/css">
+        #resultDiv #dataDiv table{min-width: 600px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>房间管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li class="current"><a>查询房间</a></li>
+		    <li><a href="@Url.Action("AddRoom", "Information")">增加房间</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="#" method="post" >
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li>房间号：</li>
+                    <li><input id="roomCode" name="roomCode" type="text" class="inputbox"/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li>所属楼宇：</li>
+                    <li><input id="buildingName" name="buildingName" type="text" class="inputbox" readonly="readonly"/></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" name="" type="button" value="  查  询  " class="btn m-button"/></li>
+         </ul>
+         <input type="hidden" id="buildingID" name="buildingID" value="-1"/>
+         </form>
+
+        <fieldset id="resultDiv" class="hidden"><legend>查询结果</legend>
+            <div id="dataDiv">
+            <table>
+                <thead><tr>
+                    <th>房间号</th>
+                    <th>所属楼宇</th>
+                    <th>楼层</th>
+                    <th>备注</th>
+                    <th>修改</th>
+                    <th>删除</th>
+                </tr></thead>
+                <tbody id="resultDataDiv">
+                </tbody>
+            </table>
+            <div id="pager"></div>
+            @*<input id="exportExcel" name="exportExcel" type="button" value=" 导出Excel " class="btn" />*@
+            </div>
+            <div id="noDataDiv">当前查询范围没有数据</div>
+        </fieldset>
+    </div></div>
+</div></div>
+
+<div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择房间">
+    <ul>
+        <li style="display: block;">
+            <h4>选择校区</h4>
+            <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="schoolAreaDiv">
+            <h4>选择分校区</h4>
+            <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="buildingDiv">
+            <h4>选择楼宇</h4>
+            <div id="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+            </select></div>
+        </li>
+    </ul>
+    <div id="dialogErrorTip" class="clear a-center red hidden">请选择一个楼宇</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#roomCode").change(function () {
+            $("#resultDiv").slideUp("fast");
+        });
+
+        $("#exportExcel").click(function () {
+            var parameters = "?roomCode=" + $("#roomCode").val()
+                             + "&buildingID=" + $("#buildingID").val();
+            window.open('@Url.Action("GetRoomExcel","Information")' + parameters, "_self");
+        });
+
+        $("#buildingName").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#roomSelectDiv").dialog({
+                modal: true,
+                width: 540,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var selectedObjs = $("#selectedBuilding option:selected");
+                        if (selectedObjs.length == 1) {
+                            $("#buildingID").val($("#selectedBuilding").val());
+                            $("#buildingName").val(selectedObjs.text());
+                            $("#resultDiv").slideUp("fast");
+                            $(this).dialog("close");
+                        } else {
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    },
+                    '清除': function () {
+                        $("#buildingID").val(-1);
+                        $("#buildingName").val("");
+                        $("#resultDiv").slideUp("fast");
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+        $("#queryButton").click(function () {
+            if ($("#resultDiv").is(":hidden")) {
+                global_totalPages = -1;
+                pageClick(1);
+            }
+        })
+
+        var global_totalPages = -1;
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />')
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("QueryRoomAjax", "Information")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                roomCode: $("#roomCode").val(),
+                buildingID: $("#buildingID").val()
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages = -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                $("#resultDataDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                    alternate: function (item) {
+                        return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                    }
+                }));
+                $("#dataDiv").show();
+            });
+        }
+
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Util")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html("");
+                $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                $("#divSchoolArea").attr("class", "divSelectRoom4");
+                $("#schoolAreaDiv").fadeIn("fast");
+                $("#buildingDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedSchoolArea").change(function () {
+            $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Util")', { areaID: this.value }, function (jsonData) {
+                $("#selectedBuilding").html("");
+                $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedBuilding");
+                $("#divSchoolArea").attr("class", "divSelectRoom1");
+                $("#divBuilding").attr("class", "divSelectRoom4");
+                $("#buildingDiv").fadeIn("fast");
+            });
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "Util")', null, function (jsonData) {
+            $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+
+    });
+
+    function deleteBuilding(roomID) {
+        $.getJSON('@Url.Action("QueryRoomUsersCount", "Information")', {
+            roomID: roomID
+        }, function (jsonData) {
+            if (jsonData == 0) {
+                if (confirm("确认删除?")) {
+                    $.getJSON('@Url.Action("DeleteRoomAjax", "Information")', {
+                        roomID: roomID
+                    }, function (jsonData) {
+                        if (jsonData == true) {
+                            alert("删除成功");
+                            $("#resultDiv").slideUp("fast");
+                        } else {
+                            alert("删除失败");
+                        }
+                    });
+                }
+            } else {
+                alert("所选删除房间有" + jsonData + "个用户数据，不能删除，请先删除其拥有的用户数据再删除该房间！");
+            }
+        });
+    }
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+    <tr class="${$item.alternate($data)}"><td>${RoomCode}</td><td>${BuildingName}</td><td>${Floor}</td><td>${Remark}</td>
+    <td><a href='@Url.Action("ModifyRoom", "Information")?r=${RoomID}'>修改</a></td>
+    <td><a href='#' onclick="deleteBuilding('${RoomID}')">删除</a></td>
+    </tr>
+</script>
+<script id="roomDataTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>

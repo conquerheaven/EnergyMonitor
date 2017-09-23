@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "楼宇管理";
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>楼宇管理</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("QueryBuilding", "Information")">查询楼宇</a></li>
+		    <li><a href="@Url.Action("AddBuilding", "Information")">增加楼宇</a></li>
+            <li class="current"><a>修改楼宇</a></li>
+	    </ul>
+	    <div class="tab-div padding50px">
+        @if (ViewBag.flag != null)
+        {
+            if (ViewBag.flag == true)
+            {
+                <div class="status success">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_success.png") " alt="Success" /><span>修改建筑信息成功!</span>
+                    <a href="@Url.Action("QueryBuilding", "Information")">点击重新查询</a></p>
+                </div>
+            }
+            else
+            {
+                <div class="status error">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Success" /><span>修改建筑信息失败!</span>
+                    尝试重新修改
+                    </p>
+                </div>
+            }
+
+        }
+        else
+        {
+            <div class="status error">
+                <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Success" /><span>修改建筑信息有误!</span>
+                请重新输入
+                </p>
+            </div>
+        }
+    </div></div>
+</div></div>
+

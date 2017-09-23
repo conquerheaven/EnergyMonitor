@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = "报表管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        .report-warpper{ width:800px; margin-left: 20px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>报表管理</h2></div>
+    <div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">		    
+		    <li class="current"><a>报表管理</a></li>		   
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="@Url.Action("ReportManagement", "BuildingGuanghua")" method="get">
+        <ul class="em-form-ul">           
+                    <li>
+                        <ul>
+                            <li><span class="red">* </span>选择一个对象： </li>
+                            <li><input id="queryObj" name="bn" type="text" class="inputbox" readonly="readonly" value="@ViewBag.objectName"/>
+                            <input type="hidden" id="buildingId" name="b" value="@Model" />
+                            <input type="hidden" id="queryObjType" name="type"  value="@ViewBag.queryObjType"/></li>
+                            <li ></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li>
+                        <ul>
+                            <li><span class="red">* </span>起始日期：</li>
+                            <li><input id="startTime" name="startTime" type="text" class="inputbox" readonly="readonly" value = "@ViewBag.startTimeDate" /></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li><span class="red">* </span>结束日期：</li>
+                            <li><input id="endTime" name="endTime" type="text" class="inputbox" readonly="readonly"value = "@ViewBag.endTimeDate"  /></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                 </li>
+                 <li>
+                    <ul>                       
+                        <li><button id="queryButton" type="submit" class="btn m-button" style="width:92px;">  查看报表  </button></li>                       
+                    </ul>
+                    <div class="clear"></div>
+               </li>                      
+         </ul>
+         </form>              
+            @if (Model != null)
+            {
+                <div class="report-warpper">
+                @Html.Partial("ReportsWarpper/ReportManagement")
+                </div>
+            }
+        </div></div>
+</div></div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#startTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#endTime").datepicker({ changeMonth: true, changeYear: true });   
+        $("#startTime").change(function () {
+            $(".report-warpper").hide();
+        });
+        $("#endTime").change(function () {
+            $(".report-warpper").hide();
+        });
+        
+        $("#myForm").validate({
+            rules: {
+                bn: {
+                    required: true
+                },
+                startTime: {
+                    required: true
+                },
+                endTime: {
+                    required: true
+                }
+            },
+            messages: {
+                bn: {                    
+                    required: "查询对象不能为空"
+                },
+                startTime: {                    
+                    required: "开始时间不能为空"
+                },
+                endTime: {
+                    required: "结束时间不能为空"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+        $("#queryButton").click(function () {
+            if (Date.parse($("#startTime").val().replace(/-/g, "/")) > Date.parse($("#endTime").val().replace(/-/g, "/"))) {
+                $("#endTime").parent().next().html('<label class="error" for="startTime" generated="true">结束时间不能大于开始时间</label>');
+                return false;
+            }
+        });
+        $("#queryObj").click(function () {
+            $("#buildingGuanghuaSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var selectedTransformers = $("#selectedTransformer option:selected");
+                        var selectedSwitchingRooms = $("#selectedSwitchingRoom option:selected");
+                        var selectedBuildings = $("#selectedBuilding option:selected");
+                        if (selectedBuildings.length == 1) {
+                            if (selectedSwitchingRooms.length == 1) {
+                                if (selectedTransformers.length == 1) {
+                                    var buildingFullName = $("#selectedBuilding option:selected").html() + ">"
+                                           + $("#selectedSwitchingRoom option:selected").html() + ">"
+                                           + $("#selectedTransformer option:selected").html();
+                                    $("#queryObj").val(buildingFullName);
+                                    $("#buildingId").val($("#selectedTransformer").val());
+                                    $("#queryObjType").val("3");
+                                    $(this).dialog("close");
+                                }
+                                else {
+                                    var buildingFullName = $("#selectedBuilding option:selected").html() + ">"
+                                               + $("#selectedSwitchingRoom option:selected").html();
+                                    $("#queryObj").val(buildingFullName);
+                                    $("#buildingId").val($("#selectedSwitchingRoom").val());
+                                    $("#queryObjType").val("2");
+                                    $(this).dialog("close");
+                                }
+                            }
+                            else {
+                                var buildingFullName = $("#selectedBuilding option:selected").html();
+                                $("#queryObj").val(buildingFullName);
+                                $("#buildingId").val($("#selectedBuilding").val());
+                                $("#queryObjType").val("1");
+                                $(this).dialog("close");
+                            }
+                        } else {
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    },
+                    '清除': function () {
+                        $("#queryObj").val("");
+                        $("#buildingId").val("");
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+    });
+</script>
+@Html.Partial("_BuildingGuanghuaSelect")

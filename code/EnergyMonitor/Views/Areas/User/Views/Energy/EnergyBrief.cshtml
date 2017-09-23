@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "当前用电";
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>当前用电</h2></div>
+    <div class="contentbox">
+    @{var dic = Model as IDictionary<int, IList<EnergyMonitor.Models.Repository.Entity.ChartStatisEntity>>;
+        foreach (var room in ViewBag.userRoomList)
+        {
+        <div class="noticebox"><div class="innernotice">
+            <p>您所在房间 <span class="green">@room.urFullName</span></p>
+            <ul style="margin:0 auto 20px 30px;">
+            @foreach (var ampItem in ViewBag.ampDic[room.RIID])
+            {
+                <li style="list-style-type:disc;">该房间所属测点最新获取表值为<span class="highlighted">@ampItem.AMP_Val.ToString("f1") 度</span>，
+                剩余电量 @if(ampItem.AMP_ValRem!=null){ <span class="highlighted">@ampItem.AMP_ValRem.ToString("f1") 度</span>} else { <span>未知</span> }  </li>
+            }
+            </ul>
+            <p>该房间当月用电数为<span class="highlighted">@ViewBag.currentDic[room.RIID].ToString("f1") 度</span>，剩余电数为<span class="highlighted">@ViewBag.remDic[room.RIID].ToString("f1") 度</span></p>
+            @if (dic[room.RIID].Count > 0)
+            {
+                <p>该房间当月外最近 @dic[room.RIID].Count 个月用电分别为</p>
+                <ul style="margin:0 auto 20px 30px;">
+                    @foreach (EnergyMonitor.Models.Repository.Entity.ChartStatisEntity item in dic[room.RIID])
+                    {
+		            <li style="list-style-type:disc;">@item.TimeBlock： @item.StatisVal.ToString("f1") 度</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>该房间当月外最近 3 个月没有用电数据</p>
+            }
+        </div></div>
+        }
+    }
+</div></div>
+

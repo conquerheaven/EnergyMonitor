@@ -1,0 +1,9 @@
+﻿.roomSelectDiv ul { white-space: nowrap;}
+.roomSelectDiv li { float:left; width: 150px; margin: 9px; display:none;}
+.roomSelectDiv li select{width: 140px;height: 200px;}
+.roomSelectDiv .divSelectRoom1{background-image: url(../../../../Content/images/roomSelectBG1.png);}
+.roomSelectDiv .divSelectRoom2{background-image: url(../../../../Content/images/roomSelectBG2.png);}
+.roomSelectDiv .divSelectRoom3{background-image: url(../../../../Content/images/roomSelectBG3.png);}
+.roomSelectDiv .divSelectRoom4{background-image: url(../../../../Content/images/roomSelectBG4.png);}
+
+

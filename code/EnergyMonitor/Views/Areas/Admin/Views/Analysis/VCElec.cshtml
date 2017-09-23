@@ -1,0 +1,463 @@
+﻿@{
+    ViewBag.Title = "能耗分析";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/Visifire.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/util.js" type="text/javascript"></script>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>能耗分析</h2></div>
+    <div class="contentbox">
+
+    <div id="tabs">
+        <ul class="tab-ul">
+		    @*<li><a href="@Url.Action("Elec", "Analysis")">单一对象按时间</a></li>*@
+		    <li class="current"><a>单一对象按分类</a></li>
+		    <li><a href="@Url.Action("VGCElec", "Analysis")">单一对象按时间和分类</a></li>
+		    <li><a href="@Url.Action("HElec", "Analysis")">多个对象</a></li>
+            <li><a href="@Url.Action("HGElec", "Analysis")">多个对象按时间</a></li>
+            <li><a href="@Url.Action("HCElec", "Analysis")">多个对象按分类</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <form id="myForm" action="#" method="post">
+        <ul class="em-form-ul">
+            <li>
+                <ul>
+                    <li><span class="red">* </span>查询对象（只能查询单个对象）： </li>
+                    <li><input id="queryObj" name="queryObj" type="text" class="inputbox" readonly="readonly" value=""/></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li><span class="red">* </span>能耗分类： </li>
+                    @*<li><input id="powerTypeName" name="powerTypeName" type="text" class="inputbox" readonly="readonly" value="电..."/></li>*@
+                    <li>
+                    <select id="powerTypeName" name="powerTypeName" >
+                        <option value="001" selected="selected">电</option>
+                        <option value="002">水</option>
+                        <option value="003">气</option>
+                    </select>
+                    </li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li><span class="red">* </span>起始日期：</li>
+                    <li><input id="startTime" name="startTime" type="text" class="inputbox" readonly="readonly" /></li>
+                    <li></li>
+                </ul>
+                <ul>
+                    <li><span class="red">* </span>结束日期：</li>
+                    <li><input id="endTime" name="endTime" type="text" class="inputbox" readonly="readonly" /></li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li>
+                <ul>
+                    <li>显示方式：</li>
+                    <li>
+                        <div id="renderTypeSet">
+                            <input type="radio" id="renderList" name="renderRadio" value="List"/><label for="renderList"> 一览表 </label>
+                            <input type="radio" id="renderColumn" name="renderRadio" value="Column" /><label for="renderColumn"> 柱状图 </label>
+                            <input type="radio" id="renderLine" name="renderRadio" value="Line" /><label for="renderLine"> 折线图 </label>
+                            <input type="radio" id="renderPie" name="renderRadio" value="Pie"  checked="checked" /><label for="renderPie"> 饼状图 </label>
+                        </div>
+                    </li>
+                    <li></li>
+                </ul>
+                <div class="clear"></div>
+            </li>
+            <li><input id="queryButton" name="" type="submit" value="  查  询  " class="btn m-button"/></li>
+         </ul>
+         </form>
+
+         <fieldset id="resultDiv" class="hidden left"><legend>查询结果</legend>
+            <div id="dataDiv">
+            <table id="dataTable" class="hidden" width="500">
+                <thead>
+                    <tr>
+                        <th>能耗类型</th>
+                        <th id="dataDivUnit">用能值</th>
+                        <th>所占比例</th>
+                    </tr>
+                </thead>
+                <tbody id="resultDataDiv">
+                </tbody>
+            </table>
+            <div id="chartDiv" class="hidden"></div>
+            <div id="pager"></div>
+            @*<input id="exportExcel" name="exportExcel" type="button" value=" 导出Excel " class="btn" />*@
+            </div>
+            <div id="noDataDiv">当前查询范围没有数据</div>
+         </fieldset>
+         <fieldset id="analysisDiv" class="hidden left"><legend>分析结果</legend><div></div>
+         </fieldset>
+         <div class="clear"></div>
+        </div>
+    </div>
+
+</div></div>
+
+<input type="hidden" id="objIDs" value="0" />
+<input type="hidden" id="objType" value="0"/>
+<input type="hidden" id="powerType" value=""/>
+
+<script type="text/javascript">
+    $(function () {
+        $("#startTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#endTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#startTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#analysisDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#endTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#analysisDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#powerType").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#analysisDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+
+        $("#renderTypeSet").buttonset();
+        $("input[name='renderRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#analysisDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+
+        $("#exportExcel").click(function () {
+            var parameters = "?objType=" + $("#objType").val()
+                             + "&objIDs=" + $("#objIDs").val()
+                             + "&startTime=" + $("#startTime").val()
+                             + "&endTime=" + $("#endTime").val()
+                             + "&powerType=" + $("#powerType").val();
+            window.open('@Url.Action("GetVCElecExcel","Analysis")' + parameters, "_self");
+        });
+
+        $("#myForm").validate({
+            rules: {
+                queryObj: {
+                    required: true
+                },
+                startTime: {
+                    required: true
+                },
+                endTime: {
+                    required: true
+                },
+                powerTypeName: {
+                    required: true
+                }
+            },
+            messages: {
+                queryObj: {
+                    required: "查询对象不能为空"
+                },
+                startTime: {
+                    required: "开始时间不能为空"
+                },
+                endTime: {
+                    required: "结束时间不能为空"
+                },
+                powerTypeName: {
+                    required: "能耗类型不能为空"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (Date.parse($("#startTime").val().replace(/-/g, "/")) > Date.parse($("#endTime").val().replace(/-/g, "/"))) {
+                    $("#endTime").parent().next().html('<label class="error" for="startTime" generated="true">结束时间不能大于开始时间</label>');
+                    return false;
+                }
+                if (!$("#resultDiv").is(":visible")) {
+                    global_totalPages = -1;
+                    global_sum = -1;
+                    pageClick(1);
+                    analyze();
+                }
+                return false;
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        //        $("#powerTypeName").click(function () {
+        //            $("#powerTreeDiv").dialog({
+        //                modal: true,
+        //                width: 500,
+        //                resizable: false,
+        //                buttons: {
+        //                    '选择': function () {
+        //                        var tempName = "";
+        //                        var tempIDs = "";
+        //                        var selectedIndex = $("#powerTreeDiv").tabs('option', 'selected');
+        //                        var checkedObjs = $("#powerTreeDiv > .em-tree:eq(" + selectedIndex + ") div.checked");
+        //                        if(checkedObjs.length>0){
+        //                            checkedObjs.each(function (index, item) {
+        //                                if(tempName==""){
+        //                                    tempName = $(item).next().html();
+        //                                }
+        //                                if(tempIDs==""){
+        //                                    tempIDs = $(item).next().next().val();
+        //                                }else{
+        //                                    tempIDs += ("_" + $(item).next().next().val());
+        //                                }
+        //                            });
+        //                            $("#powerType").val(tempIDs);
+        //                            if(checkedObjs.length > 1){
+        //                                $("#powerTypeName").val(tempName+" ... （"+checkedObjs.length+"）");
+        //                            }else{
+        //                                $("#powerTypeName").val(tempName);
+        //                            }
+        //                        } else {
+        //                            $("#treeDialogErrorTip").slideDown("fast");
+        //                            return;
+        //                        }
+        //                        $("#resultDiv").slideUp("fast");
+        //                        $("#analysisDiv").slideUp("fast");
+        //                        $("#dataDiv").hide();
+        //                        $(this).dialog("close");
+        //                    }
+        //                }
+        //            });
+
+        //        });
+
+        $("#queryObj").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#buildingSelectDiv").dialog({
+                modal: true,
+                width: 550,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        selectedObjs = $("#selectedBuilding option:selected");
+                        if (selectedObjs.length == 0) {
+                            selectedObjs = $("#selectedSchoolArea option:selected");
+                            if (selectedObjs.length == 0) {
+                                selectedObjs = $("#selectedSchool option:selected");
+                                if (selectedObjs.length > 0) {
+                                    $("#objType").val(1);
+                                }
+                            } else {
+                                $("#objType").val(2);
+                            }
+                        } else {
+                            $("#objType").val(3);
+                        }
+
+                        if (selectedObjs.length == 1) {
+                            $("#queryObj").val(selectedObjs.text());
+                            $("#objIDs").val(selectedObjs.val());
+                            $("#resultDiv").slideUp("fast");
+                            $("#analysisDiv").slideUp("fast");
+                            $("#dataDiv").hide();
+                            $(this).dialog("close");
+                        } else if (selectedObjs.length > 1) {
+                            $("#dialogErrorTip").text("只能选择单个对象");
+                            $("#dialogErrorTip").slideDown("fast");
+                        } else {
+                            $("#dialogErrorTip").text("查询对象不能为空");
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+
+                        //根据所选查询对象，确定能耗类型选项
+                        //                        var selectedObjID = $("#objIDs").val();
+                        //                        var selectedObjType = +$("#objType").val();
+                        //                        if (selectedObjID != null && selectedObjID != 0) {
+                        //                            $.getJSON('@Url.Action("PowerTypesOfObj","Information")', {
+                        //                                objID: selectedObjID,
+                        //                                objType: selectedObjType
+                        //                            }, function (jsonData) {
+                        //                                if (jsonData == null) {
+                        //                                    return;
+                        //                                }
+                        //                                if (jsonData.length == 0) {
+                        //                                    $("#powerType").val("0");
+                        //                                }
+                        //                                if (jsonData.length == 1) {
+                        //                                    $("#powerType").val(jsonData[0].PowerTypeID);
+                        //                                }
+                        //                                if (jsonData.length != 0) {
+                        //                                    $("#powerTreeDiv ul.em-tree ul li").each(function (index, item) {
+                        //                                        var tempID = $(item).children("input").val();
+                        //                                        var ifExistInJsonData = false;
+                        //                                        for (i = 0; i < jsonData.length; i++) {
+                        //                                            if (jsonData[i].PowerTypeID == tempID) {
+                        //                                                ifExistInJsonData = true;
+                        //                                                break;
+                        //                                            }
+                        //                                        }
+                        //                                        if (!ifExistInJsonData) {
+                        //                                            $(item).hide();
+                        //                                        } else {
+                        //                                            $(item).show();
+                        //                                        }
+                        //                                    });
+                        //                                    $("#powerTreeDiv ul.em-tree").first().find("div.checkbox").addClass("checked");
+                        //                                }
+                        //                                else {
+                        //                                    $("#powerTreeDiv ul.em-tree ul li").each(function (index, item) {
+                        //                                        $(item).hide();
+                        //                                    });
+                        //                                }
+                        //                            });
+                        //                        }
+                    }
+                }
+            });
+        });
+
+        var statisChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "StatisticsChart", 600, 400, "White");
+
+        var global_totalPages = -1;
+        var global_sum = -1;
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />')
+            $("#dataDiv").hide();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("GetVCElecAjax", "Analysis")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                objType: $("#objType").val(),
+                objIDs: $("#objIDs").val(),
+                powerType: $("#powerTypeName").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val(),
+                sum: global_sum
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages = -1) {
+                    global_totalPages = jsonData.totalPages;
+                    global_sum = jsonData.totalSum;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                var renderType = $("input[name='renderRadio']:checked").val();
+                if (renderType == "List") {
+                    $("#chartDiv").hide();
+                    $("#dataDivUnit").html(jsonData.yAxisTitle);
+                    $("#resultDataDiv").html($("#dataTemplate").tmpl(jsonData.data, {
+                        alternate: function (item) {
+                            return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                        }
+                    }));
+                    $("#dataTable").show();
+                    $("#dataDiv").show();
+                } else {
+                    $("#chartDiv").html("");
+                    var extendObj = {
+                        title: "用电统计",
+                        xAxisTitle: "日期",
+                        renderType: renderType
+                    };
+                    var chartData = $.extend(jsonData, extendObj);
+                    var chartXml = util_templateToChartXml("chartTemplate", chartData);
+                    statisChart.setDataXml(chartXml);
+                    $("#dataTable").hide();
+                    $("#chartDiv").show();
+                    $("#dataDiv").show();
+                    statisChart.render("chartDiv");
+                }
+            });
+        }
+
+        function analyze() {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />')
+            $("#analysisDiv > div").html(loadingImg);
+            $("#analysisDiv").show("slide", "fast");
+            $.getJSON('@Url.Action("GetVCElecAnalysisAjax", "Analysis")', {
+                objType: $("#objType").val(),
+                objIDs: $("#objIDs").val(),
+                powerType: $("#powerTypeName").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val()
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#analysisDiv > div").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (jsonData.totalRows == 0) {
+                    $("#analysisDiv > div").html("当前查询范围没有数据");
+                    return;
+                }
+                var extendObj = {
+                    queryObj: $("#queryObj").val(),
+                    startTime: $("#startTime").val(),
+                    endTime: $("#endTime").val(),
+                    powerTypeName: $("#powerTypeName").val()
+                };
+                var analysisData = $.extend(jsonData, extendObj);
+                $("#analysisDiv > div").html($("#analysisDataTemplate").tmpl(analysisData));
+            });
+        }
+
+        $("#powerType").val(globalPowerFn_getElecStr());
+    });
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+	<tr class="${$item.alternate($data)}"><td>${PowerName}</td><td>${StatisSVal}</td><td>${SPercentage}</td></tr>
+</script>
+<script id="analysisDataTemplate" type="text/x-jQuery-tmpl">
+    <p>当前查询范围包含数据【${totalRows}】条</p>
+    <p>总用能值为【${totalSum}】</p>
+    <p>最大用能类型为【${maxObj.PowerName}】，用能数为【${maxObj.StatisSVal}】，占总用能比例为【${maxObj.SPercentage}】</p>
+    <p>最小用能类型为【${minObj.PowerName}】，用能数为【${minObj.StatisSVal}】，占总用能比例为【${minObj.SPercentage}】</p>
+</script>
+<script id="chartTemplate" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="600" Height="400" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+        <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+
+        <vc:Chart.AxesX>
+            <vc:Axis Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+        <vc:Chart.Series>
+        <vc:DataSeries RenderAs="${renderType}">
+            <vc:DataSeries.DataPoints>
+                {{each data}}
+                    <vc:DataPoint AxisXLabel="${PowerName}" YValue="${StatisSVal}"/>
+                {{/each}}
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+@Html.Partial("_buildingSelect")
+@Html.Partial("_PowerSelect")

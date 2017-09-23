@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "修改信息";
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>修改信息</h2></div>
+    <div class="contentbox">
+    @if (ViewBag.isModified)
+    {
+        <div class="status success">
+            <p><img src="@Url.Content("~/Content/images/img/icons/icon_success.png") " alt="Success" /><span>修改个人信息成功!</span>
+            <a href="@Url.Action("PersonalInfo", "User")">点击查看</a>
+            </p>
+        </div>
+        if (ViewBag.isMailSendError != null)
+        {
+            if (ViewBag.isMailSendError)
+            {
+                <div class="status error">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Success" /><span>激活邮件发送失败!</span>
+                    尝试<a href="#"> 重新发送激活邮件 </a>，或者<a href="#"> 联系管理员 </a>
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="status success">
+                    <p><img src="@Url.Content("~/Content/images/img/icons/icon_success.png") " alt="Success" /><span>成功修改邮箱!</span>
+                    请去 @ViewBag.mailAddr 激活邮件，如果没有收到激活邮件，请重新登录重新发送激活邮件
+                    </p>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <div class="status success">
+            <p>
+            你没有修改任何信息，<a href="@Url.Action("ModifyInfo", "User")">点击重新修改</a>
+            </p>
+        </div>
+    }
+</div></div>

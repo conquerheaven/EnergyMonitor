@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="../../../../Content/css/layout.css" rel="stylesheet" type="text/css" />
+    <!-- Theme Start -->
+    <link href="../../../../Content/themes/green/styles.css" rel="stylesheet" type="text/css" />
+    <!-- Theme End -->
+    <script src="../../../../Scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        body {background:center #EAEAEA; height:auto;}
+        #rightside {margin: 20px 20px 0 20px;}
+        #breadcrumb {margin: 0px;}
+        #footer { margin: 20px; text-align:center;}
+    </style>
+    @RenderSection("head",required:false)
+</head>
+
+<body id="homepage">
+	<div id="header">
+    	@*<img alt="logo left" src="../../../../Content/images/headerbg_left.jpg" class="imgLeft" height="158"/>
+        <img alt="logo right" src="../../../../Content/images/headerbg_right.jpg" class="imgRight" height="158" />
+        <h1>复旦大学节约型校园建筑节能监管平台</h1>*@
+         <img  alt="logo" height="250px"  src="@Url.Content("~/Content/images/bg_lt_title.png")"/>
+    </div>
+        
+    <!-- Top Breadcrumb Start -->
+    <div id="noLoginBreadcrumb">
+    	
+        <div class="language">@Html.Partial("_SelectLanguage")</div>
+    </div>
+    <!-- Top Breadcrumb End -->
+     
+    <!-- Right Side/Main Content Start -->
+    <div id="rightside">
+        @RenderBody()      
+    </div>    
+    <!-- Right Side/Main Content End -->
+
+    <div id="footer">
+        &copy; Copyright 2011 Fudan University All Rights Reserved
+    </div>
+
+</body>
+</html>

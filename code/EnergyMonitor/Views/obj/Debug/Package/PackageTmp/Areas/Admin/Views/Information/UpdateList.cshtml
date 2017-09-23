@@ -1,0 +1,161 @@
+﻿@using System.ComponentModel;
+@{
+    ViewBag.Title = "测点管理";
+    var i = 0;
+    foreach (var ui in ViewBag.uiList){
+        i++;
+    }
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <style type="text/css">
+        .red{color: #AE0000;}
+        .green{color: #548C00;}
+        .yellow{color: #AE8F00;}
+        .click{cursor: pointer;}
+        td{padding-left:10px; padding-right:20px;}
+        .margintop30{margin-top: 20px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>测点管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("QueryPoint", "Information")">查询测点</a></li>
+            <li><a href="@Url.Action("AddRealPoint", "Information")">增加真实测点</a></li>
+            <li><a href="@Url.Action("AddPoint", "Information")">增加虚拟测点</a></li>
+            <li><a href="@Url.Action("ImportPoint", "Information")">导入历史数据</a></li>
+            <li class="current"><a>数据更新列表</a></li>
+	    </ul>
+	    <div class="tab-div" style="margin-top:20px;">
+            @if (i > 0){
+            <div id="dataDiv">
+            <table>
+                <thead><tr>
+                    <th>编号</th>
+                    <th>测点ID</th>
+                    <th>测点名称</th>
+                    <th>起始时间</th>
+                    <th>结束时间</th>
+                    <th>依赖子测点</th>
+                    <th>父测点</th>
+                    <th>状态</th>
+                </tr></thead>
+                <tbody>
+                @foreach (var item in ViewBag.uiList)
+                {
+                    PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(item);
+                    PropertyDescriptor pdID = pdc.Find("ID", true);
+                    var dataID = pdID.GetValue(item);
+                    PropertyDescriptor pdAINo = pdc.Find("AI_No", true);
+                    var dataAINo = pdAINo.GetValue(item);
+                    PropertyDescriptor pdAIName = pdc.Find("AI_Name", true);
+                    var dataAIName = pdAIName.GetValue(item);
+                    PropertyDescriptor pdSTime = pdc.Find("startTime", true);
+                    var dataSTime = pdSTime.GetValue(item);
+                    PropertyDescriptor pdETime = pdc.Find("endTime", true);
+                    var dataETime = pdETime.GetValue(item);
+                    PropertyDescriptor pdRID = pdc.Find("relatedIDs", true);
+                    var dataRID = pdRID.GetValue(item);
+                    PropertyDescriptor pdPNO = pdc.Find("parentNo", true);
+                    var dataPNO = pdPNO.GetValue(item);
+                    PropertyDescriptor pdST = pdc.Find("state", true);
+                    var dataST = pdST.GetValue(item);
+
+                    if (i % 2 == 1)
+                    {
+                        <tr class="alt">
+                        <td id="ID">@dataID</td>
+                        <td id="AINo">@dataAINo</td> 
+                        <td id="AIName">@dataAIName</td> 
+                        <td id="STime">@dataSTime</td> 
+                        <td id="ETime">@dataETime</td> 
+                        <td id="RID">@dataRID</td> 
+                        <td id="PNO">@dataPNO</td>
+                        @if (dataST == 0)
+                        {
+                            <td><span class="red click">可更新</span></td>
+                        }
+                        else if (dataST == 1)
+                        {
+                            <td><span class="green">已更新</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="yellow">等待</span></td>
+                        }
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                        <td id="ID">@dataID</td>
+                        <td id="AINo">@dataAINo</td> 
+                        <td id="AIName">@dataAIName</td> 
+                        <td id="STime">@dataSTime</td> 
+                        <td id="ETime">@dataETime</td> 
+                        <td id="RID">@dataRID</td> 
+                        <td id="PNO">@dataPNO</td>
+                        @if (dataST == 0)
+                        {
+                            <td><span class="red click">可更新</span></td>
+                        }
+                        else if (dataST == 1)
+                        {
+                            <td><span class="green">已更新</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="yellow">等待</span></td>
+                        }
+                        </tr>
+                    }
+
+                    i++;
+                }
+                </tbody>
+            </table>
+            <!--<div id="pager"></div>-->
+            </div>
+            }
+            else{
+            <div id="noDataDiv" class="margintop30">没有可更新的数据！</div>
+            }
+    </div></div>
+</div></div>
+<script type="text/javascript">
+    $(function () {
+        $(".red").click(function () {
+            $(this).html("<img alt='Loading' src='@Url.Content("~/Content/images/loading_small.gif")'>");
+            $(this).removeClass("click");
+            var ID = $(this).parent().parent().find("#ID").text();
+            var AINo = $(this).parent().parent().find("#AINo").text();
+            var STime = $(this).parent().parent().find("#STime").text();
+            var ETime = $(this).parent().parent().find("#ETime").text();
+            $.getJSON('@Url.Action("UpdateDataByAINo", "Information")', {
+                ID: ID,
+                AI_No: AINo,
+                startTime: STime,
+                endTime: ETime
+            }, function (jsonData) {
+                if (jsonData.ifSuccess == true) {
+                    alert("更新成功！");
+                    location.reload();
+                }
+                else {
+                    alert("更新失败，请重试！");
+                    location.reload();
+                }
+            });
+
+        });
+    });
+</script>

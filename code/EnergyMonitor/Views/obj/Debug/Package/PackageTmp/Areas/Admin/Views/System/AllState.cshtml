@@ -1,0 +1,139 @@
+﻿@using System.Xml;
+@{
+    ViewBag.Title = "系统运行状态";
+    XmlDocument xmlDoc = new XmlDocument();
+
+    XmlElement topUl = xmlDoc.CreateElement("ul");
+    xmlDoc.AppendChild(topUl);
+    
+    var workstationList = (List<EnergyMonitor.Models.Repository.Entity.StateEntity>)ViewBag.workstationList;
+    var rtuList = (List<EnergyMonitor.Models.Repository.Entity.StateEntity>)ViewBag.rtuList;
+    var instrumentList = (List<EnergyMonitor.Models.Repository.Entity.StateEntity>)ViewBag.instrumentList;
+     
+    foreach (var item in workstationList)
+    {
+        XmlElement li = xmlDoc.CreateElement("li");
+        li.SetAttribute("id", item.Type + "_" + item.StateNo);
+        XmlElement span = xmlDoc.CreateElement("span");
+        span.InnerText = item.Info;
+        if(item.Status == 1)
+        {
+            span.SetAttribute("class", "good");
+        }
+        else
+        {
+            span.SetAttribute("class", "bad");
+        }
+        li.AppendChild(span);
+        topUl.AppendChild(li);
+    }
+    foreach (var item in rtuList)
+    {
+        XmlNode parentLi = xmlDoc.SelectSingleNode("//li[@id='" + "W_" + item.ParentNo + "'] ");
+        if(parentLi != null)
+        {
+            XmlElement li = xmlDoc.CreateElement("li");
+            li.SetAttribute("id", item.Type + "_" + item.StateNo);
+            XmlElement span = xmlDoc.CreateElement("span");
+            span.InnerText = item.Info;
+            if (item.Status == 1)
+            {
+                span.SetAttribute("class", "good");
+            }
+            else
+            {
+                span.SetAttribute("class", "bad");
+            }
+            li.AppendChild(span);
+            
+            XmlNode parentUl = parentLi.ChildNodes[1];
+            if (parentUl != null)
+            {
+                parentUl.AppendChild(li);
+            }
+            else
+            {
+                parentUl = xmlDoc.CreateElement("ul");
+                parentUl.AppendChild(li);
+                parentLi.AppendChild(parentUl);
+            }
+        }
+    }
+    foreach (var item in instrumentList)
+    {
+        XmlNode parentLi = xmlDoc.SelectSingleNode("//li[@id='" + "R_" + item.ParentNo + "'] ");
+        if (parentLi != null)
+        {
+            XmlElement li = xmlDoc.CreateElement("li");
+            li.SetAttribute("id", item.Type + "_" + item.StateNo);
+            XmlElement span = xmlDoc.CreateElement("span");
+            span.InnerText = item.Info;
+            if (item.Status == 1)
+            {
+                span.SetAttribute("class", "good");
+            }
+            else
+            {
+                span.SetAttribute("class", "bad");
+            }
+            li.AppendChild(span);
+
+            XmlNode parentUl = parentLi.ChildNodes[1];
+            if (parentUl != null)
+            {
+                parentUl.AppendChild(li);
+            }
+            else
+            {
+                parentUl = xmlDoc.CreateElement("ul");
+                parentUl.AppendChild(li);
+                parentLi.AppendChild(parentUl);
+            }
+        }
+    }
+    
+}
+@section head{
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/mktree.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/mktree.js" type="text/javascript"></script>
+    <style type="text/css">
+        .tip{margin-left:20px; }
+        .tip .item{margin-left:20px;}
+        hr{clear:both; margin: 20px 0;border:1px #EAEAEA solid;}
+        .good{ color: Green;}
+        .bad{ color: Red;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>系统运行状态</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <!--<li><a href="@Url.Action("QueryState", "System")">展开查看</a></li>-->
+            <li><a href="@Url.Action("BadState", "System")">查看故障</a></li>
+            <li class="current"><a>查看全部</a></li>
+            <li><a href="@Url.Action("DiagramState", "System")">图表查看</a></li>
+	    </ul>
+	    <div class="tab-div">
+        <div class="tip">
+            <div class="left"><span class="good">绿色</span>：该设备正常</div>
+            <div class="left item"><span class="bad">红色</span>：该设备故障</div>
+        </div>
+        <hr />
+        <div>
+            <ul id="stateTree" class="mktree">
+                <li><span class="good"> 系统状态 </span>
+                @Html.Raw(xmlDoc.OuterXml)
+                </li>
+            </ul>
+        </div>
+    </div></div>
+</div></div>
+<script type="text/javascript">
+    $(function () {
+        convertTrees();
+        expandTree("stateTree");
+    });
+</script>

@@ -1,0 +1,10 @@
+.pointSelectDiv ul { white-space:nowrap;}
+.objSelectUl li { float: left; width: 170px; margin: 20px; display:none;}
+.objSelectUl li select{width: 170px; height: 200px; }
+.pointSelectUl li { width:auto; margin:9px; display:block;}
+.pointSelectUl li select {width:650px; height: 200px; }
+.pointSelectDiv .divSelectPoint1 {background-image: url(../../../../Content/images/roomSelectBG1.png);}
+.pointSelectDiv .divSelectPoint2 {background-image: url(../../../../Content/images/roomSelectBG2.png);}
+.pointSelectDiv .divSelectPoint3 {background-image: url(../../../../Content/images/roomSelectBG3.png);}
+.pointSelectDiv .divSelectPoint4 {background-image: url(../../../../Content/images/roomSelectBG4.png);}
+.

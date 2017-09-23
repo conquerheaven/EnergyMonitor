@@ -1,0 +1,688 @@
+﻿@{
+    ViewBag.Title = "能耗比较";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/Pager.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.pager.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/Visifire.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/util.js" type="text/javascript"></script>
+    <style type="text/css">
+        #queryBuildingTypeSet{ margin-top: 5px;}
+        #selectObjsTip{ margin-left:20px;}
+        #selectObjsTip a{ text-decoration:underline; cursor:pointer; }
+        #selectObjDiv ul li { margin:5px;}
+        #selectObjDiv ul li a{ font-weight:bold; border:1px outset black; cursor:pointer; color:white; background-color:#525252; margin-left: 10px;}
+        .em-form-ul li.col1-width ul label{ width: auto;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>能耗比较</h2></div>
+    <div class="contentbox">
+    <form id="myForm" action="#" method="post">
+    <ul class="em-form-ul">
+        <li>
+            <ul>
+                <li><span class="red">* </span>查询对象（只能添加同级别多个对象）：</li>
+                <li>
+                    <div id="queryTypeSet">
+                        <input type="radio" id="queryTypeSchool" name="queryType" value="school" /><label for="queryTypeSchool"> 校区 </label>
+                        <input type="radio" id="queryTypeArea" name="queryType" value="area" /><label for="queryTypeArea"> 区域 </label>
+                        <input type="radio" id="queryTypeBuilding" name="queryType" value="building" checked="checked" /><label for="queryTypeBuilding"> 楼宇 </label>
+                        <input type="radio" id="queryTypeCustom" name="queryType" value="custom" /><label for="queryTypeCustom"> 自定义 </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li id="queryBuildingTypeSet" class="col1-width">
+            <ul style="margin-left: 5px;">
+                <li>
+                    <div>
+                        <input type="radio" id="queryBuildingType0" name="queryBuildingType" value="0" checked="checked" /><label for="queryBuildingType0"> 所有校区 </label>
+                        @foreach (var school in ViewBag.schoolList)
+                        {
+                            <input type="radio" id="queryBuildingType@(school.SI_ID)" name="queryBuildingType" value="@school.SI_ID" /><label for="queryBuildingType@(school.SI_ID)"> @school.SI_Name </label>
+                        }
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li class="col1-width">
+            <div id="selectObjsTip" class="hidden"><span id="firstObjName"></span> ... ( <span id="objsCount">0</span> )</div>
+        </li>
+        <li id="bdTypeSelect">
+            <ul>
+                <li><span class="red">* </span>建筑类型</li>
+                <li>
+                    <div>
+                        <select id="selectedBdType" name = "y">
+                           @* <option value="all">所有类型</option>
+                            <option value="教学建筑">教学建筑</option>
+                            <option value="学生宿舍">学生宿舍</option>
+                            <option value="办公实验建筑">办公实验建筑</option>
+                            <option value="学生食堂">学生食堂</option>
+                            <option value="图书馆">图书馆</option>
+                            <option value="体育馆">体育馆</option>
+                            <option value="浴室">浴室</option>
+                            <option value="学校商业建筑">学校商业建筑</option>*@
+                             @if (ViewBag.selectedBuilding == null)
+                             {
+                                    <option value="all" selected="selected">所有类型</option>
+                             }  
+                             else
+                            {
+                                <option value="all">所有类型</option>
+                            }                          
+                            @foreach (var item in ViewBag.buildingTypesList)
+                             {
+                                 if (ViewBag.selectedBuilding != null && ViewBag.selectedBuilding == item.BT_ID)
+                                 {
+                                        <option value="@item.BT_ID" selected="selected">@item.BT_Name</option>
+                                 }
+                                 else
+                                 {
+                                        <option value="@item.BT_ID">@item.BT_Name</option>
+                                 }
+                             }
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li><span class="red">* </span>能耗分类： </li>
+                @*<li><input id="powerTypeName" name="powerTypeName" type="text" class="inputbox" readonly="readonly" value="电..."/></li>*@
+                <li><select id="powerType" name="powerType">
+                        @foreach (var item in Model)
+                        {
+                            if (item.PC_ID.Length == 3)
+                            {
+                                var prefix = "总用";
+                                <option label="@item.PC_Name" value="@item.PC_ID">@prefix@item.PC_Name</option>
+                            }
+                            else
+                            {
+                                var s = new string('-', item.PC_ID.Length - 3);
+                                <option value="@item.PC_ID">@s@item.PC_Name</option>
+                            }
+                        }
+                </select></li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <ul>
+                <li><span class="red">* </span>起始日期：</li>
+                <li><input id="startTime" name="startTime" type="text" class="inputbox" readonly="readonly" /></li>
+                <li></li>
+            </ul>
+            <ul>
+                <li><span class="red">* </span>结束日期：</li>
+                <li><input id="endTime" name="endTime" type="text" class="inputbox" readonly="readonly" /></li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <ul>
+                <li>是否分页显示：</li>
+                <li>
+                    <div id="ifPageSet">
+                        <input type="radio" id="negPage" name="pageRadio" value="negPage" checked="checked" /><label for="negPage"> 不分页 </label>
+                        <input type="radio" id="posPage" name="pageRadio" value="posPage" /><label for="posPage"> 分页 </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li class="col1-width">
+            <ul style="margin-left: 5px;">
+                <li><span class="red">* </span>排序方式：</li>
+                <li>
+                    <div id="orderTypeSet">
+                        <input type="radio" id="orderType0" name="orderType" value="0" checked="checked" /><label for="orderType0"> 默认 </label>
+                        <input type="radio" id="orderType1" name="orderType" value="1" /><label for="orderType1"> 用能值 ↓ </label>
+                        <input type="radio" id="orderType2" name="orderType" value="2" /><label for="orderType2"> 用能值 ↑ </label>
+                        <input type="radio" id="orderType3" name="orderType" value="3" /><label for="orderType3"> 名称 ↑ </label>
+                        <input type="radio" id="orderType4" name="orderType" value="4" /><label for="orderType4"> 名称 ↓ </label>
+                        <input type="radio" id="orderType5" name="orderType" value="5" /><label for="orderType5"> 单位建筑面积能耗 ↓ </label>
+                        <input type="radio" id="orderType6" name="orderType" value="6" /><label for="orderType6"> 单位建筑面积能耗 ↑ </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li>
+            <ul>
+                <li><span class="red">* </span>显示方式：</li>
+                <li>
+                    <div id="renderTypeSet">
+                        <input type="radio" id="renderList" name="renderRadio" value="List" checked="checked" /><label for="renderList"> 一览表 </label>
+                        <input type="radio" id="renderColumn" name="renderRadio" value="Column" /><label for="renderColumn"> 柱状图 </label>
+                        <input type="radio" id="renderLine" name="renderRadio" value="Line" /><label for="renderLine"> 折线图 </label>
+                        <input type="radio" id="renderPie" name="renderRadio" value="Pie" /><label for="renderPie"> 饼状图 </label>
+                    </div>
+                </li>
+                <li></li>
+            </ul>
+            <div class="clear"></div>
+        </li>
+        <li><input id="queryButton" name="" type="submit" value="  查  询  " class="btn m-button"/></li>
+     </ul>
+     </form>
+
+     <fieldset id="resultDiv" class="hidden"><legend>查询结果</legend>
+        <div id="dataDiv">
+        <table>
+            <thead><tr>
+                <th>序号</th>
+                <th>所属对象</th>
+                <th id="dataDivUnit">用能值</th>
+            </tr></thead>
+            <tbody id="resultDataDiv">
+            </tbody>
+        </table>
+        <div id="chartDataDiv"></div>
+        <div id="pager"></div>
+        <input id="exportExcel" name="exportExcel" type="button" value=" 导出Excel " class="btn" />
+        </div>
+        <div id="noDataDiv">当前查询范围没有数据</div>
+     </fieldset>
+    
+</div></div>
+
+<div id="selectObjDiv" class="hidden" title="已选中查询对象">
+<ul></ul>
+</div>
+
+<input type="hidden" id="objType" value="3"/>
+<input type="hidden" id="objIDs" value="" />
+@*<input type="hidden" id="powerType" value=""/>*@
+
+<script type="text/javascript">
+    $(function () {
+        $("#queryTypeSet").buttonset();
+        $("#queryBuildingTypeSet").buttonset();
+        $("#startTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#endTime").datepicker({ changeMonth: true, changeYear: true });
+        $("#orderTypeSet").buttonset();
+        $("#renderTypeSet").buttonset();
+        $("#ifPageSet").buttonset();
+        $("input[name='queryType']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+            var radioVal = $(this).val();
+            if (radioVal == "school") {
+                $("#selectObjsTip").slideUp("fast");
+                $("#objType").val(1);
+                $("#objIDs").val("");
+                $("#queryBuildingTypeSet").slideUp("fast");
+            } else if (radioVal == "area") {
+                $("#selectObjsTip").slideUp("fast");
+                $("#objType").val(2);
+                $("#objIDs").val("");
+                $("#queryBuildingTypeSet").slideUp("fast");
+            } else if (radioVal == "building") {
+                $("#selectObjsTip").slideUp("fast");
+                $("#objType").val(3);
+                $("#objIDs").val("");
+                $("#queryBuildingTypeSet").slideDown("fast");
+            } else {
+                $("#objType").val("");
+                $("#selectObjDiv > ul").html("");
+                $("#queryBuildingTypeSet").slideUp("fast");
+            }
+        });
+        $("#selectedBdType").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#ifPageSet").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='queryBuildingType']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#powerType").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='queryType']").click(function () {
+            var radioVal = $(this).val();
+            if (radioVal == "custom") {
+                $("#dialogErrorTip").hide();
+                $("#roomSelectDiv").dialog({
+                    modal: true,
+                    width: 850,
+                    resizable: false,
+                    buttons: {
+                        '选择': function () {
+                            var selectedObjs = $("#addedBD option");
+                            if (selectedObjs.length == 0) {
+                                $("#dialogErrorTip1").slideDown("fast");
+                            } else {
+                                var objIDStr = "" + selectedObjs[0].value;
+                                var objNameStr = (new String(selectedObjs[0].text)).substr(0, 20);
+                                var objCount = parseInt(selectedObjs.length);
+                                selectedObjs.each(function (index, item) {
+                                    if (index != 0) {
+                                        objIDStr = objIDStr + "_" + $(this).val();
+                                    }
+                                });
+                                $("#objIDs").val(objIDStr);
+                                $("#objsCount").html(selectedObjs.length);
+                                $("#selectObjsTip").show()
+                                $("#firstObjName").html(selectedObjs[0].text);
+                                $("#resultDiv").slideUp("fast");
+                                //                                $("#analysisDiv").slideUp("fast");
+                                $("#dataDiv").hide();
+                                $(this).dialog("close");
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        $("#startTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#endTime").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#powerType").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#objsDetail").click(function () {
+            $("#selectObjDiv").dialog({
+                modal: true,
+                width: 400
+            });
+        });
+        $("input[name='orderType']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("input[name='renderRadio']").change(function () {
+            $("#resultDiv").slideUp("fast");
+            $("#dataDiv").hide();
+        });
+        $("#exportExcel").click(function () {
+            var parameters = "?objType=" + $("#objType").val() + "&objIDs=" + $("#objIDs").val() + "&schoolId=" + $("input[name='queryBuildingType']:checked").val() + "&startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val() + "&powerType=" + $("#powerType").val() + "&orderType=" + $("input[name='orderType']:checked").val() + "&buildingType=" + $("#selectedBdType").val() + "&ifPage=0";
+            window.open('@Url.Action("GetCompareEnergyExcel", "Statistics")' + parameters, "_blank");
+        });
+
+        $("#myForm").validate({
+            rules: {
+                startTime: {
+                    required: true
+                },
+                endTime: {
+                    required: true
+                },
+                powerTypeName: {
+                    required: true
+                }
+            },
+            messages: {
+                startTime: {
+                    required: "开始时间不能为空"
+                },
+                endTime: {
+                    required: "结束时间不能为空"
+                },
+                powerTypeName: {
+                    required: "能耗类型不能为空"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+            },
+            submitHandler: function (form) {
+                if (Date.parse($("#startTime").val().replace(/-/g, "/")) > Date.parse($("#endTime").val().replace(/-/g, "/"))) {
+                    $("#endTime").parent().next().html('<label class="error" for="startTime" generated="true">结束时间不能大于开始时间</label>');
+                    return false;
+                }
+                if ($("#resultDiv").is(":hidden")) {
+                    if ($("input[name='queryType']:checked").val() == "custom") {
+                        var objCount = 0 + $("#objsCount").text;
+                        if (objCount == 0) {
+                            $("#queryTypeSet").parent().next().html('<label class="error" for="queryTypeSet" generated="true">自定义查询对象不能为空</label>');
+                            return false;
+                        }
+                    }
+                    var ifpage = $("input[name='pageRadio']:checked").val();
+                    if (ifpage == 'posPage') {
+                        global_totalPages = -1;
+                        pageClick(1);
+                    } else {
+                        query();
+                    }
+                }
+                return false;
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        //        $("#powerTypeName").click(function () {
+        //            $("#treeDialogErrorTip").hide();
+        //            $("#powerTreeDiv").dialog({
+        //                modal: true,
+        //                width: 500,
+        //                resizable: false,
+        //                buttons: {
+        //                    '选择': function () {
+        //                        var tempName = "";
+        //                        var tempIDs = "";
+        //                        var selectedIndex = $("#powerTreeDiv").tabs('option', 'selected');
+        //                        var checkedObjs = $("#powerTreeDiv > .em-tree:eq(" + selectedIndex + ") div.checked");
+        //                        if (checkedObjs.length > 0) {
+        //                            checkedObjs.each(function (index, item) {
+        //                                if (tempName == "") {
+        //                                    tempName = $(item).next().html();
+        //                                }
+        //                                if (tempIDs == "") {
+        //                                    tempIDs = $(item).next().next().val();
+        //                                } else {
+        //                                    tempIDs += ("_" + $(item).next().next().val());
+        //                                }
+        //                            });
+        //                            $("#powerType").val(tempIDs);
+        //                            if (checkedObjs.length > 1) {
+        //                                $("#powerTypeName").val(tempName + " ... （" + checkedObjs.length + "）");
+        //                            } else {
+        //                                $("#powerTypeName").val(tempName);
+        //                            }
+        //                        } else {
+        //                            $("#treeDialogErrorTip").slideDown("fast");
+        //                            return;
+        //                        }
+        //                        $("#resultDiv").slideUp("fast");
+        //                        $("#dataDiv").hide();
+        //                        $(this).dialog("close");
+        //                    }
+        //                }
+        //            });
+
+        //        });
+
+        var statisChart = new Visifire("../../../../Content/sl/SL.Visifire.Charts.xap", "StatisticsChart", 700, 500, "White");
+        var global_totalPages = -1;
+        function pageClick(pageIndex) {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />')
+            $("#dataDiv > table").hide();
+            $("#chartDataDiv").hide();
+            $("#dataDiv").hide();
+            var objType = $("#objType").val();
+            var orderType = $("input[name='orderType']:checked").val();
+            if (objType != "3" && objType != "1" && (orderType == "5" || orderType == "6")) {
+                $("#noDataDiv").html("对不起，只有楼宇或校区能够统计单位建筑面积能耗信息。").show();
+                $("#resultDiv").slideDown("fast");
+                return;
+            }
+            $("#pager").show();
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("GetCompareEnergy", "Statistics")', {
+                currentPage: pageIndex,
+                totalPages: global_totalPages,
+                objType: $("#objType").val(),
+                objIDs: $("#objIDs").val(),
+                schoolId: $("input[name='queryBuildingType']:checked").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val(),
+                powerType: $("#powerType").val(),
+                orderType: $("input[name='orderType']:checked").val(),
+                buildingType: $("#selectedBdType").val(),
+                ifPage: 1
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (global_totalPages = -1) {
+                    global_totalPages = jsonData.totalPages;
+                }
+                if (global_totalPages < 1) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#resultDataDiv").html("");
+                $("#pager").pager({ pagenumber: pageIndex, pagecount: global_totalPages, buttonClickCallback: pageClick });
+                var renderType = $("input[name='renderRadio']:checked").val();
+                var orderType = $("input[name='orderType']:checked").val();
+                if (orderType == "5" || orderType == "6") {
+                    if (renderType == "List") {
+                        $("#dataDivUnit").html(jsonData.yAxisTitle);
+                        $("#dataTemplateForPerArea").tmpl(jsonData.data, {
+                            alternate: function (item) {
+                                return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                            }
+                        }).appendTo("#resultDataDiv");
+                        $("#dataDiv > table").show();
+                    }
+                    else {
+                        $("#chartDataDiv").html("");
+                        var extendObj = {
+                            title: "单位建筑面积能耗比较",
+                            xAxisTitle: "楼宇",
+                            renderType: renderType
+                        };
+                        var chartData = $.extend(jsonData, extendObj);
+                        var chartXml = util_templateToChartXml("chartTemplateForPerArea", chartData);
+                        statisChart.setDataXml(chartXml);
+                        $("#chartDataDiv").show();
+                        statisChart.render("chartDataDiv");
+                    }
+                } else {
+                    if (renderType == "List") {
+                        $("#dataDivUnit").html(jsonData.yAxisTitle);
+                        $("#dataTemplate").tmpl(jsonData.data, {
+                            alternate: function (item) {
+                                return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                            }
+                        }).appendTo("#resultDataDiv");
+                        $("#dataDiv > table").show();
+                    } else {
+                        $("#chartDataDiv").html("");
+                        var extendObj = {
+                            title: "能耗比较",
+                            xAxisTitle: "比较对象",
+                            renderType: renderType
+                        };
+                        var chartData = $.extend(jsonData, extendObj);
+                        var chartXml = util_templateToChartXml("chartTemplate", chartData);
+                        statisChart.setDataXml(chartXml);
+                        $("#chartDataDiv").show();
+                        statisChart.render("chartDataDiv");
+                    }
+                }
+                $("#dataDiv").show();
+
+            });
+        }
+
+        function query() {
+            var loadingImg = $('<img src="@Url.Content("~/Content/images/loading_mid.gif")" title="Loading" width="100" />');
+            $("#dataDiv > table").hide();
+            $("#chartDataDiv").hide();
+            $("#dataDiv").hide();
+            $("#pager").hide();
+            var objType = $("#objType").val();
+            var orderType = $("input[name='orderType']:checked").val();
+            if (objType != "3" && objType != "1" && (orderType == "5" || orderType == "6")) {
+                $("#noDataDiv").html("对不起，只有楼宇或校区能够统计单位建筑面积能耗信息。").show();
+                $("#resultDiv").slideDown("fast");
+                return;
+            }
+            $("#noDataDiv").html(loadingImg).show();
+            $("#resultDiv").slideDown("fast");
+            $.getJSON('@Url.Action("GetCompareEnergy", "Statistics")', {
+                currentPage: 1,
+                totalPages: -1,
+                objType: $("#objType").val(),
+                objIDs: $("#objIDs").val(),
+                schoolId: $("input[name='queryBuildingType']:checked").val(),
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val(),
+                powerType: $("#powerType").val(),
+                orderType: $("input[name='orderType']:checked").val(),
+                buildingType: $("#selectedBdType").val(),
+                ifPage: 0
+            }, function (jsonData) {
+                if (jsonData == null) {
+                    $("#dataDiv").hide();
+                    $("#noDataDiv").html('没有权限或登录超时，尝试重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)').show();
+                    return;
+                }
+                if (jsonData.count == 0) {
+                    $("#noDataDiv").html("当前查询范围没有数据").show();
+                    $("#dataDiv").hide();
+                    return;
+                }
+                $("#noDataDiv").hide();
+                $("#resultDataDiv").html("");
+                var renderType = $("input[name='renderRadio']:checked").val();
+                var orderType = $("input[name='orderType']:checked").val();
+                if (orderType == "5" || orderType == "6") {
+                    if (renderType == "List") {
+                        $("#dataDivUnit").html(jsonData.yAxisTitle);
+                        $("#dataTemplateForPerArea").tmpl(jsonData.data, {
+                            alternate: function (item) {
+                                return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                            }
+                        }).appendTo("#resultDataDiv");
+                        $("#dataDiv > table").show();
+                    }
+                    else {
+                        $("#chartDataDiv").html("");
+                        var extendObj = {
+                            title: "单位建筑面积能耗比较",
+                            xAxisTitle: "楼宇",
+                            renderType: renderType
+                        };
+                        var chartData = $.extend(jsonData, extendObj);
+                        var chartXml = util_templateToChartXml("chartTemplateForPerArea", chartData);
+                        statisChart.setDataXml(chartXml);
+                        $("#chartDataDiv").show();
+                        statisChart.render("chartDataDiv");
+                    }
+                } else {
+                    if (renderType == "List") {
+                        $("#dataDivUnit").html(jsonData.yAxisTitle);
+                        $("#dataTemplate").tmpl(jsonData.data, {
+                            alternate: function (item) {
+                                return ($.inArray(item, jsonData.data) % 2) ? "alt" : "";
+                            }
+                        }).appendTo("#resultDataDiv");
+                        $("#dataDiv > table").show();
+                    } else {
+                        $("#chartDataDiv").html("");
+                        var extendObj = {
+                            title: "能耗比较",
+                            xAxisTitle: "比较对象",
+                            renderType: renderType
+                        };
+                        var chartData = $.extend(jsonData, extendObj);
+                        var chartXml = util_templateToChartXml("chartTemplate", chartData);
+                        statisChart.setDataXml(chartXml);
+                        $("#chartDataDiv").show();
+                        statisChart.render("chartDataDiv");
+                    }
+                }
+                $("#dataDiv").show();
+            });
+        }
+        $("#powerType").val(globalPowerFn_getElecStr());
+    });
+</script>
+<script id="dataTemplate" type="text/x-jQuery-tmpl">
+	<tr class="${$item.alternate($data)}">
+        <td>${EntityIndex}</td>
+        <td>${Name}</td>
+        <td>${StatisSVal}</td>
+</script>
+<script id="dataTemplateForPerArea" type="text/x-jQuery-tmpl">
+	<tr class="${$item.alternate($data)}">
+        <td>${EntityIndex}</td>
+        <td>${Name}</td>
+        <td>${valPerAreaStr}</td>
+</script>
+<script id="chartTemplate" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+        <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+
+        <vc:Chart.AxesX>
+            <vc:Axis Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+
+        <vc:Chart.Series>
+        <vc:DataSeries RenderAs="${renderType}">
+            <vc:DataSeries.DataPoints>
+                {{each data}}
+                    <vc:DataPoint AxisXLabel="${EntityIndex} : ${Name}" YValue="${StatisSVal}"/>
+                {{/each}}
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+
+<script id="chartTemplateForPerArea" type="text/x-jQuery-tmpl">
+	<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts" Bevel="True" AnimatedUpdate="True" View3D="False" IndicatorEnabled="True" 
+    ZoomingEnabled="True" AnimationEnabled="true" Width="700" Height="500" Theme="Theme1" 
+    BorderThickness="1" BorderBrush="Gray" ToolBarEnabled="True" ShadowEnabled="True">
+        <vc:Chart.Titles>
+        <vc:Title Text="${title}" Padding="0,0,0,5"/>
+        </vc:Chart.Titles>
+
+        <vc:Chart.AxesX>
+            <vc:Axis Title="${xAxisTitle}"/>
+        </vc:Chart.AxesX>
+        <vc:Chart.AxesY>
+            <vc:Axis Title="${yAxisTitle}"/>
+        </vc:Chart.AxesY>
+
+        <vc:Chart.Series>
+        <vc:DataSeries RenderAs="${renderType}">
+            <vc:DataSeries.DataPoints>
+                {{each data}}
+                    <vc:DataPoint AxisXLabel="${EntityIndex} : ${Name}" YValue="${valPerAreaStr}"/>
+                {{/each}}
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+
+        </vc:Chart.Series>
+    </vc:Chart>
+</script>
+@Html.Partial("_MultiObjSelect")

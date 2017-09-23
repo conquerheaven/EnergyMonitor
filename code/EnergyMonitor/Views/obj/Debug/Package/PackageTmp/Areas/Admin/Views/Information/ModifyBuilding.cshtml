@@ -1,0 +1,1804 @@
+﻿@{
+    ViewBag.Title = "楼宇管理";
+}
+@section head{
+    <link href="../../../../Content/css/jquery-ui/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/jquery-ui/datepicker/jquery-ui-1.8.11.datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/tab.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/form.css" rel="stylesheet" type="text/css" />
+    <link href="../../../../Content/css/RoomSelect.css" rel="stylesheet" type="text/css" />
+
+    <script src="../../../../Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.timepicker.js" type="text/javascript"></script>
+    <script src="../../../../Scripts/jquery.form.js" type="text/javascript"></script>
+    <style type="text/css">
+        #tabs .tab-div { padding-left:0;}
+        .form-wrapper {border:1px #EAEAEA solid; height: auto; border-radius: 10px 10px 10px 10px;margin: 10px 10px; width: 710px; float:left; padding-bottom:10px;}
+	    .form-wrapper h3{background-color: #BABABA;border-radius: 10px 10px 0px 0px; padding:3px;padding-left: 20px; display: block; color:White;}
+	    .form-wrapper h3 img{ float:right; margin-right:10px; cursor:pointer;}
+	    .form-wrapper h3 .modify-flag{ float:right; margin-right:10px; cursor:pointer;}
+	    .form-wrapper h3 .modify-flag img{ margin:0 2px; }
+	    .form-wrapper table.input-table{ width:100%; margin:5px 0;}
+	    .form-wrapper table.input-table th,.form-wrapper table.input-table td{ font-size: 12px;padding: 3px; border-left:1px #BABABA solid;border-right:1px #BABABA solid;}
+	    .form-wrapper table.input-table th { border-top:1px #BABABA solid;}
+	    .form-wrapper table.input-table td { border-bottom:1px #BABABA solid;}
+	    .form-wrapper table.input-table td input { width: 80px;border:0; border-bottom:1px solid #BABABA; }
+	    .form-wrapper table.input-table td input.small-width { width: 30px; }
+	    .form-wrapper table.input-table td input.small2-width { width: 50px; }
+	    /*
+	    .em-form-ul li ul li span.multi-select-tip{ background: url("../../../../Content/images/img/icons/icon_down_arrow.png") no-repeat 120px 5px;border:1px solid #999999;border-radius: 3px 3px 0 0; display:block;width:140px; padding: 7px; text-align:center; cursor:pointer;}
+	    .em-form-ul li ul li ol.multi-select {position: absolute; width:154px; border:1px solid #999999; border-top:0; border-radius: 0 0 3px 3px; margin:0; background-color:White; padding:0; display:none;}
+	    .em-form-ul li ul li ol.multi-select li{overflow: hidden;height:20px;}
+	    .em-form-ul li ul li ol.multi-select li input{ width:10px;}
+        */
+	    .em-form-ul li.col1-width ul li label.error{ width: auto; float:none; margin-left:5px; display:inline;}
+	    .time-picker{position: absolute; width:135px; border:1px solid #999999; margin:0; background-color:#BABABA; padding:2px; margin-top:2px;display:none;}
+        .time-picker select{ width:50px; height:20px; padding:0; margin:0; float:left;}
+        .time-picker a.confirm{background:url("../../../../Content/images/img/icons/icon_approve.png") no-repeat;float:left; width:16px; cursor:pointer; margin-top:3px;}
+        .time-picker a.cancel{background:url("../../../../Content/images/img/icons/icon_cross_sml.png") no-repeat;float:left; width:16px; cursor:pointer; margin-top:3px;}
+        .time-picker a:hover{ outline:1px #EAEAEA solid; }
+	    .small-input-text{width: 30px;border:0; border-bottom:1px solid #BABABA;}
+	    .a-plus-minus{border:1px #EAEAEA solid; text-decoration:none; padding:0 5px; margin-left:5px;}
+	    .a-plus-minus:hover{ border-color: #BABABA;}
+	    #showImg, #modifyImg{border:1px #EAEAEA solid; text-decoration:none; padding:0 5px; margin-left:5px; cursor:pointer;}
+	    #showImg:hover, #modifyImg:hover{ border-color: #BABABA;}
+	    #errorTip { text-align:center; display:none; color:Red;}
+	    hr{border:1px #EAEAEA solid;}
+	    .em-form-ul li ul li .combox{position:relative;}
+	    .em-form-ul li ul li .combox input{height:25px;position:absolute;left:0px; width:115px; border:0; margin-top:1px; margin-left:2px; padding-left:10px; padding-top:5px;}
+	    .appendix-div{display:none;}
+	    .appendix-div ul:after{content:"<li></li>"; visibility:hidden; display:block;}
+	    .appendix-div ul li{margin:2px 0;border:1px #BABABA solid; width: 1050px;}
+	    .appendix-div ul li:after{content:"."; visibility:hidden; display:block; height:0; clear:both;}
+	    .appendix-div ul li label{float:left; width:40px; padding:5px; padding-top: 25px;text-align:center; margin:0;}
+	    .appendix-div ul li label span{margin-left:-7px;margin-top:2px; display:block; width:50px;}
+	    .appendix-div ul li table{float:right;width:1000px; margin:0;}
+	    .appendix-div ul li table th, .appendix-div ul li table td{border-left:1px #BABABA solid;border-right:1px #BABABA solid;padding: 3px; text-align:center;white-space:nowrap;}
+	    .appendix-div ul li table th{border-top:1px #BABABA solid;}
+	    .appendix-div ul li table td{border-bottom:1px #BABABA solid;}
+	    .appendix-div ul li table td input { width: 95%;border:0; background:none;}
+	    .appendix-div ul li table td input.small { width: 40px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>楼宇管理</h2></div>
+<div class="contentbox">
+    <div id="tabs">
+        <ul class="tab-ul">
+		    <li><a href="@Url.Action("QueryBuilding", "Information")">查询楼宇</a></li>
+		    <li><a href="@Url.Action("AddBuilding", "Information")">增加楼宇</a></li>
+            <li class="current"><a>修改楼宇</a></li>
+	    </ul>
+	    <div class="tab-div">
+        @if (Model != null)
+        {
+            <div id="errorTip"><img src="@Url.Content("~/Content/images/img/icons/icon_error.png") " alt="Error" /> 部分数据输入有误，请重新输入!</div>
+            <form id="myForm" action="@Url.Action("ModifyBuildingInfo", "Information")" method="post" enctype="multipart/form-data" >
+            <div class="form-wrapper"><h3>必填信息</h3>
+                <ul class="em-form-ul">
+                    <li>
+                        <ul>
+                            <li><span class="red">* </span>建筑名称：</li>
+                            <li><input id="buildingName" name="b.BDI_Name" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Name" /></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li><span class="red">* </span>所属区域：</li>
+                            <li><input id="areaName" name="areaName" type="text" class="inputbox" readonly="readonly" value="@ViewBag.areaInfo.AreaName"/></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                 </ul>
+            </div>
+        
+            <div class="form-wrapper"><h3>基本信息<img src="../../../../Content/images/img/icons/icon_plus.png" /></h3>
+                <ul class="em-form-ul hidden">
+                    <li>
+                        <ul>
+                            <li>建筑简介：</li>
+                            <li><textarea id="introductionArea" name="b.BDI_Introduction" rows="1" cols="37" class="inputbox" style="overflow-y: hidden;" >@Model.BDI_Introduction</textarea></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>上传照片（<a id="showImg">查看图片</a><a id="modifyImg">重新上传</a>）：</li>
+                            <li class="hidden"><input name="uploadImg" type="file" class="inputbox" /><input name="b.BDI_ImageUrl" type="hidden" value="@Model.BDI_ImageUrl" /></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li>
+                        <ul>
+                            <li>详细地址：</li>
+                            <li><input name="b.BDI_Address" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Address" /></li>
+                            <li></li>
+                        </ul>
+                        <ul style="width:163px;">
+                            <li>所属院系：</li>
+                            <li><input name="b.BDI_Academy" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Academy" style="width:128px;" /></li>
+                            <li></li>
+                        </ul>
+                        <ul style="width:163px;">
+                            <li>楼主电话：</li>
+                            <li><input name="b.BDI_Telephone" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Telephone" style="width:128px;"/></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="col4-width">
+                        <ul>
+                            <li>能耗统计负责人：</li>
+                            <li><input name="b.BDI_LinkMan" type="text" maxlength="100" class="inputbox" value="@Model.BDI_LinkMan"/></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>能耗统计负责人电话：</li>
+                            <li><input name="b.BDI_LinkManPhone" type="text" maxlength="100" class="inputbox" value="@Model.BDI_LinkManPhone"/></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                        <li>统计人员：</li>
+                        <li><input name="b.BDI_StatMan" type="text" maxlength="100" class="inputbox" value="@Model.BDI_StatMan" /></li>
+                        <li></li>
+                    </ul>
+                        <ul>
+                            <li>统计人员电话：</li>
+                            <li><input name="b.BDI_StatManPhone" type="text" maxlength="100" class="inputbox" value="@Model.BDI_StatManPhone"/></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="col4-width">
+                        <ul>
+                            <li>建筑类型：</li>
+                            <li><div class="combox"><select  > 
+                                 @if (Model.BDI_Type == null)
+                                    {
+                                        <option value="" selected="selected"></option>
+                                    }
+                                    else
+                                    {
+                                        <option value=""></option>
+                                    }
+                                @foreach (var item in ViewBag.buildingTypesList)
+                                    {
+                                        if (item.BT_ID == Model.BDI_Type)
+                                        {
+                                                <option value="@item.BT_ID" selected="selected">@item.BT_Name</option>
+                                        }
+                                        else
+                                        {                                                                
+                                               <option value="@item.BT_ID">@item.BT_Name</option> 
+                                        }                                     
+                                    }
+                             </select><input name="b.BDI_Type" class="hidden" maxlength="100" value="@Model.BDI_Type" /></div></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>建造年代：</li>
+                            <li><input name="b.BDI_Date" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Date"/></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>建筑朝向：</li>
+                            <li><input name="b.BDI_Direction" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Direction"/></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>建筑使用人数：</li>
+                            <li><input name="b.BDI_Users" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Users"/></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li><hr /></li>
+                    <li>
+                        <ul>
+                            <li>每天运行 <input name="b.BDI_RunPerWeek" type="text" maxlength="100" style="width:40px;" value="@Model.BDI_RunPerWeek" /> 小时：从 <input name="b.BDI_WeekStart" type="text" maxlength="100" style="width:65px;" value="@Model.BDI_WeekStart" /> 到 <input name="b.BDI_WeekEnd" type="text" maxlength="100" style="width:65px;" value="@Model.BDI_WeekEnd" /> </li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>每周运行 <input name="b.BDI_RunPreMonth" type="text" maxlength="100" style="width:40px;" value="@Model.BDI_RunPreMonth" /> 天：从 <input name="b.BDI_MonthStart" type="text" maxlength="100" style="width:65px;" value="@Model.BDI_MonthStart" /> 到 <input name="b.BDI_MonthEnd" type="text" maxlength="100" style="width:65px;" value="@Model.BDI_MonthEnd" /> </li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li>
+                        <ul>
+                            <li>每年运行 <input name="b.BDI_RunPerYear" type="text" maxlength="100" style="width:40px;" value="@Model.BDI_RunPerYear" /> 月：&nbsp;&nbsp;&nbsp;从 <input name="b.BDI_YearStart" type="text" maxlength="100" style="width:65px;" value="@Model.BDI_YearStart" /> 到 <input name="b.BDI_YearEnd" type="text" maxlength="100" style="width:65px;" value="@Model.BDI_YearEnd" /> </li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>假期：<input name="b.BDI_Holiday" type="text" maxlength="100" style="width:267px;" value="@Model.BDI_Holiday" /></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li><hr /></li>
+                    <li class="col4-alt-width">
+                        <ul>
+                            <li>建筑高度：</li>
+                            <li><input name="b.BDI_Height" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Height" /> m</li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>建造地上层数：</li>
+                            <li><input name="b.BDI_FloorUp" type="text" maxlength="100" class="inputbox" value="@Model.BDI_FloorUp"/> 层</li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>建造地下层数：</li>
+                            <li><input name="b.BDI_FloorDn" type="text" maxlength="100" class="inputbox" value="@Model.BDI_FloorDn"/> 层</li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>标准层层高：</li>
+                            <li><input name="b.BDI_FloorHeight" type="text" maxlength="100" class="inputbox" value="@Model.BDI_FloorHeight"/> m<sup>2</sup></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="col4-alt-width">
+                        <ul>
+                            <li>建筑面积：</li>
+                            <li><input name="b.BDI_Area" type="text" maxlength="100" class="inputbox" value="@Model.BDI_Area" /> m<sup>2</sup></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>空调面积：</li>
+                            <li><input name="b.BDI_AreaAir" type="text" maxlength="100" class="inputbox" value="@Model.BDI_AreaAir"/> m<sup>2</sup></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>采暖面积：</li>
+                            <li><input name="b.BDI_AreaHot" type="text" maxlength="100" class="inputbox" value="@Model.BDI_AreaHot"/> m<sup>2</sup></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>特殊区域面积：</li>
+                            <li><input name="b.BDI_AreaSpe" type="text" maxlength="100" class="inputbox" value="@Model.BDI_AreaSpe"/> m<sup>2</sup></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li><hr /></li>
+                    @if (@Model.BDI_AauditFlag == 1 && @Model.BDI_AauditDate != null)
+                    {
+                        <li class="col1-width" style="padding-left:10px;"><ul><li>以前是否进行过能源审计? (如果是，给出审计日期)  <input type="radio" name="b.BDI_AauditFlag" value="0" />否<input type="radio" name="b.BDI_AauditFlag" checked="checked" value="1" />是 <span style="margin-left:20px;">审计日期：<input id="auditDate" name="b.BDI_AauditDate" type="text" maxlength="100" style="width:132px;" value="@Model.BDI_AauditDate" readonly="readonly" /></span></li><li></li></ul></li>
+                    }
+                    else
+                    {
+                        <li class="col1-width" style="padding-left:10px;"><ul><li>以前是否进行过能源审计? (如果是，给出审计日期)  <input type="radio" name="b.BDI_AauditFlag" checked="checked" value="0" />否<input type="radio" name="b.BDI_AauditFlag" value="1" />是 <span style="margin-left:20px;visibility:hidden;">审计日期：<input id="auditDate" name="b.BDI_AauditDate" type="text" maxlength="100" style="width:132px;" value="" readonly="readonly" /></span></li><li></li></ul></li>
+                    }
+                    @if (@Model.BDI_TransforFlag == 1 && @Model.BDI_TransforContent != null)
+                    {
+                        <li class="col1-width" style="padding-left:10px;"><ul><li>以前是否实施过节能改造? (如果是，注明改造项目) <input type="radio" name="b.BDI_TransforFlag" value="0" />否<input type="radio" name="b.BDI_TransforFlag" checked="checked" value="1" />是 <span style="margin-left:20px;">改造项目：<input name="b.BDI_TransforContent" type="text" maxlength="100" style="width:132px;" value="@Model.BDI_TransforContent" /></span></li><li></li></ul></li>
+                    }
+                    else
+                    {
+                        <li class="col1-width" style="padding-left:10px;"><ul><li>以前是否实施过节能改造? (如果是，注明改造项目) <input type="radio" name="b.BDI_TransforFlag" checked="checked" value="0" />否<input type="radio" name="b.BDI_TransforFlag" value="1" />是 <span style="margin-left:20px;visibility:hidden;">改造项目：<input name="b.BDI_TransforContent" type="text" maxlength="100" style="width:132px;" value="" /></span></li><li></li></ul></li>
+                    }
+                    <li><hr /></li>
+                    <li>
+                        <ul>
+                            <li>电力公司名称：</li>
+                            <li><input name="b.BDI_ElectricCompName" type="text" maxlength="100" class="inputbox" value="@Model.BDI_ElectricCompName" /></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>燃气供应公司名称：</li>
+                            <li><input name="b.BDI_GasCompName" type="text" maxlength="100" class="inputbox" value="@Model.BDI_GasCompName" /></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                 </ul>
+            </div>
+
+            <div class="form-wrapper"><h3>建筑围护结构<img src="../../../../Content/images/img/icons/icon_plus.png" /></h3>
+                <ul class="em-form-ul hidden">
+                    <li class="col4-width">
+                        <ul>
+                            <li>建筑结构形式：</li>
+                            <li><div class="combox"><select><option value="砖混结构">砖混结构</option><option value="混凝土剪力墙">混凝土剪力墙</option><option value="钢结构">钢结构</option><option value="木结构">木结构</option><option value="玻璃幕墙">玻璃幕墙</option></select><input name="b.BDI_Structure" maxlength="100" value="@Model.BDI_Structure" /></div></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>窗墙比：</li>
+                            <li><input name="b.BDI_AreaRatio" type="text" maxlength="100" class="inputbox" style="width:105px;height:10px;" value="@Model.BDI_AreaRatio"/> %</li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>外墙材料：</li>
+                            <li><div class="combox"><select><option value="实心粘土墙">实心粘土墙</option><option value="空心粘土砖(多孔)">空心粘土砖(多孔)</option><option value="灰砂砖">灰砂砖</option><option value="加气混凝土砌块">加气混凝土砌块</option><option value="混凝土小型空心砌块(多孔)">混凝土小型空心砌块(多孔)</option></select><input name="b.BDI_KindsOut" maxlength="100" value="@Model.BDI_KindsOut" /></div></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>是否保温：</li>
+                            <li>
+                                <select name="b.BDI_WarmKeep"><optgroup label="是">@if (Model.BDI_WarmKeep == "是,内保温")
+                                                                                  { <option value="是,内保温" selected="selected">内保温</option> }
+                                                                                  else
+                                                                                  { <option value="是,内保温">内保温</option> } @if (Model.BDI_WarmKeep == "是,外保温")
+                                                                                                                         { <option value="是,外保温" selected="selected">外保温</option> }
+                                                                                                                         else
+                                                                                                                         { <option value="是,外保温">外保温</option> } </optgroup>
+                                <optgroup label="否">@if (Model.BDI_WarmKeep == "否,无保温")
+                                                    { <option value="否,无保温" selected="selected">无保温</option> }
+                                                    else
+                                                    { <option value="否,无保温">无保温</option> }</optgroup></select>
+                            </li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="col4-width">
+                        <ul>
+                            <li>外窗类型：</li>
+                            <li><div class="combox"><select><option value="单玻单层窗">单玻单层窗</option><option value="单玻双层窗">单玻双层窗</option><option value="单玻单层窗+单玻双层窗">单玻单层窗+单玻双层窗</option><option value="中空双层玻璃窗">中空双层玻璃窗</option><option value="中空三层玻璃窗">中空三层玻璃窗</option><option value="中空充惰性气体">中空充惰性气体</option></select><input name="b.BDI_WinOut" maxlength="100" value="@Model.BDI_WinOut" /></div></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>有无遮阳：</li>
+                            <li>
+                                <select name="b.BDI_Visor"><optgroup label="是">@if (Model.BDI_WarmKeep == "是,固定外遮阳")
+                                                                               { <option value="是,固定外遮阳" selected="selected">固定外遮阳</option> }
+                                                                               else
+                                                                               { <option value="是,固定外遮阳">固定外遮阳</option> } @if (Model.BDI_WarmKeep == "是,固定内遮阳")
+                                                                                                                          { <option value="是,固定内遮阳" selected="selected">固定内遮阳</option> }
+                                                                                                                          else
+                                                                                                                          { <option value="是,固定内遮阳">固定内遮阳</option> } </optgroup>
+                                <optgroup label="否">@if (Model.BDI_WarmKeep == "否,无遮阳")
+                                                    { <option value="否,无遮阳" selected="selected">无遮阳</option> }
+                                                    else
+                                                    { <option value="否,无遮阳">无遮阳</option> }</optgroup></select>
+                            </li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>玻璃类型：</li>
+                            <li><div class="combox"><select><option value="普通玻璃">普通玻璃</option><option value="镀膜玻璃">镀膜玻璃</option><option value="Low-e玻璃">Low-e玻璃</option></select><input name="b.BDI_Glass" maxlength="100" value="@Model.BDI_Glass" /></div></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>窗框材料：</li>
+                            <li><div class="combox"><select><option value="钢窗">钢窗</option><option value="铝合金">铝合金</option><option value="木窗">木窗</option><option value="断热窗框">断热窗框</option></select><input name="b.BDI_Win" maxlength="100" value="@Model.BDI_Win" /></div></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                 </ul>
+            </div>
+            <div class="form-wrapper"><h3>空调系统<img src="../../../../Content/images/img/icons/icon_plus.png" /></h3>
+                <ul class="em-form-ul hidden">
+                    <li class="col3-alt-width">
+                        <ul>
+                            <li>设定温度供冷温度： 供热温度：</li>
+                            <li>
+                            <input name="b.BDI_TemCool" type="text" maxlength="100" class="inputbox" style="width:40px; margin-left:40px;" value="@Model.BDI_TemCool" /> <sup>o</sup>C
+                            <input name="b.BDI_TemHot" type="text" maxlength="100" class="inputbox" style="width:40px;" value="@Model.BDI_TemHot" /> <sup>o</sup>C
+                            </li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>特殊区域供冷温度： 供热温度：</li>
+                            <li>
+                            <input name="b.BDI_TemSepcialCool" type="text" maxlength="100" class="inputbox" style="width:40px; margin-left:40px;" value="@Model.BDI_TemSepcialCool" /> <sup>o</sup>C
+                            <input name="b.BDI_TemSepcialHot" type="text" maxlength="100" class="inputbox" style="width:40px;" value="@Model.BDI_TemSepcialHot" /> <sup>o</sup>C
+                            </li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>空调系统形式：</li>
+                            <li><div class="combox"><select id="airConditionSelect" ><option value=""></option><option value="集中式全空气系统">集中式全空气系统</option><option value="风机盘管＋新风系统">风机盘管＋新风系统</option><option value="分体式空调或VRV的局部式机组系统">分体式空调或VRV的局部式机组系统</option></select><input name="b.BDI_AirSys" maxlength="100" value="@Model.BDI_AirSys" style="width:124px;" /></div></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                 </ul>
+            </div>
+            <div class="form-wrapper"><h3>冷热源设备<img src="../../../../Content/images/img/icons/icon_plus.png" /></h3>
+                <ul class="em-form-ul hidden">
+                    <li class="col3-width">
+                        <ul>
+                            <li>水冷：</li>
+                            <li><select id="devCoolSelect" name="b.BDI_DevCool">@foreach (var item in new string[] { "", "水冷式机组（离心式、螺杆式等）" })
+                                                                                {
+                                                                                    if (Model.BDI_DevCool == item)
+                                                                                    {<option value="@item" selected="selected" >@item</option>}
+                                                                                    else
+                                                                                    {<option value="@item" >@item</option>}
+                                                                                }</select></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>热泵：</li>
+                            <li><select id="devHotSelect" name="b.BDI_DevHot">@foreach (var item in new string[] { "", "空气源热泵机组", "水源热泵机组", "地源（土壤源）热泵机组", "水环热泵机组" })
+                                                                              {
+                                                                                  if (Model.BDI_DevHot == item)
+                                                                                  {<option value="@item" selected="selected" >@item</option>}
+                                                                                  else
+                                                                                  {<option value="@item" >@item</option>}
+                                                                              }</select></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>溴化锂吸收式：</li>
+                            <li><select id="liBrSelect" name="b.BDI_LiBr">@foreach (var item in new string[] { "", "直燃型溴化锂吸收式机组", "蒸汽型溴化锂吸收式机组", "热水型溴化锂吸收式机组" })
+                                                                          {
+                                                                              if (Model.BDI_LiBr == item)
+                                                                              {<option value="@item" selected="selected" >@item</option>}
+                                                                              else
+                                                                              {<option value="@item" >@item</option>}
+                                                                          }</select></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="col3-width">
+                        <ul>
+                            <li>分体式空调：</li>
+                            <li><select id="airSplitSelect" name="b.BDI_AirSplit">@foreach (var item in new string[] { "", "分体式空调或VRV的局部式机组" })
+                                                                                  {
+                                                                                      if (Model.BDI_AirSplit == item)
+                                                                                      {<option value="@item" selected="selected" >@item</option>}
+                                                                                      else
+                                                                                      {<option value="@item" >@item</option>}
+                                                                                  }</select></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>电锅炉：</li>
+                            <li><select id="boilerPowerSelect" name="b.BDI_BoilerPower">@foreach (var item in new string[] { "", "电锅炉" })
+                                                                                        {
+                                                                                            if (Model.BDI_BoilerPower == item)
+                                                                                            {<option value="@item" selected="selected" >@item</option>}
+                                                                                            else
+                                                                                            {<option value="@item" >@item</option>}
+                                                                                        }</select></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>锅炉：</li>
+                            <li><select id="boilerSelect" name="b.BDI_Boiler">@foreach (var item in new string[] { "", "燃油锅炉", "燃气锅炉" })
+                                                                              {
+                                                                                  if (Model.BDI_Boiler == item)
+                                                                                  {<option value="@item" selected="selected" >@item</option>}
+                                                                                  else
+                                                                                  {<option value="@item" >@item</option>}
+                                                                              }</select></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="col3-width">
+                        <ul>
+                            <li>市政蒸汽或热水：</li>
+                            <li><select name="b.BDI_SteamOrWater">@foreach (var item in new string[] { "", "市政蒸汽或热水" })
+                                                                  {
+                                                                      if (Model.BDI_SteamOrWater == item)
+                                                                      {<option value="@item" selected="selected" >@item</option>}
+                                                                      else
+                                                                      {<option value="@item" >@item</option>}
+                                                                  }</select></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>热电联产：</li>
+                            <li><select id="powerHotSelect" name="b.BDI_PowerHot">@foreach (var item in new string[] { "", "热电联产机组" })
+                                                                                  {
+                                                                                      if (Model.BDI_PowerHot == item)
+                                                                                      {<option value="@item" selected="selected" >@item</option>}
+                                                                                      else
+                                                                                      {<option value="@item" >@item</option>}
+                                                                                  }</select></li>
+                            <li></li>
+                        </ul>
+                        <ul>
+                            <li>其他：</li>
+                            <li><input id="devOtherSelect" name="b.BDI_DevOther" type="text" maxlength="100" class="inputbox" value="@Model.BDI_DevOther" /></li>
+                            <li></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </li>
+                 </ul>
+            </div>
+            <div class="form-wrapper"><h3>照明系统<div class="modify-flag"><input name="modifyFlag" type="checkbox" value="l" /> 修改 <img src="../../../../Content/images/img/icons/icon_plus.png" /></div></h3>
+                <ul class="em-form-ul hidden">
+                    <li>
+                    <table class="input-table">
+                    <thead><tr>
+                        <th>照明区域</th><th>区域面积m<sup>2</sup></th><th>灯具类型</th><th>照明灯具数量</th><th>总功率W</th><th>照度lx</th><th>照明开启时间</th><th>调节方式</th>
+                    </tr></thead>
+                    <tbody>
+                    @if (ViewBag.lightList.Count > 0)
+                    {
+                        for (int i = 0; i < ViewBag.lightList.Count; i++)
+                        {
+                        <tr><td>@ViewBag.lightList[i].LD_Region<input name="l[@i].LD_Region" value="@ViewBag.lightList[i].LD_Region" type="hidden" /></td><td><input name="l[@i].LD_Area" type="text" maxlength="100" value="@ViewBag.lightList[i].LD_Area"/></td><td><input name="l[@i].LD_Type" type="text" maxlength="100" value="@ViewBag.lightList[i].LD_Type"/></td><td><input name="l[@i].LD_Num" type="text" maxlength="100" value="@ViewBag.lightList[i].LD_Num"/></td><td><input name="l[@i].LD_Power" type="text" maxlength="100" style="width:50px;" value="@ViewBag.lightList[i].LD_Power"/></td><td><input name="l[@i].LD_Dgree" type="text" maxlength="100" class="small-width" value="@ViewBag.lightList[i].LD_Dgree"/></td><td>上午<input name="l[@i].LD_Start" type="text" maxlength="100" class="small-width time-input" readonly="readonly" value="@ViewBag.lightList[i].LD_Start"/>点到下午<input name="l[@i].LD_End" type="text" maxlength="100" class="small-width time-input" readonly="readonly" value="@ViewBag.lightList[i].LD_End"/>点</td><td><input name="l[@i].LD_Mode" type="text" maxlength="100" value="@ViewBag.lightList[i].LD_Mode"/><input type="hidden" name="l[@i].LD_ID" value="@ViewBag.lightList[i].LD_ID" /></td></tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td>大厅<input name="l[0].LD_Region" value="大厅" type="hidden" /></td><td><input name="l[0].LD_Area" type="text" maxlength="100"/></td><td><input name="l[0].LD_Type" type="text" maxlength="100"/></td><td><input name="l[0].LD_Num" type="text" maxlength="100"/></td><td><input name="l[0].LD_Power" type="text" maxlength="100" style="width:50px;"/></td><td><input name="l[0].LD_Dgree" type="text" maxlength="100" class="small-width"/></td><td>上午<input name="l[0].LD_Start" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点到下午<input name="l[0].LD_End" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点</td><td><input name="l[0].LD_Mode" type="text" maxlength="100"/></td></tr>
+                        <tr><td>办公区域<input name="l[1].LD_Region" value="办公区域" type="hidden" /></td><td><input name="l[1].LD_Area" type="text" maxlength="100"/></td><td><input name="l[1].LD_Type" type="text" maxlength="100"/></td><td><input name="l[1].LD_Num" type="text" maxlength="100"/></td><td><input name="l[1].LD_Power" type="text" maxlength="100" style="width:50px;"/></td><td><input name="l[1].LD_Dgree" type="text" maxlength="100" class="small-width"/></td><td>上午<input name="l[1].LD_Start" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点到下午<input name="l[1].LD_End" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点</td><td><input name="l[1].LD_Mode" type="text" maxlength="100"/></td></tr>
+                        <tr><td>走廊<input name="l[2].LD_Region" value="走廊" type="hidden" /></td><td><input name="l[2].LD_Area" type="text" maxlength="100"/></td><td><input name="l[2].LD_Type" type="text" maxlength="100"/></td><td><input name="l[2].LD_Num" type="text" maxlength="100"/></td><td><input name="l[2].LD_Power" type="text" maxlength="100" style="width:50px;"/></td><td><input name="l[2].LD_Dgree" type="text" maxlength="100" class="small-width"/></td><td>上午<input name="l[2].LD_Start" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点到下午<input name="l[2].LD_End" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点</td><td><input name="l[2].LD_Mode" type="text" maxlength="100"/></td></tr>
+                        <tr><td>室外<input name="l[3].LD_Region" value="室外" type="hidden" /></td><td><input name="l[3].LD_Area" type="text" maxlength="100"/></td><td><input name="l[2].LD_Type" type="text" maxlength="100"/></td><td><input name="l[3].LD_Num" type="text" maxlength="100"/></td><td><input name="l[3].LD_Power" type="text" maxlength="100" style="width:50px;"/></td><td><input name="l[3].LD_Dgree" type="text" maxlength="100" class="small-width"/></td><td>上午<input name="l[3].LD_Start" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点到下午<input name="l[3].LD_End" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点</td><td><input name="l[3].LD_Mode" type="text" maxlength="100"/></td></tr>
+                        <tr><td>其他公共区域<input name="l[4].LD_Region" value="其他公共区域" type="hidden" /></td><td><input name="l[4].LD_Area" type="text" maxlength="100"/></td><td><input name="l[2].LD_Type" type="text" maxlength="100"/></td><td><input name="l[4].LD_Num" type="text" maxlength="100"/></td><td><input name="l[4].LD_Power" type="text" maxlength="100" style="width:50px;"/></td><td><input name="l[4].LD_Dgree" type="text" maxlength="100" class="small-width"/></td><td>上午<input name="l[4].LD_Start" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点到下午<input name="l[4].LD_End" type="text" maxlength="100" class="small-width time-input" readonly="readonly"/>点</td><td><input name="l[4].LD_Mode" type="text" maxlength="100"/></td></tr>
+                    }
+                    </tbody>
+                    </table>
+                    </li>
+                 </ul>
+            </div>
+            <div class="form-wrapper"><h3>电梯设备（共 @if (ViewBag.elevatorList.Count > 0)
+                                                 { <span>@ViewBag.elevatorList.Count</span> }
+                                                 else
+                                                 { <span>1</span> } 台 <a id="elevatorPlus" class="a-plus-minus" href="javascript:void(0)">+</a><a id="elevatorMinus" class="a-plus-minus" href="javascript:void(0)">-</a>）<div class="modify-flag"><input name="modifyFlag" type="checkbox" value="e" /> 修改 <img src="../../../../Content/images/img/icons/icon_plus.png" /></div></h3>
+                <ul class="em-form-ul hidden">
+                    <li>
+                    <table class="input-table">
+                    <thead><tr>
+                        <th>电梯编号</th><th>电梯类型</th><th>厂家及型号</th><th>功率kW</th><th>运行时间</th><th>控制方式</th>
+                    </tr></thead>
+                    <tbody id="elevatorData">
+                    @if (ViewBag.elevatorList.Count > 0)
+                    {
+                        for (int i = 0; i < ViewBag.elevatorList.Count; i++)
+                        {
+                        <tr><td><input name="e[@i].ED_SerialNum" type="text" maxlength="100" value="@ViewBag.elevatorList[i].ED_SerialNum"/></td><td><input name="e[@i].ED_Type" type="text" maxlength="100" value="@ViewBag.elevatorList[i].ED_Type"/></td><td><input name="e[@i].ED_FactoryModel" type="text" maxlength="100" value="@ViewBag.elevatorList[i].ED_FactoryModel"/></td><td><input name="e[@i].ED_Power" type="text" maxlength="100" value="@ViewBag.elevatorList[i].ED_Power"/></td><td>上午<input name="e[@i].ED_Start" type="text" maxlength="100" class="small2-width time-input" readonly="readonly" value="@ViewBag.elevatorList[i].ED_Start"/>点到下午<input name="e[@i].ED_End" type="text" maxlength="100" class="small2-width time-input" readonly="readonly" value="@ViewBag.elevatorList[i].ED_End"/>点</td><td><input name="e[@i].ED_Mode" type="text" maxlength="100" value="@ViewBag.elevatorList[i].ED_Mode"/><input type="hidden" name="e[@i].ED_ID" value="@ViewBag.elevatorList[i].ED_ID" /></td></tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td><input name="e[0].ED_SerialNum" type="text" maxlength="100"/></td><td><input name="e[0].ED_Type" type="text" maxlength="100"/></td><td><input name="e[0].ED_FactoryModel" type="text" maxlength="100"/></td><td><input name="e[0].ED_Power" type="text" maxlength="100"/></td><td>上午<input name="e[0].ED_Start" type="text" maxlength="100" class="small2-width time-input" readonly="readonly"/>点到下午<input name="e[0].ED_End" type="text" maxlength="100" class="small2-width time-input" readonly="readonly"/>点</td><td><input name="e[0].ED_Mode" type="text" maxlength="100"/></td></tr>
+                    }
+                    </tbody>
+                    </table>
+                    </li>
+                 </ul>
+            </div>
+            <div class="form-wrapper"><h3>水泵用能设备<div class="modify-flag"><input name="modifyFlag" type="checkbox" value="wp" /> 修改 <img src="../../../../Content/images/img/icons/icon_plus.png" /></div></h3>
+                <ul class="em-form-ul hidden">
+                @if (ViewBag.waterPumpList.Count > 0)
+                {
+                    for (int i = 0; i < ViewBag.waterPumpList.Count; i++)
+                    {
+                    <li class="col1-width"><ul><li><label><input name="wp[@i].WPD_Type" value="@ViewBag.waterPumpList[i].WPD_Type" type="hidden" />@ViewBag.waterPumpList[i].WPD_Type：</label><input name="wp[@i].WPD_Num" type="text" maxlength="100" value="@ViewBag.waterPumpList[i].WPD_Num"/> 台，流量 <input name="wp[@i].WPD_Flow" type="text" maxlength="100" value="@ViewBag.waterPumpList[i].WPD_Flow" /> m<sup>3</sup>/h，扬程 <input name="wp[@i].WPD_Lifting" type="text" maxlength="100" value="@ViewBag.waterPumpList[i].WPD_Lifting" /> m，功率 <input name="wp[@i].WPD_Power" type="text" maxlength="100" value="@ViewBag.waterPumpList[i].WPD_Power" /> kW，全年运行时间 <input name="wp[@i].WPD_YearRuntime" type="text" maxlength="100" value="@ViewBag.waterPumpList[i].WPD_YearRuntime" /> h<input type="hidden" name="wp[@i].WPD_ID" value="@ViewBag.waterPumpList[i].WPD_ID" /></li><li></li></ul></li>
+                    }
+                }
+                else
+                {
+                    <li class="col1-width"><ul><li><label><input name="wp[0].WPD_Type" value="生活给水泵" type="hidden" />生活给水泵：</label><input name="wp[0].WPD_Num" type="text" maxlength="100"/> 台，流量 <input name="wp[0].WPD_Flow" type="text" maxlength="100" /> m<sup>3</sup>/h，扬程 <input name="wp[0].WPD_Lifting" type="text" maxlength="100" /> m，功率 <input name="wp[0].WPD_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="wp[0].WPD_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="wp[1].WPD_Type" value="热水泵" type="hidden" />热水泵：</label><input name="wp[1].WPD_Num" type="text" maxlength="100"/> 台，流量 <input name="wp[1].WPD_Flow" type="text" maxlength="100" /> m<sup>3</sup>/h，扬程 <input name="wp[1].WPD_Lifting" type="text" maxlength="100" /> m，功率 <input name="wp[1].WPD_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="wp[1].WPD_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="wp[2].WPD_Type" value="消防给水泵" type="hidden" />消防给水泵：</label><input name="wp[2].WPD_Num" type="text" maxlength="100"/> 台，流量 <input name="wp[2].WPD_Flow" type="text" maxlength="100" /> m<sup>3</sup>/h，扬程 <input name="wp[2].WPD_Lifting" type="text" maxlength="100" /> m，功率 <input name="wp[2].WPD_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="wp[2].WPD_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="wp[3].WPD_Type" value="污水泵" type="hidden" />污水泵：</label><input name="wp[3].WPD_Num" type="text" maxlength="100"/> 台，流量 <input name="wp[3].WPD_Flow" type="text" maxlength="100" /> m<sup>3</sup>/h，扬程 <input name="wp[3].WPD_Lifting" type="text" maxlength="100" /> m，功率 <input name="wp[3].WPD_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="wp[3].WPD_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                }
+                </ul>
+            </div>
+            <div class="form-wrapper"><h3>风机用能设备<div class="modify-flag"><input name="modifyFlag" type="checkbox" value="wm" /> 修改 <img src="../../../../Content/images/img/icons/icon_plus.png" /></div></h3>
+                <ul class="em-form-ul hidden">
+                @if (ViewBag.windMachList.Count > 0)
+                {
+                    for (int i = 0; i < ViewBag.windMachList.Count; i++)
+                    {
+                        if (@ViewBag.windMachList[i].WMD_Type != "卫生间排气扇")
+                        {
+                        <li class="col1-width"><ul><li><label><input name="wm[@i].WMD_Type" value="@ViewBag.windMachList[i].WMD_Type" type="hidden" />@ViewBag.windMachList[i].WMD_Type：</label><input name="wm[@i].WMD_Num" type="text" maxlength="100" value="@ViewBag.windMachList[i].WMD_Num"/> 台，风量 <input name="wm[@i].WMD_windAmount" type="text" maxlength="100" value="@ViewBag.windMachList[i].WMD_windAmount" /> m<sup>3</sup>/h，风压 <input name="wm[@i].WMD_Intensity" type="text" maxlength="100" value="@ViewBag.windMachList[i].WMD_Intensity" /> Pa，功率 <input name="wm[@i].WMD_Power" type="text" maxlength="100" value="@ViewBag.windMachList[i].WMD_Power" /> kW，全年运行时间 <input name="wm[@i].WMD_YearRuntime" type="text" maxlength="100" value="@ViewBag.windMachList[i].WMD_YearRuntime" /> h<input type="hidden" name="wm[@i].WMD_ID" value="@ViewBag.windMachList[i].WMD_ID" /></li><li></li></ul></li>
+                        }
+                        else
+                        {
+                        <li class="col1-width"><ul><li><label><input name="wm[@i].WMD_Type" value="@ViewBag.windMachList[i].WMD_Type" type="hidden" />@ViewBag.windMachList[i].WMD_Type</label><input name="wm[@i].WMD_Num" type="text" maxlength="100" value="@ViewBag.windMachList[i].WMD_Num"/> 台，功率 <input name="wm[@i].WMD_Power" type="text" maxlength="100" value="@ViewBag.windMachList[i].WMD_Power" /> kW，全年运行时间 <input name="wm[@i].WMD_YearRuntime" type="text" maxlength="100" value="@ViewBag.windMachList[i].WMD_YearRuntime" /> h<input type="hidden" name="wm[@i].WMD_ID" value="@ViewBag.windMachList[i].WMD_ID" /></li><li></li></ul></li>
+                        }
+                    }
+                }
+                else
+                {
+                    <li class="col1-width"><ul><li><label><input name="wm[0].WMD_Type" value="加压送风机" type="hidden" />加压送风机：</label><input name="wm[0].WMD_Num" type="text" maxlength="100"/> 台，风量 <input name="wm[0].WMD_windAmount" type="text" maxlength="100" /> m<sup>3</sup>/h，风压 <input name="wm[0].WMD_Intensity" type="text" maxlength="100" /> Pa，功率 <input name="wm[0].WMD_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="wm[0].WMD_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="wm[1].WMD_Type" value="排烟风机" type="hidden" />排烟风机：</label><input name="wm[1].WMD_Num" type="text" maxlength="100"/> 台，风量 <input name="wm[1].WMD_windAmount" type="text" maxlength="100" /> m<sup>3</sup>/h，风压 <input name="wm[1].WMD_Intensity" type="text" maxlength="100" /> Pa，功率 <input name="wm[1].WMD_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="wm[1].WMD_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="wm[2].WMD_Type" value="卫生间排气扇" type="hidden" />卫生间排气扇</label><input name="wm[2].WMD_Num" type="text" maxlength="100"/> 台，功率 <input name="wm[2].WMD_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="wm[2].WMD_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                }
+                </ul>
+            </div>
+            <div class="form-wrapper"><h3>厨房设备<div class="modify-flag"><input name="modifyFlag" type="checkbox" value="ke" /> 修改 <img src="../../../../Content/images/img/icons/icon_plus.png" /></div></h3>
+                <ul class="em-form-ul hidden">
+                @if (ViewBag.kitchenEquipList.Count > 0)
+                {
+                    for (int i = 0; i < ViewBag.kitchenEquipList.Count; i++)
+                    {
+                        if (@ViewBag.kitchenEquipList[i].KED_Type != "炉子")
+                        {
+                        <li class="col1-width"><ul><li><label><input name="ke[@i].KED_Type" value="@ViewBag.kitchenEquipList[i].KED_Type" type="hidden" />@ViewBag.kitchenEquipList[i].KED_Type：</label><input name="ke[@i].KED_Num" type="text" maxlength="100" value="@ViewBag.kitchenEquipList[i].KED_Num"/> 台，功率 <input name="ke[@i].KED_Power" type="text" maxlength="100" value="@ViewBag.kitchenEquipList[i].KED_Power" /> kW，全年运行时间 <input name="ke[@i].KED_YearRuntime" type="text" maxlength="100" value="@ViewBag.kitchenEquipList[i].KED_YearRuntime" /> h<input type="hidden" name="ke[@i].KED_ID" value="@ViewBag.kitchenEquipList[i].KED_ID" /></li><li></li></ul></li>
+                        }
+                        else
+                        {
+                        <li class="col1-width"><ul><li><label><input name="ke[@i].KED_Type" value="@ViewBag.kitchenEquipList[i].KED_Type" type="hidden" />@ViewBag.kitchenEquipList[i].KED_Type：</label><input name="ke[@i].KED_Num" type="text" maxlength="100" value="@ViewBag.kitchenEquipList[i].KED_Num"/> 台，燃料形式 <input name="ke[@i].KED_FuelType" type="text" maxlength="100" value="@ViewBag.kitchenEquipList[i].KED_FuelType" /> 燃料消耗量：<input name="ke[@i].KED_Consumption" type="text" maxlength="100" value="@ViewBag.kitchenEquipList[i].KED_Consumption" /> kg/h(m<sup>3</sup>/h)，全年运行时间 <input name="ke[@i].KED_YearRuntime" type="text" maxlength="100" value="@ViewBag.kitchenEquipList[i].KED_YearRuntime" /> h<input type="hidden" name="ke[@i].KED_ID" value="@ViewBag.kitchenEquipList[i].KED_ID" /></li><li></li></ul></li>
+                        }
+                    }
+                }
+                else
+                {
+                    <li class="col1-width"><ul><li><label><input name="ke[0].KED_Type" value="炉子" type="hidden" />炉子：</label><input name="ke[0].KED_Num" type="text" maxlength="100"/> 台，燃料形式 <input name="ke[0].KED_FuelType" type="text" maxlength="100" /> 燃料消耗量：<input name="ke[0].KED_Consumption" type="text" maxlength="100" /> kg/h(m<sup>3</sup>/h)，全年运行时间 <input name="ke[0].KED_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="ke[1].KED_Type" value="洗碗机" type="hidden" />洗碗机：</label><input name="ke[1].KED_Num" type="text" maxlength="100"/> 台，功率 <input name="ke[1].KED_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="ke[1].KED_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="ke[2].KED_Type" value="微波炉" type="hidden" />微波炉：</label><input name="ke[2].KED_Num" type="text" maxlength="100"/> 台，功率 <input name="ke[2].KED_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="ke[2].KED_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="ke[3].KED_Type" value="冷藏箱" type="hidden" />冷藏箱：</label><input name="ke[3].KED_Num" type="text" maxlength="100"/> 台，功率 <input name="ke[3].KED_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="ke[3].KED_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="ke[4].KED_Type" value="排气罩" type="hidden" />排气罩：</label><input name="ke[4].KED_Num" type="text" maxlength="100"/> 台，功率 <input name="ke[4].KED_Power" type="text" maxlength="100" /> kW，全年运行时间 <input name="ke[4].KED_YearRuntime" type="text" maxlength="100" /> h</li><li></li></ul></li>
+                }
+                </ul>
+            </div>
+            <div class="form-wrapper"><h3>室内办公设备<div class="modify-flag"><input name="modifyFlag" type="checkbox" value="oe" /> 修改 <img src="../../../../Content/images/img/icons/icon_plus.png" /></div></h3>
+                <ul class="em-form-ul hidden">
+                @if (ViewBag.officeEquipList.Count > 0)
+                {
+                    for (int i = 0; i < ViewBag.officeEquipList.Count; i++)
+                    {
+                    <li class="col1-width"><ul><li><label><input name="oe[@i].OED_Type" value="@ViewBag.officeEquipList[i].OED_Type" type="hidden" />@ViewBag.officeEquipList[i].OED_Type：</label><input name="oe[@i].OED_Num" type="text" maxlength="100" value="@ViewBag.officeEquipList[i].OED_Num"/> 台，额定功率 <input name="oe[@i].OED_FixedPower" type="text" maxlength="100" value="@ViewBag.officeEquipList[i].OED_FixedPower" /> W，共 <input name="oe[@i].OED_YearPower" type="text" maxlength="100" value="@ViewBag.officeEquipList[i].OED_YearPower" type="text" maxlength="100" value="@ViewBag.officeEquipList[i].OED_Type" /> kW，运行时间：从上午 <input name="oe[@i].OED_Start" type="text" maxlength="100" class="time-input" readonly="readonly" value="@ViewBag.officeEquipList[i].OED_Start" /> 点到下午 <input name="oe[@i].OED_End" type="text" maxlength="100" class="time-input" readonly="readonly" value="@ViewBag.officeEquipList[i].OED_End" /> 点<input type="hidden" name="oe[@i].OED_ID" value="@ViewBag.officeEquipList[i].OED_ID" /></li><li></li></ul></li>
+                    }
+                }
+                else
+                {
+                    <li class="col1-width"><ul><li><label><input name="oe[0].OED_Type" value="台式电脑" type="hidden" />台式电脑：</label><input name="oe[0].OED_Num" type="text" maxlength="100"/> 台，额定功率 <input name="oe[0].OED_FixedPower" type="text" maxlength="100" /> W，共 <input name="oe[0].OED_YearPower" type="text" maxlength="100" /> kW，运行时间：从上午 <input name="oe[0].OED_Start" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点到下午 <input name="oe[0].OED_End" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="oe[1].OED_Type" value="打印机" type="hidden" />打印机：</label><input name="oe[1].OED_Num" type="text" maxlength="100"/> 台，额定功率 <input name="oe[1].OED_FixedPower" type="text" maxlength="100" /> W，共 <input name="oe[1].OED_YearPower" type="text" maxlength="100" /> kW，运行时间：从上午 <input name="oe[1].OED_Start" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点到下午 <input name="oe[1].OED_End" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="oe[2].OED_Type" value="复印机" type="hidden" />复印机：</label><input name="oe[2].OED_Num" type="text" maxlength="100"/> 台，额定功率 <input name="oe[2].OED_FixedPower" type="text" maxlength="100" /> W，共 <input name="oe[2].OED_YearPower" type="text" maxlength="100" /> kW，运行时间：从上午 <input name="oe[2].OED_Start" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点到下午 <input name="oe[2].OED_End" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="oe[3].OED_Type" value="传真机" type="hidden" />传真机：</label><input name="oe[3].OED_Num" type="text" maxlength="100"/> 台，额定功率 <input name="oe[3].OED_FixedPower" type="text" maxlength="100" /> W，共 <input name="oe[3].OED_YearPower" type="text" maxlength="100" /> kW，运行时间：从上午 <input name="oe[3].OED_Start" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点到下午 <input name="oe[3].OED_End" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="oe[4].OED_Type" value="笔记本电脑" type="hidden" />笔记本电脑：</label><input name="oe[4].OED_Num" type="text" maxlength="100"/> 台，额定功率 <input name="oe[4].OED_FixedPower" type="text" maxlength="100" /> W，共 <input name="oe[4].OED_YearPower" type="text" maxlength="100" /> kW，运行时间：从上午 <input name="oe[4].OED_Start" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点到下午 <input name="oe[4].OED_End" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点</li><li></li></ul></li>
+                    <li class="col1-width"><ul><li><label><input name="oe[5].OED_Type" value="其他" type="hidden" />其他：</label><input name="oe[5].OED_Num" type="text" maxlength="100"/> 台，额定功率 <input name="oe[5].OED_FixedPower" type="text" maxlength="100" /> W，共 <input name="oe[5].OED_YearPower" type="text" maxlength="100" /> kW，运行时间：从上午 <input name="oe[5].OED_Start" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点到下午 <input name="oe[5].OED_End" type="text" maxlength="100" class="time-input" readonly="readonly" /> 点</li><li></li></ul></li>
+                }
+                </ul>
+            </div>
+
+            <div class="clear"><button id="queryButton" type="submit" class="btn m-button" style="margin-left:275px;">  修  改  </button></div>
+            <input id="BuildingID" name="b.BDI_ID" type="hidden" value="@Model.BDI_ID" />
+            <input id="areaID" name="areaID" type="hidden" value="@ViewBag.areaInfo.AreaID" />
+            <input id="oldBuildingName" name="oldBuildingName" type="hidden" value="@Model.BDI_Name"/>
+            <input id="oldAreaID" name="oldAreaID" type="hidden" value="@ViewBag.areaInfo.AreaID" />
+            </form>
+        }
+    </div></div>
+</div></div>
+
+<div id="roomSelectDiv" class="roomSelectDiv hidden" title="请选择区域">
+    <ul>
+        <li style="display: block;">
+            <h4>选择校区</h4>
+            <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="schoolAreaDiv">
+            <h4>选择区域</h4>
+            <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+            </select></div>
+        </li>
+    </ul>
+    <div id="dialogErrorTip" class="clear a-center red hidden">请选择一个区域</div>
+</div>
+<div id="uploadImgDiv" class="hidden a-center" title="查看图片">
+    @if (!String.IsNullOrWhiteSpace(Model.BDI_ImageUrl))
+    {
+        <img src="@Url.Content(Model.BDI_ImageUrl)" alt="@Model.BDI_Name" width="800" />
+    }
+    else
+    {
+        <div>当前建筑还没有上传图片</div>
+    }
+</div>
+
+<div id="appendixDiv">
+<div id="a1AppendixDiv" class="appendix-div" title="空调机组及其辅助设备参数表">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>空调机组<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量kW</th><th>制热量kW</th><th>电机功率kW</th><th>电源Ph/V/Hz</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>送风机<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>风量m<sup>3</sup>/h</th><th>风压kPa</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>新风机<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>风量m<sup>3</sup>/h</th><th>风压kPa</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>.
+</li>
+<li>
+    <label>回风机<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>风量m<sup>3</sup>/h</th><th>风压kPa</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>排风机<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>风量m<sup>3</sup>/h</th><th>风压kPa</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="a2AppendixDiv" class="appendix-div" title="新风机组及风机盘管参数表">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>新风机组<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量kW</th><th>制热量kW</th><th>电机功率kW</th><th>电源Ph/V/Hz</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>风机盘管<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量kW</th><th>制热量kW</th><th>电机功率kW</th><th>电源Ph/V/Hz</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>新风机<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>风量m<sup>3</sup>/h</th><th>风压kPa</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>回风机<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>风量m<sup>3</sup>/h</th><th>风压kPa</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>排风机<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>风量m<sup>3</sup>/h</th><th>风压kPa</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="a3AppendixDiv" class="appendix-div" title="分体式机组或VRV机组参数表">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>分体式机组<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量kW</th><th>制热量kW</th><th>电机功率kW</th><th>电源Ph/V/Hz</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="b1AppendixDiv" class="appendix-div" title="水冷式机组及其辅助设备参数表">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>冷水机组<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量kW</th><th>输入功率kW</th><th>电源Ph/V/Hz</th><th>每天运行时间</th><th>全年运行时间h</th><th>平均负载率%</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>冷水塔<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>冷却水量m<sup>3</sup>/h</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间h</th><th> —— </th><th> —— </th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>冷冻水泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>流量m<sup>3</sup>/h</th><th>扬程m</th><th>功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>冷却水泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>流量m<sup>3</sup>/h</th><th>扬程m</th><th>功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="b2AppendixDiv" class="appendix-div" title="热泵机组及其辅助设备参数表">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>热泵机组<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量kW</th><th>制热量kW</th><th>制冷输入kW</th><th>制热输入kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>水泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>流量m<sup>3</sup>/h</th><th>扬程m</th><th>功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="b3AppendixDiv" class="appendix-div" title="溴化锂吸收式机组及其辅助设备参数表">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>吸收式机组<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量kW</th><th>制热量kW</th><th>燃料消耗kg/h(Nm<sup>3</sup>/h)</th><th>电功率kW</th><th>每天运行时间</th><th>全年运行时间h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>冷却塔<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>冷却水量m<sup>3</sup>/h</th><th>电机功率kW</th><th>每天运行时间</th><th>全年运行时间h</th><th> —— </th><th> —— </th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>冷温水循环泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>流量m<sup>3</sup>/h</th><th>扬程m</th><th>功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>冷却水泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>流量m<sup>3</sup>/h</th><th>扬程m</th><th>功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="b4AppendixDiv" class="appendix-div" title="分体式机组或VRV机组参数表">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>分体式机组<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量kW</th><th>制热量kW</th><th>电机功率kW</th><th>电源Ph/V/Hz</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="b5AppendixDiv" class="appendix-div" title="电锅炉及辅助设备">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>锅炉<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制热量MW</th><th>电功率kW</th><th>锅炉效率%</th><th>每天运行时间</th><th>全年运行时间 h</th><th>年平均负载率%</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>水泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>流量m<sup>3</sup>/h</th><th>扬程m</th><th>功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="b6AppendixDiv" class="appendix-div" title="燃油/燃气锅炉及辅助设备">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>锅炉<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>供热量kW</th><th>燃料消耗kg/h(Nm<sup>3</sup>/h)</th><th>锅炉效率%</th><th>每天运行时间</th><th>全年运行时间 h</th><th>年平均负载率%</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>水泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>流量m<sup>3</sup>/h</th><th>扬程m</th><th>功率kW</th><th>每天运行时间</th><th>全年运行时间 h</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="b7AppendixDiv" class="appendix-div" title="热电联产机组">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>CHP联产机组<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <colgroup><col width="106" /><col width="172" /><col width="102" /><col width="102" /><col width="102" /><col width="102" /><col width="102" /><col width="102" /><col width="109" /></colgroup>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>发电功率kW</th><th>热力输出kW</th><th>电源Ph/V/Hz</th><th>每天运行时间</th><th>全年运行时间</th><th>年平均负载率%</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>水泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <colgroup><col width="106" /><col width="172" /><col width="102" /><col width="102" /><col width="102" /><col width="102" /><col width="102" /><col width="102" /><col width="109" /></colgroup>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+<div id="b8AppendixDiv" class="appendix-div" title="其他空调冷热源设备">
+<form action="@Url.Action("ModifydBuildingAppendix", "Information")" method="post">
+<ul>
+<li>
+    <label>冷热源设备<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <colgroup><col width="96" /><col width="172" /><col width="96" /><col width="138" /><col width="96" /><col width="96" /><col width="97" /><col width="97" /><col width="109" /></colgroup>
+    <thead><tr><th>类型</th><th>台数（若是备用请注明）</th><th>厂家及型号</th><th>制冷量或供热量 kW</th><th>电功率kW</th><th>电源Ph/V/Hz</th><th>每天运行时间</th><th>全年运行时间</th><th>年平均负载率%</th></tr></thead>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+<li>
+    <label>水泵<span><a class="a-plus-minus" href="javascript:void(0)">+</a><a class="a-plus-minus" href="javascript:void(0)">-</a></span></label>
+    <table>
+    <colgroup><col width="96" /><col width="172" /><col width="96" /><col width="138" /><col width="96" /><col width="96" /><col width="97" /><col width="97" /><col width="109" /></colgroup>
+    <tbody><tr><td colspan="9"><img src="../../../../Content/images/loading_small.gif" alt="loading" /></td></tr></tbody>
+    </table>
+</li>
+</ul>
+</form>
+</div>
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#areaName").click(function () {
+            $("#dialogErrorTip").hide();
+            $("#roomSelectDiv").dialog({
+                modal: true,
+                width: 370,
+                resizable: false,
+                buttons: {
+                    '选择': function () {
+                        var selectedObjs = $("#selectedSchoolArea option:selected");
+                        if (selectedObjs.length == 1) {
+                            $("#areaID").val($("#selectedSchoolArea").val());
+                            $("#areaName").val(selectedObjs.text());
+                            $("#resultDiv").slideUp("fast");
+                            $(this).dialog("close");
+                            $("#buildingName").removeData("previousValue");
+                        } else {
+                            $("#dialogErrorTip").slideDown("fast");
+                        }
+                    }
+                }
+            });
+        });
+        $("#introductionArea").change(function(){ $(this).css("height",this.scrollHeight+"px"); });
+        $("#introductionArea").keyup(function(){ $(this).css("height",this.scrollHeight+"px"); });
+        $("#showImg").click(function(){
+            $("#uploadImgDiv").dialog({
+                modal: true,
+                width: 820
+            });
+        });
+        $("#modifyImg").click(function(){
+            if($(this).text() == "重新上传"){
+                $(this).parent().next().show();
+                $(this).text("取消重新上传");
+            }else{
+                $(this).parent().next().hide();
+                $(this).parent().next().children(":file").val("");
+                $(this).text("重新上传");
+            }
+        });
+        $(".form-wrapper > h3 > img").click(function () {
+            if($(this).parent().next().is(":hidden")){
+                $(this).parent().next().slideDown("fast");
+                $(this).attr("src", "../../../../Content/images/img/icons/icon_minus.png");
+            }else{
+                $(this).parent().next().slideUp("fast");
+                $(this).attr("src", "../../../../Content/images/img/icons/icon_plus.png");
+            }
+        });
+        $(".form-wrapper > h3 > div.modify-flag").click(function () {
+            if($(this).parent().next().is(":hidden")){
+                
+                $(this).parent().next().slideDown("fast");
+                $(this).children(":checkbox").attr("checked", true);
+                $(this).children("img").attr("src", "../../../../Content/images/img/icons/icon_minus.png");
+            }else{
+                $(this).parent().next().slideUp("fast");
+                $(this).children(":checkbox").attr("checked", false);
+                $(this).children("img").attr("src", "../../../../Content/images/img/icons/icon_plus.png");
+            }
+        });
+//        $("span.multi-select-tip").click(function () {
+//            if($(this).next().is(":hidden")){
+//                $(this).next().slideDown("fast");
+//            }else{
+//                $(this).next().slideUp("fast");
+//            }
+//        });
+//        $("ol.multi-select :checkbox").click(function(){
+//            var hiddenVal = "";
+//            $.each($(this).parent().parent().find("input:checkbox:checked"),function(index, item){
+//                if(index == 0){
+//                    hiddenVal = $(item).val();
+//                }else{
+//                    hiddenVal += ("," + $(item).val());
+//                }
+//            });
+//            $(this).parent().parent().next(":hidden").val(hiddenVal);
+//        });
+        $("#elevatorPlus").click(function(){
+            var currentNum = +$(this).prev("span").text();
+            var newTR = $("<tr><td><input name='e["+currentNum+"].ED_SerialNum' type='text' maxlength='100'/></td><td><input name='e["+currentNum+"].ED_Type' type='text' maxlength='100'/></td><td><input name='e["+currentNum+"].ED_FactoryModel' type='text' maxlength='100'/></td><td><input name='e["+currentNum+"].ED_Power' type='text' maxlength='100'/></td><td>上午<input name='e["+currentNum+"].ED_Start' type='text' maxlength='100' class='small2-width time-input' readonly='readonly'/>点到下午<input name='e["+currentNum+"].ED_End' type='text' maxlength='100' class='small2-width time-input' readonly='readonly'/>点</td><td><input name='e["+currentNum+"].ED_Mode' type='text' maxlength='100'/></td></tr>");
+            $("input.time-input", newTR).timepicker();
+            newTR.appendTo($("#elevatorData"));
+            currentNum++;
+            $(this).prev("span").text(currentNum);
+        });
+        $("#elevatorMinus").click(function(){
+            var currentNum = +$(this).prev().prev("span").text();
+            if(currentNum > 1){
+                $("#elevatorData > tr:last").remove();
+                currentNum--;
+                $(this).prev().prev("span").text(currentNum);
+            }
+        });
+        $("div.combox > select").change(function(){
+            $(this).next("input").val($(this).val());
+        });
+        $(":radio[name='b.BDI_AauditFlag'],:radio[name='b.BDI_TransforFlag']").change(function(){
+            if($(this).val()=="1"){
+                $(this).next("span").css("visibility","visible");
+            }else{
+                $(this).next().next("span").css("visibility","hidden");
+                $(this).next().next("span").children("input").val("");
+            }
+        });
+        $("#auditDate").datepicker({ changeMonth: true, changeYear: true });
+        $("input.time-input").timepicker();
+
+        function showAppendixDialog(dialogID, appendixNo){
+            var dialogObj = $("#"+dialogID);
+            dialogObj.dialog({
+                modal: true,
+                width: 1100,
+                resizable: false,
+                buttons: {
+                    "保存": function () {
+                        dialogObj.children("form").ajaxSubmit({
+                            data: { 
+                                buildingID: "@Model.BDI_ID", 
+                                modifyAppendixNo: appendixNo 
+                            },
+                            dataType:  "json", 
+                            success: function(flag){
+                                if(flag!=true){
+                                    alert("保存失败，检查是否超时或者没有权限！")
+                                }
+                            }
+                        });
+                        $(this).dialog("close");
+                    },
+                    "取消": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            if(dialogObj.data("dataFlag") != undefined){
+                return;
+            }
+            dialogObj.data("dataFlag", true);
+            $.getJSON('@Url.Action("GetBuildingAppendix", "Information")', {
+                buildingID: "@Model.BDI_ID",
+                appendixNo: appendixNo
+            }, function (jsonData) {
+                if(jsonData != null){
+                    if(jsonData.length > 0){
+                        for(var objIndex in jsonData){
+                            var subData = jsonData[objIndex]
+                            for(var subIndex in subData){
+                                var extendObj = {
+                                    index: subIndex
+                                };
+                                subData[subIndex] = $.extend(subData[subIndex], extendObj);
+                            }
+                            var renderHtml = $("#ba"+objIndex+appendixNo+"AppendixDataTemplate").tmpl(subData);
+                            $("input.time-input", renderHtml).timepicker();
+                            dialogObj.find("tbody:eq("+objIndex+")").html(renderHtml);
+                        }
+                    }else{
+                        var tbodyCount = dialogObj.find("tbody").length;
+                        for(var objIndex = 0; objIndex < tbodyCount; objIndex++){
+                            var newData = [
+                                {index: 0},
+                                {index: 1},
+                                {index: 2}
+                            ];
+                            var renderHtml = $("#ba"+objIndex+appendixNo+"AppendixDataTemplate").tmpl(newData);
+                            $("input.time-input", renderHtml).timepicker();
+                            dialogObj.find("tbody:eq("+objIndex+")").html(renderHtml);
+                        }
+                    }
+
+                }else{
+                    alert("超时，请重新登录！");
+                }
+            });
+
+        }
+        $("#airConditionSelect").change(function(){
+            var selectVal = $(this).val();
+            var dialogID, appendixNo;
+            if(selectVal=="集中式全空气系统"){
+                dialogID = "a1AppendixDiv";
+                appendixNo = "A1";
+            }else if(selectVal=="风机盘管＋新风系统"){
+                dialogID = "a2AppendixDiv";
+                appendixNo = "A2";
+            }else if(selectVal=="分体式空调或VRV的局部式机组系统"){
+                dialogID = "a3AppendixDiv";
+                appendixNo = "A3";
+            }else{
+                return;
+            }
+            if($.trim(selectVal) != ""){
+                showAppendixDialog(dialogID, appendixNo);
+            }
+        });
+        $("#devCoolSelect").change(function(){
+            if($.trim($(this).val()) != ""){
+                showAppendixDialog("b1AppendixDiv", "B1");
+            }
+        });
+        $("#devHotSelect").change(function(){
+            if($.trim($(this).val()) != ""){
+                showAppendixDialog("b2AppendixDiv", "B2");
+            }
+        });
+        $("#liBrSelect").change(function(){
+            if($.trim($(this).val()) != ""){
+                showAppendixDialog("b3AppendixDiv", "B3");
+            }
+        });
+        $("#airSplitSelect").change(function(){
+            if($.trim($(this).val()) != ""){
+                showAppendixDialog("b4AppendixDiv", "B4");
+            }
+        });
+        $("#boilerPowerSelect").change(function(){
+            if($.trim($(this).val()) != ""){
+                showAppendixDialog("b5AppendixDiv", "B5");
+            }
+        });
+        $("#boilerSelect").change(function(){
+            if($.trim($(this).val()) != ""){
+                showAppendixDialog("b6AppendixDiv", "B6");
+            }
+        });
+        $("#powerHotSelect").change(function(){
+            if($.trim($(this).val()) != ""){
+                showAppendixDialog("b7AppendixDiv", "B7");
+            }
+        });
+        $("#devOtherSelect").change(function(){
+            if($.trim($(this).val()) != ""){
+                showAppendixDialog("b8AppendixDiv", "B8");
+            }
+        });
+
+        $("#appendixDiv a").click(function(){
+            var tBodyObj = $(this).parent().parent().next().children("tbody");
+            var trCount = tBodyObj.children().length;
+            if($(this).text() == "+"){
+                var newTr = tBodyObj.children(":last-child").clone();
+                $(":text,:hidden[name$='.BA_ID']",newTr).val("");
+                $("input",newTr).attr("name",function(index, attrVal){
+                    return attrVal.replace(/\[\d\]/, "["+trCount+"]");
+                });
+                $("input.time-input", newTr).timepicker();
+                newTr.appendTo(tBodyObj);
+            }else if(trCount > 1){
+                tBodyObj.children(":last-child").remove();
+            }
+        });
+
+        $("#myForm").validate({
+            rules: {
+                "b.BDI_Name": {
+                    required: true,
+                    rangelength: [1, 100],
+                    remote: {
+                        url: "@Url.Action("QueryBuildingNotExistAjax", "Information")",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "oldBuildingName": $("#oldBuildingName").val(),
+                            "oldAreaID": $("#oldAreaID").val(),
+                            "buildingName": function(){return $("#buildingName").val()},
+                            "areaID": function(){return $("#areaID").val()}
+                        }
+                    }
+                },
+                "areaName": {required: true, rangelength: [1, 100] },
+                "b.BDI_Users": { digits: true, min: 1 },
+                "b.BDI_Height": { number: true },
+                "b.BDI_FloorUp": { digits: true },
+                "b.BDI_FloorDn": { digits: true },
+                "b.BDI_FloorHeight": { number: true },
+                "b.BDI_Area": { number: true },
+                "b.BDI_AreaAir": { number: true },
+                "b.BDI_AreaHot": { number: true },
+                "b.BDI_AreaSpe": { number: true },
+                "b.BDI_AreaRatio": { number: true },
+                "b.BDI_TemCool": { number: true },
+                "b.BDI_TemHot": { number: true },
+                //照明系统
+                "l[0].LD_Area": { number: true },
+                "l[0].LD_Num": { digits: true },
+                "l[0].LD_Power": { number: true },
+                "l[0].LD_Dgree": { number: true },
+                "l[1].LD_Area": { number: true },
+                "l[1].LD_Num": { digits: true },
+                "l[1].LD_Power": { number: true },
+                "l[1].LD_Dgree": { number: true },
+                "l[2].LD_Area": { number: true },
+                "l[2].LD_Num": { digits: true },
+                "l[2].LD_Power": { number: true },
+                "l[2].LD_Dgree": { number: true },
+                "l[3].LD_Area": { number: true },
+                "l[3].LD_Num": { digits: true },
+                "l[3].LD_Power": { number: true },
+                "l[3].LD_Dgree": { number: true },
+                //水泵用能设备
+                "wp[0].WPD_Num": { digits: true },
+                "wp[0].WPD_Flow": { number: true },
+                "wp[0].WPD_Lifting": { number: true },
+                "wp[0].WPD_Power": { number: true },
+                "wp[0].WPD_YearRuntime": { number: true },
+                "wp[1].WPD_Num": { digits: true },
+                "wp[1].WPD_Flow": { number: true },
+                "wp[1].WPD_Lifting": { number: true },
+                "wp[1].WPD_Power": { number: true },
+                "wp[1].WPD_YearRuntime": { number: true },
+                "wp[2].WPD_Num": { digits: true },
+                "wp[2].WPD_Flow": { number: true },
+                "wp[2].WPD_Lifting": { number: true },
+                "wp[2].WPD_Power": { number: true },
+                "wp[2].WPD_YearRuntime": { number: true },
+                "wp[3].WPD_Num": { digits: true },
+                "wp[3].WPD_Flow": { number: true },
+                "wp[3].WPD_Lifting": { number: true },
+                "wp[3].WPD_Power": { number: true },
+                "wp[3].WPD_YearRuntime": { number: true },
+                //风机用能设备
+                "wm[0].WMD_Num": { digits: true },
+                "wm[0].WMD_windAmount": { number: true },
+                "wm[0].WMD_Intensity": { number: true },
+                "wm[0].WMD_Power": { number: true },
+                "wm[0].WMD_YearRuntime": { number: true },
+                "wm[1].WMD_Num": { digits: true },
+                "wm[1].WMD_windAmount": { number: true },
+                "wm[1].WMD_Intensity": { number: true },
+                "wm[1].WMD_Power": { number: true },
+                "wm[1].WMD_YearRuntime": { number: true },
+                "wm[2].WMD_Num": { digits: true },
+                "wm[2].WMD_Power": { number: true },
+                "wm[2].WMD_YearRuntime": { number: true },
+                //厨房设备
+                "ke[0].KED_Num": { digits: true },
+                "ke[0].KED_Consumption": { number: true },
+                "ke[0].KED_YearRuntime": { number: true },
+                "ke[1].KED_Num": { digits: true },
+                "ke[1].KED_Power": { number: true },
+                "ke[1].KED_YearRuntime": { number: true },
+                "ke[2].KED_Num": { digits: true },
+                "ke[2].KED_Power": { number: true },
+                "ke[2].KED_YearRuntime": { number: true },
+                "ke[3].KED_Num": { digits: true },
+                "ke[3].KED_Power": { number: true },
+                "ke[3].KED_YearRuntime": { number: true },
+                "ke[4].KED_Num": { digits: true },
+                "ke[4].KED_Power": { number: true },
+                "ke[4].KED_YearRuntime": { number: true },
+                //室内办公设备
+                "oe[0].OED_Num": { digits: true },
+                "oe[0].OED_FixedPower": { number: true },
+                "oe[0].OED_YearPower": { number: true },
+                "oe[1].OED_Num": { digits: true },
+                "oe[1].OED_FixedPower": { number: true },
+                "oe[1].OED_YearPower": { number: true },
+                "oe[2].OED_Num": { digits: true },
+                "oe[2].OED_FixedPower": { number: true },
+                "oe[2].OED_YearPower": { number: true },
+                "oe[3].OED_Num": { digits: true },
+                "oe[3].OED_FixedPower": { number: true },
+                "oe[3].OED_YearPower": { number: true },
+                "oe[4].OED_Num": { digits: true },
+                "oe[4].OED_FixedPower": { number: true },
+                "oe[4].OED_YearPower": { number: true },
+                "oe[5].OED_Num": { digits: true },
+                "oe[5].OED_FixedPower": { number: true },
+                "oe[5].OED_YearPower": { number: true }
+            },
+            messages: {
+                "b.BDI_Name": {
+                    required: "名称不能为空",
+                    rangelength: "长度不合法",
+                    remote: "该名称已经存在，或登录已超时"
+                },
+                "areaName": {
+                    required: "区域名称不能为空",
+                    rangelength: "长度不合法"
+                },
+                "b.BDI_Users": {
+                    digits: "必须为整数",
+                    min: "必须大于0"
+                },
+                "b.BDI_Height": { number: "必须为数字" },
+                "b.BDI_FloorUp": { digits: "必须为整数" },
+                "b.BDI_FloorDn": { digits: "必须为整数" },
+                "b.BDI_FloorHeight": { number: "必须为数字" },
+                "b.BDI_Area": { number: "必须为数字" },
+                "b.BDI_AreaAir": { number: "必须为数字" },
+                "b.BDI_AreaHot": { number: "必须为数字" },
+                "b.BDI_AreaSpe": { number: "必须为数字" },
+                "b.BDI_AreaRatio": { number: "必须为数字" },
+                "b.BDI_TemCool": { number: "必须为数字" },
+                "b.BDI_TemHot": { number: "必须为数字" },
+                //照明系统
+                "l[0].LD_Area": { number: "必须为数字" },
+                "l[0].LD_Num": { digits: "必须为整数" },
+                "l[0].LD_Power": { number: "必须为数字" },
+                "l[0].LD_Dgree": { number: "必须为数字" },
+                "l[1].LD_Area": { number: "必须为数字" },
+                "l[1].LD_Num": { digits: "必须为整数" },
+                "l[1].LD_Power": { number: "必须为数字" },
+                "l[1].LD_Dgree": { number: "必须为数字" },
+                "l[2].LD_Area": { number: "必须为数字" },
+                "l[2].LD_Num": { digits: "必须为整数" },
+                "l[2].LD_Power": { number: "必须为数字" },
+                "l[2].LD_Dgree": { number: "必须为数字" },
+                "l[3].LD_Area": { number: "必须为数字" },
+                "l[3].LD_Num": { digits: "必须为整数" },
+                "l[3].LD_Power": { number: "必须为数字" },
+                "l[3].LD_Dgree": { number: "必须为数字" },
+                //水泵用能设备
+                "wp[0].WPD_Num": { digits: "必须为整数" },
+                "wp[0].WPD_Flow": { number: "必须为数字" },
+                "wp[0].WPD_Lifting": { number: "必须为数字" },
+                "wp[0].WPD_Power": { number: "必须为数字" },
+                "wp[0].WPD_YearRuntime": { number: "必须为数字" },
+                "wp[1].WPD_Num": { digits: "必须为整数" },
+                "wp[1].WPD_Flow": { number: "必须为数字" },
+                "wp[1].WPD_Lifting": { number: "必须为数字" },
+                "wp[1].WPD_Power": { number: "必须为数字" },
+                "wp[1].WPD_YearRuntime": { number: "必须为数字" },
+                "wp[2].WPD_Num": { digits: "必须为整数" },
+                "wp[2].WPD_Flow": { number: "必须为数字" },
+                "wp[2].WPD_Lifting": { number: "必须为数字" },
+                "wp[2].WPD_Power": { number: "必须为数字" },
+                "wp[2].WPD_YearRuntime": { number: "必须为数字" },
+                "wp[3].WPD_Num": { digits: "必须为整数" },
+                "wp[3].WPD_Flow": { number: "必须为数字" },
+                "wp[3].WPD_Lifting": { number: "必须为数字" },
+                "wp[3].WPD_Power": { number: "必须为数字" },
+                "wp[3].WPD_YearRuntime": { number: "必须为数字" },
+                //风机用能设备
+                "wm[0].WMD_Num": { digits: "必须为整数" },
+                "wm[0].WMD_windAmount": { number: "必须为数字" },
+                "wm[0].WMD_Intensity": { number: "必须为数字" },
+                "wm[0].WMD_Power": { number: "必须为数字" },
+                "wm[0].WMD_YearRuntime": { number: "必须为数字" },
+                "wm[1].WMD_Num": { digits: "必须为整数" },
+                "wm[1].WMD_windAmount": { number: "必须为数字" },
+                "wm[1].WMD_Intensity": { number: "必须为数字" },
+                "wm[1].WMD_Power": { number: "必须为数字" },
+                "wm[1].WMD_YearRuntime": { number: "必须为数字" },
+                "wm[2].WMD_Num": { digits: "必须为整数" },
+                "wm[2].WMD_Power": { number: "必须为数字" },
+                "wm[2].WMD_YearRuntime": { number: "必须为数字" },
+                //厨房设备
+                "ke[0].KED_Num": { digits: "必须为整数" },
+                "ke[0].KED_Consumption": { number: "必须为数字" },
+                "ke[0].KED_YearRuntime": { number: "必须为数字" },
+                "ke[1].KED_Num": { digits: "必须为整数" },
+                "ke[1].KED_Power": { number: "必须为数字" },
+                "ke[1].KED_YearRuntime": { number: "必须为数字" },
+                "ke[2].KED_Num": { digits: "必须为整数" },
+                "ke[2].KED_Power": { number: "必须为数字" },
+                "ke[2].KED_YearRuntime": { number: "必须为数字" },
+                "ke[3].KED_Num": { digits: "必须为整数" },
+                "ke[3].KED_Power": { number: "必须为数字" },
+                "ke[3].KED_YearRuntime": { number: "必须为数字" },
+                "ke[4].KED_Num": { digits: "必须为整数" },
+                "ke[4].KED_Power": { number: "必须为数字" },
+                "ke[4].KED_YearRuntime": { number: "必须为数字" },
+                //室内办公设备
+                "oe[0].OED_Num": { digits: "必须为整数" },
+                "oe[0].OED_FixedPower": { number: "必须为数字" },
+                "oe[0].OED_YearPower": { number: "必须为数字" },
+                "oe[1].OED_Num": { digits: "必须为整数" },
+                "oe[1].OED_FixedPower": { number: "必须为数字" },
+                "oe[1].OED_YearPower": { number: "必须为数字" },
+                "oe[2].OED_Num": { digits: "必须为整数" },
+                "oe[2].OED_FixedPower": { number: "必须为数字" },
+                "oe[2].OED_YearPower": { number: "必须为数字" },
+                "oe[3].OED_Num": { digits: "必须为整数" },
+                "oe[3].OED_FixedPower": { number: "必须为数字" },
+                "oe[3].OED_YearPower": { number: "必须为数字" },
+                "oe[4].OED_Num": { digits: "必须为整数" },
+                "oe[4].OED_FixedPower": { number: "必须为数字" },
+                "oe[4].OED_YearPower": { number: "必须为数字" },
+                "oe[5].OED_Num": { digits: "必须为整数" },
+                "oe[5].OED_FixedPower": { number: "必须为数字" },
+                "oe[5].OED_YearPower": { number: "必须为数字" }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent().next());
+                $("#errorTip").slideDown("fast");
+            },
+            submitHandler: function (form) {
+                if (confirm("确认提交?")) {
+                    form.submit();
+                }
+                $("#errorTip").slideUp("fast");
+            },
+            onkeyup: false,
+            onfocusout: false,
+            onclick: false
+        });
+
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Util")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html("");
+                $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedSchoolArea");
+                $("#divSchoolArea").attr("class", "divSelectRoom4");
+                $("#schoolAreaDiv").fadeIn("fast");
+            });
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "Util")', null, function (jsonData) {
+            $("#roomDataTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+    });
+</script>
+<script id="roomDataTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>
+<script id="ba0A1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="A1" /><input type="hidden" name="ba0[${index}].BA_Name" value="空调机组" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1A1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_AirVolume" type="text" maxlength="100" value="${BA_AirVolume}" /></td>
+    <td><input name="ba1[${index}].BA_WindPressure" type="text" maxlength="100" value="${BA_WindPressure}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba1[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba1[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba1[${index}].BA_AppendixNo" value="A1" /><input type="hidden" name="ba1[${index}].BA_Name" value="送风机" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba2A1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba2[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba2[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba2[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba2[${index}].BA_AirVolume" type="text" maxlength="100" value="${BA_AirVolume}" /></td>
+    <td><input name="ba2[${index}].BA_WindPressure" type="text" maxlength="100" value="${BA_WindPressure}" /></td>
+    <td><input name="ba2[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba2[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba2[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba2[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba2[${index}].BA_AppendixNo" value="A1" /><input type="hidden" name="ba2[${index}].BA_Name" value="新风机" /><input type="hidden" name="ba2[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba3A1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba3[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba3[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba3[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba3[${index}].BA_AirVolume" type="text" maxlength="100" value="${BA_AirVolume}" /></td>
+    <td><input name="ba3[${index}].BA_WindPressure" type="text" maxlength="100" value="${BA_WindPressure}" /></td>
+    <td><input name="ba3[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba3[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba3[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba3[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba3[${index}].BA_AppendixNo" value="A1" /><input type="hidden" name="ba3[${index}].BA_Name" value="回风机" /><input type="hidden" name="ba3[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba4A1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba4[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba4[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba4[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba4[${index}].BA_AirVolume" type="text" maxlength="100" value="${BA_AirVolume}" /></td>
+    <td><input name="ba4[${index}].BA_WindPressure" type="text" maxlength="100" value="${BA_WindPressure}" /></td>
+    <td><input name="ba4[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba4[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba4[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba4[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba4[${index}].BA_AppendixNo" value="A1" /><input type="hidden" name="ba4[${index}].BA_Name" value="排风机" /><input type="hidden" name="ba4[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0A2AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="A2" /><input type="hidden" name="ba0[${index}].BA_Name" value="新风机组" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1A2AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba1[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba1[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba1[${index}].BA_AppendixNo" value="A2" /><input type="hidden" name="ba1[${index}].BA_Name" value="风机盘管" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba2A2AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba2[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba2[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba2[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba2[${index}].BA_AirVolume" type="text" maxlength="100" value="${BA_AirVolume}" /></td>
+    <td><input name="ba2[${index}].BA_WindPressure" type="text" maxlength="100" value="${BA_WindPressure}" /></td>
+    <td><input name="ba2[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba2[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba2[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba2[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba2[${index}].BA_AppendixNo" value="A2" /><input type="hidden" name="ba2[${index}].BA_Name" value="新风机" /><input type="hidden" name="ba2[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba3A2AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba3[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba3[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba3[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba3[${index}].BA_AirVolume" type="text" maxlength="100" value="${BA_AirVolume}" /></td>
+    <td><input name="ba3[${index}].BA_WindPressure" type="text" maxlength="100" value="${BA_WindPressure}" /></td>
+    <td><input name="ba3[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba3[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba3[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba3[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba3[${index}].BA_AppendixNo" value="A2" /><input type="hidden" name="ba3[${index}].BA_Name" value="回风机" /><input type="hidden" name="ba3[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba4A2AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba4[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba4[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba4[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba4[${index}].BA_AirVolume" type="text" maxlength="100" value="${BA_AirVolume}" /></td>
+    <td><input name="ba4[${index}].BA_WindPressure" type="text" maxlength="100" value="${BA_WindPressure}" /></td>
+    <td><input name="ba4[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba4[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba4[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba4[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba4[${index}].BA_AppendixNo" value="A2" /><input type="hidden" name="ba4[${index}].BA_Name" value="排风机" /><input type="hidden" name="ba4[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0A3AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="A3" /><input type="hidden" name="ba0[${index}].BA_Name" value="分体式机组" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0B1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td><input name="ba0[${index}].BA_AverageLoadRate" type="text" maxlength="100" value="${BA_AverageLoadRate}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="B1" /><input type="hidden" name="ba0[${index}].BA_Name" value="冷水机组" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1B1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_CoolingWater" type="text" maxlength="100" value="${BA_CoolingWater}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td> —— </td>
+    <td> —— <input type="hidden" name="ba1[${index}].BA_AppendixNo" value="B1" /><input type="hidden" name="ba1[${index}].BA_Name" value="冷水塔" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba2B1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba2[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba2[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba2[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba2[${index}].BA_Flow" type="text" maxlength="100" value="${BA_Flow}" /></td>
+    <td><input name="ba2[${index}].BA_Lifting" type="text" maxlength="100" value="${BA_Lifting}" /></td>
+    <td><input name="ba2[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba2[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba2[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba2[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba2[${index}].BA_AppendixNo" value="B1" /><input type="hidden" name="ba2[${index}].BA_Name" value="冷冻水泵" /><input type="hidden" name="ba2[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba3B1AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba3[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba3[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba3[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba3[${index}].BA_Flow" type="text" maxlength="100" value="${BA_Flow}" /></td>
+    <td><input name="ba3[${index}].BA_Lifting" type="text" maxlength="100" value="${BA_Lifting}" /></td>
+    <td><input name="ba3[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba3[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba3[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba3[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba3[${index}].BA_AppendixNo" value="B1" /><input type="hidden" name="ba3[${index}].BA_Name" value="冷却水泵" /><input type="hidden" name="ba3[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0B2AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingPower" type="text" maxlength="100" value="${BA_CoolingPower}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingPower" type="text" maxlength="100" value="${BA_HeatingPower}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="B2" /><input type="hidden" name="ba0[${index}].BA_Name" value="热泵机组" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1B2AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_Flow" type="text" maxlength="100" value="${BA_Flow}" /></td>
+    <td><input name="ba1[${index}].BA_Lifting" type="text" maxlength="100" value="${BA_Lifting}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba1[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba1[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba1[${index}].BA_AppendixNo" value="B2" /><input type="hidden" name="ba1[${index}].BA_Name" value="水泵" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0B3AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_FuelConsumption" type="text" maxlength="100" value="${BA_FuelConsumption}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="B3" /><input type="hidden" name="ba0[${index}].BA_Name" value="吸收式机组" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1B3AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_CoolingWater" type="text" maxlength="100" value="${BA_CoolingWater}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td> —— </td>
+    <td> —— <input type="hidden" name="ba1[${index}].BA_AppendixNo" value="B3" /><input type="hidden" name="ba1[${index}].BA_Name" value="冷却塔" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba2B3AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba2[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba2[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba2[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba2[${index}].BA_Flow" type="text" maxlength="100" value="${BA_Flow}" /></td>
+    <td><input name="ba2[${index}].BA_Lifting" type="text" maxlength="100" value="${BA_Lifting}" /></td>
+    <td><input name="ba2[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba2[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba2[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba2[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba2[${index}].BA_AppendixNo" value="B3" /><input type="hidden" name="ba2[${index}].BA_Name" value="冷温水循环泵" /><input type="hidden" name="ba2[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba3B3AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba3[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba3[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba3[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba3[${index}].BA_Flow" type="text" maxlength="100" value="${BA_Flow}" /></td>
+    <td><input name="ba3[${index}].BA_Lifting" type="text" maxlength="100" value="${BA_Lifting}" /></td>
+    <td><input name="ba3[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba3[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba3[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba3[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba3[${index}].BA_AppendixNo" value="B3" /><input type="hidden" name="ba3[${index}].BA_Name" value="冷却水泵" /><input type="hidden" name="ba3[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0B4AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="B4" /><input type="hidden" name="ba0[${index}].BA_Name" value="分体式机组" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0B5AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_BoilerEfficiency" type="text" maxlength="100" value="${BA_BoilerEfficiency}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td><input name="ba0[${index}].BA_AverageLoadRate" type="text" maxlength="100" value="${BA_AverageLoadRate}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="B5" /><input type="hidden" name="ba0[${index}].BA_Name" value="锅炉" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1B5AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_Flow" type="text" maxlength="100" value="${BA_Flow}" /></td>
+    <td><input name="ba1[${index}].BA_Lifting" type="text" maxlength="100" value="${BA_Lifting}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba1[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba1[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba1[${index}].BA_AppendixNo" value="B5" /><input type="hidden" name="ba1[${index}].BA_Name" value="水泵" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0B6AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingCapacity" type="text" maxlength="100" value="${BA_HeatingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_FuelConsumption" type="text" maxlength="100" value="${BA_FuelConsumption}" /></td>
+    <td><input name="ba0[${index}].BA_BoilerEfficiency" type="text" maxlength="100" value="${BA_BoilerEfficiency}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td><input name="ba0[${index}].BA_AverageLoadRate" type="text" maxlength="100" value="${BA_AverageLoadRate}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="B6" /><input type="hidden" name="ba0[${index}].BA_Name" value="锅炉" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1B6AppendixDataTemplate" type="text/x-jQuery-tmpl">
+    <tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_Flow" type="text" maxlength="100" value="${BA_Flow}" /></td>
+    <td><input name="ba1[${index}].BA_Lifting" type="text" maxlength="100" value="${BA_Lifting}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td>上午<input name="ba1[${index}].BA_DayWorkStart" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkStart}" />点到下午<input name="ba1[${index}].BA_DayWorkEnd" type="text" class="small time-input" readonly="readonly" maxlength="100" value="${BA_DayWorkEnd}" />点</td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /><input type="hidden" name="ba1[${index}].BA_AppendixNo" value="B6" /><input type="hidden" name="ba1[${index}].BA_Name" value="水泵" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0B7AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_HeatingPower" type="text" maxlength="100" value="${BA_HeatingPower}" /></td>
+    <td><input name="ba0[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td><input name="ba0[${index}].BA_AverageLoadRate" type="text" maxlength="100" value="${BA_AverageLoadRate}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="B7" /><input type="hidden" name="ba0[${index}].BA_Name" value="CHP联产机组" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1B7AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba1[${index}].BA_HeatingPower" type="text" maxlength="100" value="${BA_HeatingPower}" /></td>
+    <td><input name="ba1[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td><input name="ba1[${index}].BA_AverageLoadRate" type="text" maxlength="100" value="${BA_AverageLoadRate}" /><input type="hidden" name="ba1[${index}].BA_AppendixNo" value="B7" /><input type="hidden" name="ba1[${index}].BA_Name" value="水泵" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba0B8AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba0[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba0[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba0[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba0[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba0[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba0[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba0[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td><input name="ba0[${index}].BA_AverageLoadRate" type="text" maxlength="100" value="${BA_AverageLoadRate}" /><input type="hidden" name="ba0[${index}].BA_AppendixNo" value="B8" /><input type="hidden" name="ba0[${index}].BA_Name" value="冷热源设备" /><input type="hidden" name="ba0[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>
+<script id="ba1B8AppendixDataTemplate" type="text/x-jQuery-tmpl">
+	<tr><td><input name="ba1[${index}].BA_Type" type="text" maxlength="100" value="${BA_Type}" /></td>
+    <td><input name="ba1[${index}].BA_Num" type="text" maxlength="100" value="${BA_Num}" /></td>
+    <td><input name="ba1[${index}].BA_ManufacturerAndModel" type="text" maxlength="100" value="${BA_ManufacturerAndModel}" /></td>
+    <td><input name="ba1[${index}].BA_CoolingCapacity" type="text" maxlength="100" value="${BA_CoolingCapacity}" /></td>
+    <td><input name="ba1[${index}].BA_Power" type="text" maxlength="100" value="${BA_Power}" /></td>
+    <td><input name="ba1[${index}].BA_PowerSource" type="text" maxlength="100" value="${BA_PowerSource}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerDay" type="text" maxlength="100" value="${BA_WorkPerDay}" /></td>
+    <td><input name="ba1[${index}].BA_WorkPerYear" type="text" maxlength="100" value="${BA_WorkPerYear}" /></td>
+    <td><input name="ba1[${index}].BA_AverageLoadRate" type="text" maxlength="100" value="${BA_AverageLoadRate}" /><input type="hidden" name="ba1[${index}].BA_AppendixNo" value="B8" /><input type="hidden" name="ba1[${index}].BA_Name" value="水泵" /><input type="hidden" name="ba1[${index}].BA_ID" value="${BA_ID}" /></td></tr>
+</script>

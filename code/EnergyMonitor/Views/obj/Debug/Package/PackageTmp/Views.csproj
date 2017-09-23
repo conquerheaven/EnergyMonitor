@@ -1,0 +1,567 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{87FD3729-BB80-444B-8684-C39B92F3890E}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EnergyMonitor</RootNamespace>
+    <AssemblyName>EnergyMonitor</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>false</IncludeIisSettings>
+    <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Telerik.Reporting, Version=5.1.11.713, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.ReportViewer.WebForms, Version=5.1.11.713, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\BuildingGuanghua\ReportsWarpper\ReportManagement.aspx" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\FlexPaperViewer.swf" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\js\flexpaper_flash.js" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\js\flexpaper_flash_debug.js" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\js\jquery.js" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\Paper.swf" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\playerProductInstall.swf" />
+    <Content Include="Areas\Admin\Views\Information\ReportsWarpper\BuildingDetail.aspx" />
+    <Content Include="Areas\Admin\Views\Report\ReportsWarpper\BuildingDetail.aspx" />
+    <Content Include="Areas\Admin\Views\Report\ReportsWarpper\BuildingElecMonth.aspx" />
+    <Content Include="Areas\Admin\Views\Report\ReportsWarpper\BuildingWaterMonth.aspx" />
+    <Content Include="Areas\Admin\Views\Report\ReportsWarpper\BuildingElecDay.aspx" />
+    <Content Include="Areas\Admin\Views\Report\ReportsWarpper\BuildingEnergyMonth.aspx" />
+    <Content Include="Areas\Admin\Views\Report\ReportsWarpper\AreaWaterMonth.aspx" />
+    <Content Include="Areas\Admin\Views\Report\ReportsWarpper\ThirdPointMonth.aspx" />
+    <Content Include="Areas\Admin\Views\Shared\NoLogin.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_SelectLanguage.cshtml" />
+    <Content Include="Areas\Admin\Views\User\ActiveMail.cshtml" />
+    <Content Include="Areas\Admin\Views\User\RedirectPage.cshtml" />
+    <Content Include="Areas\Admin\Views\User\ModifyInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\User\PersonalInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Welcome.cshtml" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\User\Views\Energy\EnergyBrief.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QuerySchool.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifySchool.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifiedSchool.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddSchool.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddSchoolInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QuerySchoolArea.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddSchoolArea.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddSchoolAreaInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifySchoolArea.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifySchoolAreaInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QueryBuilding.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddBuilding.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddBuildingInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyBuilding.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyBuildingInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QueryRoom.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddRoom.cshtml" />
+    <Content Include="Areas\Admin\Views\Energy\RealElec.cshtml" />
+    <Content Include="Areas\Admin\Views\Energy\QueryElec.cshtml" />
+    <Content Include="Areas\Admin\Views\Analysis\Elec.cshtml" />
+    <Content Include="Areas\Admin\Views\Analysis\VCElec.cshtml" />
+    <Content Include="Areas\Admin\Views\Analysis\VGCElec.cshtml" />
+    <Content Include="Areas\Admin\Views\Analysis\HElec.cshtml" />
+    <Content Include="Areas\Admin\Views\Analysis\HGElec.cshtml" />
+    <Content Include="Areas\Admin\Views\Analysis\HCElec.cshtml" />
+    <Content Include="Areas\Admin\Views\Publicity\Elec.cshtml" />
+    <Content Include="Areas\Admin\Views\Global\Map.cshtml" />
+    <Content Include="Areas\Admin\Views\Global\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\Global\BrowseMap.cshtml" />
+    <Content Include="Areas\Admin\Views\Global\FullScrMap.cshtml" />
+    <Content Include="Areas\Admin\Views\Global\FullViewMap.cshtml" />
+    <Content Include="Areas\Admin\Views\Global\BuildingDetail.cshtml" />
+    <Content Include="Areas\Admin\Views\Energy\QueryVal.cshtml" />
+    <Content Include="Areas\Admin\Views\Global\EnergyCompare.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddRealPoint.cshtml" />
+    <Content Include="Areas\Admin\Views\Energy\QueryUniversityEnergy.cshtml" />
+    <Content Include="Areas\Admin\Views\ExceptionInfo\ValueDecline.cshtml" />
+    <Content Include="Areas\Admin\Views\ExceptionInfo\MachineException.cshtml" />
+    <Content Include="Areas\Admin\Views\ExceptionInfo\DiscontinuousValue.cshtml" />
+    <Content Include="Areas\Admin\Views\ExceptionInfo\ValueIncrease.cshtml" />
+    <Content Include="Areas\Admin\Views\ExceptionInfo\SetEmailInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\ExceptionInfo\ModifyEmailInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\BuildingGuanghua\ReportManagement.cshtml" />
+    <Content Include="Areas\Admin\Views\BuildingGuanghua\EnergyStatistics.cshtml" />
+    <Content Include="Areas\Admin\Views\BuildingGuanghua\HGElec.cshtml" />
+    <Content Include="Areas\Admin\Views\BuildingGuanghua\HElec.cshtml" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\Comptroller.cshtml" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\Comptrollering.cshtml" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\Comptrolleringone.cshtml" />
+    <Content Include="Areas\Admin\Views\EnergyComptroller\ComptrollerDelete.cshtml" />
+    <Content Include="Areas\Admin\Views\ExceptionInfo\SetMessageInfo.cshtml" />
+    <None Include="Areas\Admin\Views\Information\AddRoomInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyRoom.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyRoomInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\System\QueryUsers.cshtml" />
+    <Content Include="Areas\Admin\Views\System\QueryRole.cshtml" />
+    <Content Include="Areas\User\Views\Shared\_Layout2.cshtml" />
+    <Content Include="Areas\User\Views\Energy\BuyHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_RoomSelect2.cshtml" />
+    <Content Include="Areas\Admin\Views\Statistics\Elec.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_RoomSelect1.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_PowerSelect.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QueryPoint.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddPoint.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddPointInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyPoint.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyPointInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QueryDepart.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddDepart.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddDepartInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyDepart.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyDepartInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QueryPower.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\Elec.cshtml" />
+    <Content Include="Areas\Admin\Views\System\AddRole.cshtml" />
+    <Content Include="Areas\Admin\Views\System\AddRoleInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\NoRight.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout2.cshtml" />
+    <Content Include="Areas\Admin\Views\System\ModifyRole.cshtml" />
+    <Content Include="Areas\Admin\Views\System\ModifyRoleInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\User\MyRight.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\DetailBuilding.cshtml" />
+    <Content Include="Areas\Admin\Views\System\QueryState.cshtml" />
+    <Content Include="Areas\Admin\Views\System\BadState.cshtml" />
+    <Content Include="Areas\Admin\Views\System\AllState.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_BuildingSelect.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QueryHistoryVal.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QueryAnalogInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddAnalogInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddAnalogInfoData.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyAnalogInfo.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyAnalogInfoData.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\QueryWorkstation.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\SetParameters.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\ModifyParameters.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\BuildingElecMonth.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\BuildingWaterMonth.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\BuildingElecDay.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\BuildingEnergyMonth.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\AreaWaterMonth.cshtml" />
+    <Content Include="Areas\Admin\Views\Statistics\Compare.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ImportPoint.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ImportingPoint.cshtml" />
+    <Content Include="Areas\Admin\Views\System\DiagramState.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\AddThirdPointVal.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\ModifyUniversity.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_RoomSelect3.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_MultiObjSelect.cshtml" />
+    <Content Include="Areas\Admin\Views\Information\BuildingEnergyConsum.cshtml" />
+    <Content Include="Areas\Admin\Views\Report\ThirdPointMonth.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_BuildingGuanghuaSelect.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_BuildingGuanghuaRoomSelect.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_BuildingGuanghuaMultiObjSelect.cshtml" />
+    <Content Include="Areas\Admin\Views\Statistics\BuildingTypeStatistics.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\User\Views\Shared\app.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Areas\User\Views\Shared\_Layout.cshtml" />
+    <Content Include="bin\Controllers.dll" />
+    <Content Include="bin\Controllers.pdb" />
+    <Content Include="bin\en-us\Resources.resources.dll" />
+    <Content Include="bin\EnergyMonitor.dll" />
+    <Content Include="bin\EnergyMonitor.pdb" />
+    <Content Include="bin\Microsoft.Office.Interop.Word.dll" />
+    <Content Include="bin\Microsoft.Office.Interop.Word.xml" />
+    <Content Include="bin\Models.dll" />
+    <Content Include="bin\Models.pdb" />
+    <Content Include="bin\office.dll" />
+    <Content Include="bin\office.xml" />
+    <Content Include="bin\Resources.dll" />
+    <Content Include="bin\Resources.pdb" />
+    <Content Include="bin\zh-cn\Resources.resources.dll" />
+    <Content Include="bin\zh-Hans\Controllers.resources.dll" />
+    <Content Include="Content\config\savedCmp.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\css\detail.css" />
+    <Content Include="Content\css\form.css" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_glass_55_fcf0ba_1x400.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_gloss-wave_100_ece8da_500x100.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_highlight-hard_100_f5f3e5_1x100.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_highlight-hard_100_fafaf4_1x100.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_highlight-hard_15_459e00_1x100.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_highlight-hard_95_cccccc_1x100.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_highlight-soft_25_67b021_1x100.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_highlight-soft_95_ffedad_1x100.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-bg_inset-soft_15_2b2922_1x100.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-icons_808080_256x240.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-icons_847e71_256x240.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-icons_8dc262_256x240.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-icons_eeeeee_256x240.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\css\jquery-ui\datepicker\jquery-ui-1.8.11.datepicker.css" />
+    <Content Include="Content\css\jquery-ui\datepicker\jquery_ui_timepicker_addon.css" />
+    <Content Include="Content\css\layout.css" />
+    <Content Include="Content\css\login.css" />
+    <Content Include="Content\css\mktree.css" />
+    <Content Include="Content\css\Pager.css" />
+    <Content Include="Content\css\PointSelect.css" />
+    <Content Include="Content\css\report.css" />
+    <Content Include="Content\css\RoomSelect.css" />
+    <Content Include="Content\css\tab.css" />
+    <Content Include="Content\css\tree.css" />
+    <Content Include="Content\images\loading_load.gif" />
+    <Content Include="Content\images\avatar2.png" />
+    <Content Include="Content\images\bg_breadcrumb.png" />
+    <Content Include="Content\images\bg_log_lt_leftside.png" />
+    <Content Include="Content\images\bg_lt_leftside.png" />
+    <Content Include="Content\images\bg_lt_title.png" />
+    <Content Include="Content\images\btn_logout_ico.png" />
+    <Content Include="Content\images\btn_map_ico2.png" />
+    <Content Include="Content\images\campus.jpg" />
+    <Content Include="Content\images\error.jpg" />
+    <Content Include="Content\images\headerbg.jpg" />
+    <Content Include="Content\images\headerbg_left.jpg" />
+    <Content Include="Content\images\headerbg_right.jpg" />
+    <Content Include="Content\images\imgzsk.jpg" />
+    <Content Include="Content\images\img\bg_login_box2.png" />
+    <Content Include="Content\images\img\bg_login_header2.png" />
+    <Content Include="Content\images\img\btn_logout_ico.png" />
+    <Content Include="Content\images\img\icons\icon_column.png" />
+    <Content Include="Content\images\img\icons\icon_down_arrow.png" />
+    <Content Include="Content\images\img\icons\icon_line.png" />
+    <Content Include="Content\images\img\icons\icon_minus.png" />
+    <Content Include="Content\images\img\icons\icon_pie.png" />
+    <Content Include="Content\images\img\icons\icon_plus.png" />
+    <Content Include="Content\images\img\icons\icon_powerfn.png" />
+    <Content Include="Content\images\img\NO-2-2.png" />
+    <Content Include="Content\images\img\NO-2h.png" />
+    <Content Include="Content\images\img\NO-2k.png" />
+    <Content Include="Content\images\img\pop.png" />
+    <Content Include="Content\images\importsample.jpg" />
+    <Content Include="Content\images\iws3.png" />
+    <Content Include="Content\images\iw_close.gif" />
+    <Content Include="Content\images\iw_tail.png" />
+    <Content Include="Content\images\loading_small.gif" />
+    <Content Include="Content\images\loading_big.gif" />
+    <Content Include="Content\images\loading_mid.gif" />
+    <Content Include="Content\images\loginbg.png" />
+    <Content Include="Content\images\loginBox.png" />
+    <Content Include="Content\images\mapinfo.png" />
+    <Content Include="Content\images\nav_bj.gif" />
+    <Content Include="Content\images\NO-2-2.png" />
+    <Content Include="Content\images\NO-2h.png" />
+    <Content Include="Content\images\NO-2k.png" />
+    <Content Include="Content\images\R0.png" />
+    <Content Include="Content\images\R1.png" />
+    <Content Include="Content\images\roomSelectBG1.png" />
+    <Content Include="Content\images\roomSelectBG2.png" />
+    <Content Include="Content\images\roomSelectBG3.png" />
+    <Content Include="Content\images\roomSelectBG4.png" />
+    <Content Include="Content\images\img\bg_btn_grey_lrg.png" />
+    <Content Include="Content\images\img\bg_btn_grey_sml.png" />
+    <Content Include="Content\images\img\bg_fade_blue_med.png" />
+    <Content Include="Content\images\img\bg_fade_green_med.png" />
+    <Content Include="Content\images\img\bg_fade_green_sml.png" />
+    <Content Include="Content\images\img\bg_fade_med.png" />
+    <Content Include="Content\images\img\bg_fade_red_med.png" />
+    <Content Include="Content\images\img\bg_fade_red_sml.png" />
+    <Content Include="Content\images\img\bg_fade_sml.png" />
+    <Content Include="Content\images\img\bg_fade_up.png" />
+    <Content Include="Content\images\img\bg_fade_yellow_med.png" />
+    <Content Include="Content\images\img\bg_forgotten_password.png" />
+    <Content Include="Content\images\img\bg_grey_dark_med.png" />
+    <Content Include="Content\images\img\bg_header.png" />
+    <Content Include="Content\images\img\bg_heading.png" />
+    <Content Include="Content\images\img\bg_login_box.png" />
+    <Content Include="Content\images\img\bg_login_header.png" />
+    <Content Include="Content\images\img\bg_login_page.png" />
+    <Content Include="Content\images\img\bg_navigation_link.png" />
+    <Content Include="Content\images\img\bg_noticebox_grey.png" />
+    <Content Include="Content\images\img\bg_noticebox_yellow.png" />
+    <Content Include="Content\images\img\bg_td_alt.png" />
+    <Content Include="Content\images\img\bg_th.png" />
+    <Content Include="Content\images\img\bg_usage_green.png" />
+    <Content Include="Content\images\img\bg_usage_orange.png" />
+    <Content Include="Content\images\img\bg_usage_red.png" />
+    <Content Include="Content\images\img\icons\icon_approve.png" />
+    <Content Include="Content\images\img\icons\icon_breadcrumb.png" />
+    <Content Include="Content\images\img\icons\icon_bullet.png" />
+    <Content Include="Content\images\img\icons\icon_cross_sml.png" />
+    <Content Include="Content\images\img\icons\icon_delete.png" />
+    <Content Include="Content\images\img\icons\icon_edit.png" />
+    <Content Include="Content\images\img\icons\icon_error.png" />
+    <Content Include="Content\images\img\icons\icon_info.png" />
+    <Content Include="Content\images\img\icons\icon_missing.png" />
+    <Content Include="Content\images\img\icons\icon_square_close.png" />
+    <Content Include="Content\images\img\icons\icon_success.png" />
+    <Content Include="Content\images\img\icons\icon_ticklist.png" />
+    <Content Include="Content\images\img\icons\icon_unapprove.png" />
+    <Content Include="Content\images\img\icons\icon_warning.png" />
+    <Content Include="Content\images\img\loading.gif" />
+    <Content Include="Content\images\img\login_fade.png" />
+    <Content Include="Content\images\img\news_temp.png" />
+    <Content Include="Content\images\S0.png" />
+    <Content Include="Content\images\S1.png" />
+    <Content Include="Content\images\search_buttons.png" />
+    <Content Include="Content\images\tools_img.png" />
+    <Content Include="Content\images\tree\bullet.gif" />
+    <Content Include="Content\images\tree\check0.gif" />
+    <Content Include="Content\images\tree\check1.gif" />
+    <Content Include="Content\images\tree\check2.gif" />
+    <Content Include="Content\images\tree\collapsed.gif" />
+    <Content Include="Content\images\tree\expanded.gif" />
+    <Content Include="Content\images\tree\minus.gif" />
+    <Content Include="Content\images\tree\plus.gif" />
+    <Content Include="Content\images\W0.png" />
+    <Content Include="Content\images\W1.png" />
+    <Content Include="Content\images\zsk.png" />
+    <Content Include="Content\images\zsk2.png" />
+    <Content Include="Content\images\zsk3.png" />
+    <Content Include="Content\previewPdfFiles\FlexPaperViewer.swf" />
+    <Content Include="Content\previewPdfFiles\国际学术交流中心.swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学单幢建筑_先进材料试验室20110713[1].swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学单幢建筑_光华楼.swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学单幢建筑_史带楼.swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学单幢建筑_正大体育馆.swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学单幢建筑_行政与会议中心.swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学能耗监管平台使用手册.swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学能耗管理平台.swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学节约型校园建筑节能监管平台智能表具相关参数.swf" />
+    <Content Include="Content\previewPdfFiles\复旦大学节约型校园建筑节能监管平台用户使用手册.swf" />
+    <Content Include="Content\previewPdfFiles\本部食堂.swf" />
+    <Content Include="Content\previewPdfFiles\设计及建设详细方案.swf" />
+    <Content Include="Content\sl\SL.Visifire.Charts.xap" />
+    <Content Include="Content\themes\green\img\bg_buttons.png" />
+    <Content Include="Content\themes\green\img\bg_buttons_alternative.png" />
+    <Content Include="Content\themes\green\img\bg_heading_alt.png" />
+    <Content Include="Content\themes\green\img\bg_login_btn.png" />
+    <Content Include="Content\themes\green\img\bg_login_input.png" />
+    <Content Include="Content\themes\green\img\bg_navigation.png" />
+    <Content Include="Content\themes\green\img\bg_navigation_selected.png" />
+    <Content Include="Content\themes\green\img\bg_notify_count.png" />
+    <Content Include="Content\themes\green\img\cp_logo_login.png" />
+    <Content Include="Content\themes\green\img\loginbg.png" />
+    <Content Include="Content\themes\green\img\NO-2-2.png" />
+    <Content Include="Content\themes\green\img\NO-2k.png" />
+    <Content Include="Content\themes\green\img\NO.png" />
+    <Content Include="Content\themes\green\img\subimg-h.png" />
+    <Content Include="Content\themes\green\img\subimg-n.png" />
+    <Content Include="Content\themes\green\styles.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\css\jquery-ui\base\jquery-ui.css" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\css\jquery-ui\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Index.htm" />
+    <Content Include="Scripts\flexpaper_flash.js" />
+    <Content Include="Scripts\flexpaper_flash_debug.js" />
+    <Content Include="Scripts\joint.all.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.11.datepicker.min.js" />
+    <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
+    <Content Include="Scripts\jquery.checktree.0.3b1.js" />
+    <Content Include="Scripts\jquery.checktree.0.3b1.pack.js" />
+    <Content Include="Scripts\jquery.checktree.pack.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.pager.js" />
+    <Content Include="Scripts\jquery.timepicker.js" />
+    <Content Include="Scripts\jquery.tmpl.min.js" />
+    <Content Include="Scripts\jquery.ui.datepicker-zh-CN.js" />
+    <Content Include="Scripts\arcgismap.js" />
+    <Content Include="Scripts\mktree.js" />
+    <Content Include="Scripts\swfobject.js" />
+    <Content Include="Scripts\util.js" />
+    <Content Include="Scripts\Visifire.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Areas\User\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\User\Views\Shared\Error.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Homes\Login.cshtml" />
+    <Content Include="Areas\User\Views\User\AddInfo.cshtml" />
+    <Content Include="Views\Homes\NoLogin.cshtml" />
+    <Content Include="Areas\User\Views\User\AddInfoResult.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Homes\Reactive.cshtml" />
+    <Content Include="Views\Homes\Error.cshtml" />
+    <Content Include="Views\Homes\ReactiveResult.cshtml" />
+    <Content Include="Views\Shared\_SelectLanguage.cshtml" />
+    <Content Include="Views\Homes\Disabled.cshtml" />
+    <Content Include="Views\Homes\ActiveMail.cshtml" />
+    <Content Include="Areas\User\Views\User\Register.cshtml" />
+    <Content Include="Content\css\_MultiObjSelect.cshtml" />
+    <Content Include="bin\EnergyMonitor.dll.config" />
+    <Content Include="Areas\User\Views\User\ActiveMailForMobile.cshtml" />
+    <None Include="Content\downloads\importtemplate.xls" />
+    <Content Include="Views\Homes\Login2.cshtml" />
+    <None Include="Content\previewPdfFiles\国际学术交流中心.pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学单幢建筑_先进材料试验室20110713[1].pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学单幢建筑_光华楼.pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学单幢建筑_史带楼.pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学单幢建筑_正大体育馆.pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学单幢建筑_行政与会议中心.pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学能耗监管平台使用手册.pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学能耗管理平台.pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学节约型校园建筑节能监管平台智能表具相关参数.pdf" />
+    <None Include="Content\previewPdfFiles\复旦大学节约型校园建筑节能监管平台用户使用手册.pdf" />
+    <None Include="Content\previewPdfFiles\本部食堂.pdf" />
+    <None Include="Content\previewPdfFiles\设计及建设详细方案.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\images\buildingimgs\" />
+    <Folder Include="Content\uploads\" />
+    <Folder Include="Views\Home\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Controllers\Controllers.csproj">
+      <Project>{923C3B8F-B737-4B60-9E90-41D876B6F17D}</Project>
+      <Name>Controllers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Resources\Resources.csproj">
+      <Project>{C7F42CDD-5F12-441F-A4EC-74AFA6EA62F9}</Project>
+      <Name>Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\Home\Welcome.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\Shared\_SelectLanguage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.sitemap">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\User\PersonalInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\User\ModifyInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\User\RedirectPage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\User\ActiveMail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\Shared\NoLogin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\User\Views\Energy\EnergyHistory.cshtml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

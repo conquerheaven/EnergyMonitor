@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 20.75, 20.25" name="EnergyMonitor">
+  <DataContextMoniker Name="/EnergyMonitorDataContext" />
+  <nestedChildShapes>
+    <classShape Id="c8c405a1-32b0-4ffe-b776-77779df6a3df" absoluteBounds="3, 3, 2, 2.5266442871093751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/RoomInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="08fcb6ae-37c7-481c-be0f-b120819bb830" absoluteBounds="3.015, 3.46, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1e080549-f361-4741-8902-b511aa0e4c4a" absoluteBounds="5.5, 6.25, 2, 2.9086836751302076">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/SchoolInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1f919bef-e4a6-4bc5-9972-cc61de57f1bf" absoluteBounds="5.515, 6.71, 1.9700000000000002, 2.348683675130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2ddc7c07-ee1c-4425-9f2c-8d3e07802409" absoluteBounds="0.625, 6.25, 2, 1.5715458170572916">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/SchoolAreaInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c1d6e0dd-de93-4813-9642-f93537cad36f" absoluteBounds="0.64000000000000012, 6.71, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b691c1f5-d1fa-44bc-93ed-1f2bf0d47b7f" absoluteBounds="8, 1.25, 2, 1.5715458170572916">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/DepartmentInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f1228188-59fd-4596-b355-a0604838a28c" absoluteBounds="8.015, 1.71, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b4d80895-d88a-452e-8872-09f1ef1e7559" absoluteBounds="0.625, 4.875, 2, 1.1895064290364583">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/UserRoom" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ae0fd78e-cfd3-4fc8-92e2-17c78af6b7e9" absoluteBounds="0.64000000000000012, 5.335, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d925c3e7-6437-4fad-9136-ebec53fcc1ca" absoluteBounds="3, 7.5, 2, 1.3805261230468751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/AnalogHistory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c1d105e5-419a-4488-8d55-c333690257ac" absoluteBounds="3.015, 7.9600000000000009, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="df5e3ef1-0efd-4df4-806a-6d7de06f6559" absoluteBounds="0.625, 1.875, 2, 2.9086836751302081">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/User" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c6753511-e5f8-41dd-857e-d9d409752333" absoluteBounds="0.64000000000000057, 2.335, 1.9700000000000002, 2.348683675130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="826c43b6-a08e-4842-9913-c422f2cf6022" absoluteBounds="3, 1.375, 2, 1.3805261230468751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/Role" />
+      <nestedChildShapes>
+        <elementListCompartment Id="89ab91a3-73d1-4dbe-aa02-dd49b87d3060" absoluteBounds="3.015, 1.835, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f27eb5f8-8420-48f4-ac43-d9c7efb53acb" absoluteBounds="3, 9, 2, 1.3805261230468751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/AnalogHistoryMonth" />
+      <nestedChildShapes>
+        <elementListCompartment Id="763c47da-cc3c-4805-b86c-23fa7d70ea6c" absoluteBounds="3.015, 9.46, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a80b2c9b-4b40-4110-9942-0f4fdad6ffd7" absoluteBounds="3, 10.5, 2, 1.3805261230468751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/AnalogHistoryDay" />
+      <nestedChildShapes>
+        <elementListCompartment Id="17dc5120-aff2-404d-b126-df9e1f990d22" absoluteBounds="3.0150000000000006, 10.96, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3e40c80b-989c-4b4a-ba9d-0c9e5c3ab37b" absoluteBounds="8, 3.125, 2, 1.9535852050781251">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/PowerClass" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7e19ffe0-ca93-47e8-ba73-5bcd7c1c3687" absoluteBounds="8.015, 3.5850000000000009, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8c3e8b4a-1c48-47ed-9b13-86a1d5bed72c" absoluteBounds="8, 5.375, 2, 1.7625655110677081">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/Function" />
+      <nestedChildShapes>
+        <elementListCompartment Id="88129519-0aba-4db3-b99f-be23a8e82988" absoluteBounds="8.015, 5.835, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ce151a86-38c6-4e1c-8aba-e89178fc6795" absoluteBounds="8, 7.375, 2, 1.1895064290364583">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/RoleFunction" />
+      <nestedChildShapes>
+        <elementListCompartment Id="461189d5-6f99-4b4d-bcc1-f07d7f858067" absoluteBounds="8.015, 7.835, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="5bb7ac0c-14ea-4f09-9b9e-911f264d67cc" absoluteBounds="0.625, 8, 2, 2.1446048990885416">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/BuyHistory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="06b69c03-6a4e-414b-bf2c-05e2025e2bd0" absoluteBounds="0.64, 8.46, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7cf8b90f-caac-4601-8bc1-6341d084e84a" absoluteBounds="12.75, 7.625, 2, 2.5266442871093751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/WaterPumpDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="225ab11d-e38a-4b43-beae-566af474064e" absoluteBounds="12.765, 8.085, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1180d0a8-5b5e-4a71-ad14-16b31fbbfd37" absoluteBounds="12.75, 10.375, 2, 2.5266442871093751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/WindMachDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="435c087b-3cd9-4fc0-ad96-1c61f87737bb" absoluteBounds="12.765, 10.835, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ce4e43c1-b8ab-4b69-8cdf-1e2499f8e5c2" absoluteBounds="12.75, 13.125, 2, 2.5266442871093751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/KitchenEquipDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="14b37626-d877-4f73-83d5-5c13c28b6386" absoluteBounds="12.765, 13.585, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d9ac31d3-b81b-4e0a-bc5b-96db3b65a779" absoluteBounds="8, 8.875, 2, 5.7739790852864576">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/BuildingAppendix" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6d4034ca-14ff-4573-858a-b8c1f6158027" absoluteBounds="8.015, 9.335, 1.9700000000000002, 5.213979085286458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d3cecfb7-c557-46f4-b08d-f800729138d6" absoluteBounds="12.75, 1.25, 2, 3.0997033691406251">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/LightDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7e5aa026-eb9a-4dd0-a283-5e726a010fae" absoluteBounds="12.765, 1.71, 1.9700000000000002, 2.539703369140625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="50403bab-b872-44fc-8290-f1bc397fe97d" absoluteBounds="12.75, 4.625, 2, 2.7176639811197916">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/ElevatorDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3c9bfaed-0297-4c26-aeeb-d9fe1f397074" absoluteBounds="12.765, 5.085, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="eb757808-92e3-414d-a680-a2aab215a5f1" absoluteBounds="12.75, 15.875, 2, 2.5266442871093751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/OfficeEquipDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4b2f86e7-7bfa-49a3-8738-b83f24a1042a" absoluteBounds="12.765, 16.335, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="81385f55-3e53-4366-adc2-8a9246d32006" absoluteBounds="10.375, 1.25, 2, 17.044141031901042">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/BuildingDetailInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b543fe6c-77a1-4a54-ad1b-77567e8d5c29" absoluteBounds="10.39, 1.71, 1.9700000000000002, 16.484141031901039" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="333d398a-d403-4e89-bb60-95f2440f82d2" absoluteBounds="5.5, 11.25, 2, 1.7625655110677081">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/Workstation" />
+      <nestedChildShapes>
+        <elementListCompartment Id="779fe027-8e2f-4042-84b3-396abe07b08f" absoluteBounds="5.515, 11.71, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3466553c-b1de-43f2-82ee-13913c1fa251" absoluteBounds="5.5, 13, 2, 2.7176639811197916">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/RTU" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b7fb838b-061e-4e9e-90ce-265f7c1940c3" absoluteBounds="5.515, 13.46, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="36d241e9-11b9-4b15-876f-0285c68f763d" absoluteBounds="5.5, 15.875, 2, 1.9535852050781251">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/InstrumentInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="370186c2-93e4-4521-a441-7bad3bba5627" absoluteBounds="5.515, 16.335, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="694eef4d-a2db-4369-be06-55e2269ee891" absoluteBounds="5.5, 9.25, 2, 1.9535852050781251">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/StateReal" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c6c92979-01b7-4416-8419-5c0a7c6a240e" absoluteBounds="5.515, 9.71, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="60860e42-539f-4a12-8508-32d18950029b" absoluteBounds="3, 11.875, 2, 1.7625655110677081">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/SystemProfile" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5ba157e7-0d24-4ecd-aed4-424f914d19c2" absoluteBounds="3.015, 12.335, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="126c889c-c05e-4962-ab9e-0ef4254cc487" absoluteBounds="3, 13.875, 2, 1.9535852050781251">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/Log" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e9351618-78ce-4429-ae2f-571a381f1fc8" absoluteBounds="3.015, 14.335, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b59c85ac-a5c1-4387-adae-90abeea87bc8" absoluteBounds="3.125, 16, 2, 1.3805261230468751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/UniversityInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="33fe64f0-eec5-4c28-af15-2c921805f5a0" absoluteBounds="3.1399999999999997, 16.46, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="43b390fd-072b-4d5c-a0f5-ed56053b87fd" absoluteBounds="3, 5.5, 2, 1.9535852050781251">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/BuildingBriefInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="939e2eca-072f-4af2-86fe-fecf48387c60" absoluteBounds="3.015, 5.96, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="24ed567b-d316-4482-8332-b6f1f20dc62e" absoluteBounds="8.125, 15.125, 2, 1.5715458170572916">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/BuildingEnergyConsum" />
+      <nestedChildShapes>
+        <elementListCompartment Id="de7820aa-8e24-45ef-a315-d0f5685f60d0" absoluteBounds="8.14, 15.585, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="37a2e508-9fda-4173-96e7-e030d5456f3d" absoluteBounds="0.625, 10.5, 2, 4.0548018391927076">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/AnalogInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f42fa903-0fca-4fcb-a2f1-ece3937d06b3" absoluteBounds="0.63999999999999968, 10.96, 1.9700000000000002, 3.494801839192708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d1bf65da-c291-4843-ba07-10e2f610986a" absoluteBounds="15.25, 4.125, 2, 1.1895064290364583">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/SetEmail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4d671ec3-f9a8-4829-aa4c-0c3022b81594" absoluteBounds="15.265, 4.585, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="de4a3841-f7e8-433e-b288-ff0366fcaf8c" absoluteBounds="15.25, 5.75, 2, 1.5715458170572916">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/ElecDistributionInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="86dff5e5-f0d8-4248-bb4b-8cb9e74c983a" absoluteBounds="15.265, 6.21, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="fac44725-49ad-423a-9332-d6fd626e994f" absoluteBounds="15.25, 7.625, 2, 1.5715458170572916">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/ElecTSInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="584d5a18-d1dd-4d33-90b8-987ef3312966" absoluteBounds="15.265, 8.085, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e873775e-cb30-4315-8610-88e231b34891" absoluteBounds="15.25, 9.625, 2, 1.9535852050781251">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/BuildingGuanghua" />
+      <nestedChildShapes>
+        <elementListCompartment Id="84d7c7fa-f643-4262-b120-79079c2654a1" absoluteBounds="15.265, 10.085, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a19591f7-cc03-435c-89d6-9a5238f37a68" absoluteBounds="15.25, 1.375, 2, 2.3356245930989585">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/ExceptionInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0156a83a-5887-4f33-86c8-5abd44c5bab2" absoluteBounds="15.265, 1.835, 1.9700000000000002, 1.7756245930989585" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8ea03891-91b9-4810-a5c0-639de35050d1" absoluteBounds="18.125, 1.5, 2, 1.3805261230468751">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/BuildingTypes" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d6ddc09e-44d4-4bda-b5ba-72cf94dcd8ef" absoluteBounds="18.14, 1.96, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7b594a1d-6312-4bd8-9f32-5839b6b832c9" absoluteBounds="5.625, 1.25, 2, 4.8188806152343746">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/AnalogMeasurePoint" />
+      <nestedChildShapes>
+        <elementListCompartment Id="202bbf9e-7799-4423-8d72-92de50f5e9d7" absoluteBounds="5.64, 1.71, 1.9700000000000002, 4.258880615234375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="573eab0c-2a71-4dfd-bc7a-c08e043a631a" absoluteBounds="0.5, 0.5, 2, 1.1895064290364583">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/setMessages" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a57bfff8-2b76-411c-a75f-b60d9c159cb4" absoluteBounds="0.51500000000000012, 0.96, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="81563cf3-9550-485a-8ad1-bf4daa16349b" absoluteBounds="15.5, 17.875, 2, 2.1446048990885416">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/UpdateInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="983abe47-27b9-4a11-8c3e-bebd92ec651b" absoluteBounds="15.515, 18.335, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="16b7dce6-70b9-41cb-b943-150e7b388e7d" absoluteBounds="18.5, 4.125, 2, 2.1446048990885416">
+      <DataClassMoniker Name="/EnergyMonitorDataContext/AnnouncementInfo" />
+      <nestedChildShapes>
+        <elementListCompartment Id="37e63309-d9d3-4254-b93f-a20fdc606c9d" absoluteBounds="18.515, 4.585, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

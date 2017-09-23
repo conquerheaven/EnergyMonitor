@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "没有登录";
+    Layout = "~/Areas/User/Views/Shared/_Layout2.cshtml";
+}
+<div class="contentcontainer m-center" style="height: 300px;">
+<div class="headings altheading"><h2>没有登录</h2></div>
+    <div class="contentbox" style="height: 200px;">
+    <div class="status">
+        <div><img src="@Url.Content("~/Content/images/error.jpg") " alt="error" />
+        <h1 style="padding-top: 60px; padding-left: 200px;">没有登录，请重新 @Html.ActionLink("登录", "Index2", "Homes", new { area = "" }, null)</h1></div>
+    </div>
+</div></div>

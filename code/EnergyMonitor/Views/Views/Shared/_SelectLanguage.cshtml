@@ -1,0 +1,32 @@
+﻿@{
+    var langDic = AppState["supportLanguage"] as Dictionary<string, string>;
+    if (langDic != null){
+        <select id="shared_selectLanguage" disabled="disabled">
+        @foreach (var key in langDic.Keys){
+            if (Session["selectedLanguage"] != null)
+            {
+                if (Session["selectedLanguage"].Equals(key))
+                {
+                    <option value="@key" selected="selected">@langDic[key]</option>
+                }
+                else
+                {
+                    <option value="@key" >@langDic[key]</option>
+                }
+            }
+            else
+            {
+                <option value="@key" >@langDic[key]</option>
+            }
+        }
+        </select>
+    }
+}
+      <script type="text/javascript">
+          $(function () {
+              $("#shared_selectLanguage").change(function () {
+                  var currentUrl = "@Url.Action(null)";
+                  window.open('@Url.Action("ChangeLanguage","Shared")?language=' + this.value + "&previousUrl=" + currentUrl, "_top");
+              });
+          });
+      </script>

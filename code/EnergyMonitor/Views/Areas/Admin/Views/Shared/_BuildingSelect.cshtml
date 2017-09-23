@@ -1,0 +1,48 @@
+﻿
+<link href="@Url.Content("~/Content/css/RoomSelect.css")" rel="stylesheet" type="text/css" />
+<div id="buildingSelectDiv" class="roomSelectDiv hidden" title="请选择建筑">
+    <ul>
+        <li style="display:block;">
+            <h4>选择校区</h4>
+            <div class="divSelectRoom1"><select id="selectedSchool" name="selectedSchool" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="schoolAreaDiv">
+            <h4>选择区域</h4>
+            <div id="divSchoolArea"><select id="selectedSchoolArea" name="selectedSchoolArea" multiple="multiple">
+            </select></div>
+        </li>
+        <li id="buildingDiv">
+            <h4>选择楼宇</h4>
+            <div id="divBuilding"><select id="selectedBuilding" name="selectedBuilding" multiple="multiple">
+            </select></div>
+        </li>
+    </ul>
+    <div id="dialogErrorTip" class="clear a-center red hidden">请选择一个建筑对象</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#selectedSchool").change(function () {
+            $.getJSON('@Url.Action("GetAreasBySchoolIDAjax", "Util")', { schoolID: this.value }, function (jsonData) {
+                $("#selectedSchoolArea").html($("#buildingDataTemplate").tmpl(jsonData));
+                $("#divSchoolArea").attr("class", "divSelectRoom4");
+                $("#schoolAreaDiv").fadeIn("fast");
+                $("#buildingDiv").fadeOut("fast");
+            });
+        });
+        $("#selectedSchoolArea").change(function () {
+            $.getJSON('@Url.Action("GetBuildingByAreaAjax", "Util")', { areaID: this.value }, function (jsonData) {
+                $("#selectedBuilding").html($("#buildingDataTemplate").tmpl(jsonData));
+                $("#divSchoolArea").attr("class", "divSelectRoom1");
+                $("#divBuilding").attr("class", "divSelectRoom4");
+                $("#buildingDiv").fadeIn("fast");
+            });
+        });
+        $.getJSON('@Url.Action("GetAllShoolAjax", "Util")', null, function (jsonData) {
+            $("#buildingDataTemplate").tmpl(jsonData).appendTo("#selectedSchool");
+        });
+    });
+</script>
+<script id="buildingDataTemplate" type="text/x-jQuery-tmpl">
+	<option value="${dataID}">${dataValue}</option>
+</script>

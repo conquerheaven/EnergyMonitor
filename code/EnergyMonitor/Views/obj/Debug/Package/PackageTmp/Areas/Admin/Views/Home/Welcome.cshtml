@@ -1,0 +1,45 @@
+﻿@using EnergyMonitor.Models.LinqEntity;
+@{
+    ViewBag.Title = "欢迎使用复旦大学节约型校园建筑节能监管平台";
+}
+@section head{
+    <style type="text/css">
+        .contentbox h2{margin: 10px;}
+        .contentbox h3{margin: 10px;}
+    </style>
+}
+<div class="contentcontainer">
+<div class="headings altheading"><h2>欢迎使用！</h2></div>
+    <div class="contentbox">
+    <fieldset id="resultDiv" ><legend>各校区用电</legend>
+         @if (Model == null)
+         {
+            <div id="noDataDiv">当前查询范围没有数据</div>
+         }
+         else
+         {
+            <div id="dataDiv">
+            <table id="dataTable"  width="1000">
+                <thead>
+                    <tr>
+                        <th width = "100">校区名称</th>
+                        <th width = "70" >邯郸校区</th>
+                        <th width = "70">江湾校区</th>
+                        <th width = "70">枫林校区</th>
+                        <th width = "70">张江校区</th>
+                    </tr>
+                </thead>
+                <tbody id="resultDataDiv">
+                
+                @for (var i = 0; i < 9; i++)
+                {
+                    <tr><td>@Model[i].name</td> <td>@Model[i].val</td><td>@Model[i].valOne</td><td>@Model[i].valTwo</td><td>@Model[i].valThree</td></tr>
+                }
+                </tbody>
+            </table>      
+            <div id="pager"></div>
+            @*<input id="exportExcel" name="exportExcel" type="button" value=" 导出Excel " class="btn" />*@
+            </div>
+         }
+     </fieldset>
+</div></div>
