@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EnergyMonitor" Class="EnergyMonitorEntitiesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=10.131.200.70;Initial Catalog=EnergyMonitor;User ID=sa" SettingsObjectName="Interpolation.Properties.Settings" SettingsPropertyName="EnergyMonitorConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.AnalogHistory" Member="AnalogHistory">
+    <Type Name="AnalogHistory">
+      <Column Name="AH_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AH_Time" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AH_Value" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnalogMeasurePoint" Member="AnalogMeasurePoint">
+    <Type Name="AnalogMeasurePoint">
+      <Column Name="AMP_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AMP_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_CptFlag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Statistic" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Val" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_ValRem" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AMP_Unit" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_SchooldID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_SAreaID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_BuildingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_RoomID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_DepartID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_PowerType" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_PowerName" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Timespan" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_ParentNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AMP_OperationRule" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="AMP_OperationParameter" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AMP_State" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AMP_Encoding" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnalogInfo" Member="AnalogInfo">
+    <Type Name="AnalogInfo">
+      <Column Name="RTU_No" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_No" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AI_Serial" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Name" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AI_LogicalLow" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AI_LogicalUp" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Decimal" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Cptflag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Base" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Rate" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="AI_LockVal" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AI_LockFlag" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Timespace" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Unit" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="AI_State" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Level" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="AI_Type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnalogHistoryHour" Member="AnalogHistoryHour">
+    <Type Name="AnalogHistoryHour">
+      <Column Name="AHH_AnalogNo" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AHH_HTime" Type="System.DateTime" DbType="SmallDateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AHH_Value" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InterpolationState" Member="InterpolationState">
+    <Type Name="InterpolationState">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AnalogNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Lvalue" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Rvalue" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InterpolationData" Member="InterpolationData">
+    <Type Name="InterpolationData">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AnalogNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ITime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>
